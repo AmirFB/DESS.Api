@@ -41,6 +41,12 @@ namespace Dess.Api.Controllers
         ef.Log.Add(ef.Status);
       }
 
+      if(ef.AutoLocation)
+      {
+        ef.Latitude = ef.Status.Latitude;
+        ef.Longitude = ef.Status.Longitude;
+      }
+
       await _repository.SaveAsync();
       return Ok(ef.Hash);
     }
