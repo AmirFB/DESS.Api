@@ -45,7 +45,7 @@ namespace Dess.Api.Controllers
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddAsync([FromBody] ElectroFenceForCreationDto electroFence)
+    public async Task<IActionResult> AddAsync([FromBody] ElectroFenceDto electroFence)
     {
       var electroFenceEntity = _mapper.Map<ElectroFence>(electroFence);
       _repository.Add(electroFenceEntity);
@@ -58,7 +58,7 @@ namespace Dess.Api.Controllers
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateAsync(int id, ElectroFenceForUpdateDto ef)
+    public async Task<IActionResult> UpdateAsync(int id, ElectroFenceDto ef)
     {
       var efFromRepo = await _repository.GetAsync(id);
       _mapper.Map(efFromRepo, ef);
