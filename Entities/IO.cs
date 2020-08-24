@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
-
+using Dess.Api.Models;
 using Dess.Api.Types;
 
 namespace Dess.Api.Entities
 {
-  public class IO : EntityBase
+  public class IO : EntityBase, IHashable
   {
     public IOType Type { get; set; } = IOType.NO;
     public bool Enabled { get; set; } = true;

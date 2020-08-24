@@ -33,7 +33,7 @@ namespace Dess.Api.Controllers
       _mapper.Map(status, ef.Status);
       ef.Applied = configHash == ef.Hash;
 
-      var statusHash = status.GetHash();
+      var statusHash = (status as IHashable).GetHash();
 
       if (ef.Status.Hash != statusHash)
       {

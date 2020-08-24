@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-
 using Dess.Api.Models;
-using Dess.Api.Services;
 
 namespace Dess.Api.Entities
 {
-  public class ElectroFence : EntityBase, Hashable
+  public class ElectroFence : EntityBase, IHashable
   {
     [Required]
     public string Serial { get; set; }
