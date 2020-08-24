@@ -49,6 +49,7 @@ namespace Dess.Api.Controllers
     {
       var electroFenceEntity = _mapper.Map<ElectroFence>(electroFence);
       _repository.Add(electroFenceEntity);
+      electroFenceEntity.Hash = (electroFenceEntity as IHashable).GetHash();
       await _repository.SaveAsync();
 
       var electroFenceToReturn = _mapper.Map<ElectroFenceDto>(electroFenceEntity);
@@ -62,6 +63,7 @@ namespace Dess.Api.Controllers
     {
       var efFromRepo = await _repository.GetAsync(id);
       _mapper.Map(efFromRepo, ef);
+      efFromRepo.Hash = (efFromRepo as IHashable).GetHash();
       await _repository.SaveAsync();
 
       return Ok();
