@@ -13,6 +13,8 @@ namespace Dess.Api.Entities
     public bool Applied { get; set; }
 
     public bool AutoLocation { get; set; }
+    public string Latitude{ get; set; }
+    public string Longitude{ get; set; }
 
     [Required]
     public bool HvEnabled { get; set; }
