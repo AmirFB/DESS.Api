@@ -7,7 +7,7 @@ using Dess.Api.Services;
 
 namespace Dess.Api.Entities
 {
-  public class ElectroFence : EntityBase, IHashable
+  public class ElectroFence : EntityBase, Hashable
   {
     [Required]
     public string Serial { get; set; }
