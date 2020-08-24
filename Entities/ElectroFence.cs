@@ -42,8 +42,5 @@ namespace Dess.Api.Entities
       $"{HvRepeat}{Input1}{Input2}{Output1}{Output2}";
       return data;
     }
-
-    public string GetHash() =>
-      (this as IHashable).GetHash();
   }
 }

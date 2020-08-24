@@ -3,7 +3,7 @@ using Dess.Api.Types;
 
 namespace Dess.Api.Models
 {
-  public class ElectroFenceStatusDto : IHashable
+  public class ElectroFenceStatusDto : Hashable
   {
     public DateTime Date { get; set; }
 
@@ -30,15 +30,12 @@ namespace Dess.Api.Models
     public string Longitude { get; set; }
     public byte SignalStrength { get; set; }
 
-    public string GetHashBase()
+    public override string GetHashBase()
     {
       var data = $"{HvAlarm}{LvAlarm}{TamperAlarm}" +
       $"{BatteryStatus}{MainPowerFault}{HvPowerFault}{HvChargeFault}" +
       $"{HvDischargeFault}{Input1}{Input2}{Output1}{Output2}";
       return data;
     }
-
-    public string GetHash() =>
-      (this as IHashable).GetHash();
   }
 }
