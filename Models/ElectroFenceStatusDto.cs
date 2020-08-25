@@ -5,7 +5,6 @@ namespace Dess.Api.Models
 {
   public class ElectroFenceStatusDto : IHashable
   {
-    public DateTime Date { get; set; }
 
     public bool HvAlarm { get; set; }
     public bool LvAlarm { get; set; }
