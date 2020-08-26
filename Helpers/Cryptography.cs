@@ -3,7 +3,7 @@ using System.Text;
 using Dess.Entities;
 using Dess.Models;
 
-namespace Dess.Services
+namespace Dess.Helpers
 {
   public static class Cryptography
   {
