@@ -28,6 +28,12 @@ namespace Dess.Api.Entities
     [Required]
     public int HvRepeat { get; set; }
 
+    public int TemperatureMin { get; set; }
+    public int TemperatureMax { get; set; }
+
+    public double BatteryMin { get; set; }
+    public double BatteryMax { get; set; }
+
     [Required]
     public IO Input1, Input2, Output1, Output2;
 
