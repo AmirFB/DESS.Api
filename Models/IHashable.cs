@@ -1,6 +1,6 @@
-using Dess.Api.Services;
+using Dess.Services;
 
-namespace Dess.Api.Models
+namespace Dess.Models
 {
   public interface IHashable
   {

@@ -1,9 +1,9 @@
 using System.Security.Cryptography;
 using System.Text;
-using Dess.Api.Entities;
-using Dess.Api.Models;
+using Dess.Entities;
+using Dess.Models;
 
-namespace Dess.Api.Services
+namespace Dess.Services
 {
   public static class Cryptography
   {

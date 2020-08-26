@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 
-using Dess.Api.Entities;
-using Dess.Api.Models;
+using Dess.Entities;
+using Dess.Models;
 
-namespace Dess.Api.Profiles
+namespace Dess.Profiles
 {
 	public class ElectroFenceStatusProfile : Profile
     {

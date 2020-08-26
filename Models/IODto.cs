@@ -1,7 +1,7 @@
-﻿using Dess.Api.Entities;
-using Dess.Api.Types;
+﻿using Dess.Entities;
+using Dess.Types;
 
-namespace Dess.Api.Models
+namespace Dess.Models
 {
 	public class IODto : EntityBase
     {

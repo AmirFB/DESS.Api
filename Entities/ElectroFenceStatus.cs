@@ -1,10 +1,10 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Dess.Api.Services;
-using Dess.Api.Types;
+using Dess.Services;
+using Dess.Types;
 
-namespace Dess.Api.Entities
+namespace Dess.Entities
 {
   public class ElectroFenceStatus : EntityBase
   {

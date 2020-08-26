@@ -1,7 +1,7 @@
 ﻿using System;
-using Dess.Api.Types;
+using Dess.Types;
 
-namespace Dess.Api.Models
+namespace Dess.Models
 {
   public class ElectroFenceStatusDto : IHashable
   {

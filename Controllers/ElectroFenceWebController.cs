@@ -4,13 +4,13 @@ using System.Threading.Tasks;
 
 using AutoMapper;
 
-using Dess.Api.Entities;
-using Dess.Api.Models;
-using Dess.Api.Repositories;
+using Dess.Entities;
+using Dess.Models;
+using Dess.Repositories;
 
 using Microsoft.AspNetCore.Mvc;
 
-namespace Dess.Api.Controllers
+namespace Dess.Controllers
 {
   [ApiController]
   [Route("api/irancell/web/efs")]

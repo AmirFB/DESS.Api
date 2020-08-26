@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 
-using Dess.Api.Entities;
-using Dess.Api.Models;
+using Dess.Entities;
+using Dess.Models;
 
-namespace Dess.Api.Repositories
+namespace Dess.Repositories
 {
     public interface IElectroFenceRepository : IRepositoryBase<ElectroFence>
     {

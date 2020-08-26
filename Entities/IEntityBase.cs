@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Dess.Api.Entities
+namespace Dess.Entities
 {
     public interface IEntityBase
     {

@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Dess.Api.Models;
-using Dess.Api.Types;
+using Dess.Models;
+using Dess.Types;
 
-namespace Dess.Api.Entities
+namespace Dess.Entities
 {
   public class IO : EntityBase, IHashable
   {

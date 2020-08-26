@@ -1,6 +1,6 @@
-using Dess.Api.Entities;
+using Dess.Entities;
 
-namespace Dess.Api.Models
+namespace Dess.Models
 {
   public class ElectroFenceForHwDto : EntityBase
   {

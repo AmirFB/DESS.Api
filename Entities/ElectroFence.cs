@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Dess.Api.Models;
+using Dess.Models;
 
-namespace Dess.Api.Entities
+namespace Dess.Entities
 {
   public class ElectroFence : EntityBase, IHashable
   {

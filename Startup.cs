@@ -1,7 +1,7 @@
 using System;
 using AutoMapper;
-using Dess.Api.DbContexts;
-using Dess.Api.Repositories;
+using Dess.DbContexts;
+using Dess.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
