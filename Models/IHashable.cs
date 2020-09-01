@@ -6,6 +6,6 @@ namespace Dess.Models
   public interface IHashable
   {
     string GetHashBase();
-    public virtual string GetHash() => Cryptography.GetHashMD5(GetHashBase());
+    public virtual string GetHash() => Cryptography.GetHashMD5String(GetHashBase());
   }
 }
