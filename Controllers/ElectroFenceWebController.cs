@@ -30,7 +30,7 @@ namespace Dess.Controllers
     [HttpGet("{id}", Name = "GetAsync")]
     public async Task<ActionResult<ElectroFenceDto>> GetAsync([FromRoute] int id)
     {
-      if (!await _repository.Exists(id))
+      if (!await _repository.ExistsAsync(id))
         return NotFound();
 
       var ef = await _repository.GetAsync(id);
