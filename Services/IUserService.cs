@@ -7,7 +7,7 @@ namespace Dess.Services
   {
     Task<User> AuthenticateAsync(string username, string password);
     Task<User> CreateAsync(User user, string password);
-    void Update(User user, string password);
-    void Delete(int id);
+    Task UpdateAsync(User user, string password);
+    Task DeleteAsync(int id);
   }
 }

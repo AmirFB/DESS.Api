@@ -44,14 +44,42 @@ namespace Dess.Services
       return user;
     }
 
-    public void Delete(int id)
+    public async Task UpdateAsync(User user, string password = null)
     {
-      throw new System.NotImplementedException();
+      var userFromRepo = await _repository.GetAsync(user.Id);
+
+      if (userFromRepo == null)
+        throw new Exception("User not found.");
+
+      if (!string.IsNullOrWhiteSpace(user.Username) && userFromRepo.Username != user.Username)
+      {
+        if (await _repository.ExistsAsync(user.Username))
+          throw new Exception($"Username {user.Username} is already taken.");
+
+        userFromRepo.Username = user.Username;
+      }
+
+      if (!string.IsNullOrWhiteSpace(user.FirstName))
+        userFromRepo.FirstName = user.FirstName;
+
+      if (!string.IsNullOrWhiteSpace(user.LastName))
+        userFromRepo.LastName = user.LastName;
+
+      if (!string.IsNullOrWhiteSpace(password))
+        userFromRepo.Password = Cryptography.GetHashSHA512String(password);
+
+      await _repository.SaveAsync();
     }
 
-    public void Update(User user, string password = null)
+    public async Task DeleteAsync(int id)
     {
-      throw new System.NotImplementedException();
+      var user = await _repository.GetAsync(id);
+
+      if (user == null)
+        throw new Exception("User not found.");
+
+      _repository.Remove(user);
+      await _repository.SaveAsync();
     }
   }
 }
