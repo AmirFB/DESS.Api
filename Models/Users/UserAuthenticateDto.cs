@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Dess.Models
+namespace Dess.Models.Users
 {
-  public class UserAuthenticate
+  public class UserAuthenticateDto
   {
     [Required]
     public string Username { get; set; }

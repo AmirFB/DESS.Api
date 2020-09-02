@@ -1,6 +1,6 @@
-namespace Dess.Models
+namespace Dess.Models.Users
 {
-  public class UserRegisterDto
+  public class UserUpdateDto
   {
     public string FirstName { get; set; }
     public string LastName { get; set; }
