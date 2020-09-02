@@ -1,6 +1,6 @@
 using Dess.Entities;
 
-namespace Dess.Models.Users
+namespace Dess.Models.User
 {
   public class UserDto : EntityBase
   {

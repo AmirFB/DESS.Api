@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Dess.Entities;
 using Dess.Helpers;
-using Dess.Models.Users;
+using Dess.Models.User;
 using Dess.Repositories;
 using Dess.Services;
 using Microsoft.AspNetCore.Authorization;
