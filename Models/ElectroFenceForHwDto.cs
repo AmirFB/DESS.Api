@@ -2,7 +2,7 @@ using Dess.Entities;
 
 namespace Dess.Models
 {
-  public class ElectroFenceForHwDto : EntityBase
+  public class ElectroFenceForHwDto
   {
     public bool HvEnabled { get; set; }
     public bool LvEnabled { get; set; }
