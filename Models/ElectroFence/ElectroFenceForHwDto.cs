@@ -1,6 +1,6 @@
 using Dess.Entities;
 
-namespace Dess.Models
+namespace Dess.Models.ElectroFence
 {
   public class ElectroFenceForHwDto
   {

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 
 using Dess.Entities;
-using Dess.Models;
+using Dess.Models.ElectroFence;
 
 namespace Dess.Profiles
 {

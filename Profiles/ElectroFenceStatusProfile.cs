@@ -1,15 +1,14 @@
 ﻿using AutoMapper;
-
 using Dess.Entities;
-using Dess.Models;
+using Dess.Models.ElectroFence;
 
 namespace Dess.Profiles
 {
-	public class ElectroFenceStatusProfile : Profile
+  public class ElectroFenceStatusProfile : Profile
+  {
+    public ElectroFenceStatusProfile()
     {
-        public ElectroFenceStatusProfile()
-        {
-            CreateMap<ElectroFenceStatus, ElectroFenceStatusDto>().ReverseMap();
-        }
+      CreateMap<ElectroFenceStatus, ElectroFenceStatusDto>().ReverseMap();
     }
+  }
 }

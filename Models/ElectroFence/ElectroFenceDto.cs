@@ -1,16 +1,16 @@
 ﻿using Dess.Entities;
 
-namespace Dess.Models
+namespace Dess.Models.ElectroFence
 {
   public class ElectroFenceDto : EntityBase
   {
     public string Serial { get; set; }
     public string PhoneNumber { get; set; }
     public bool Applied { get; set; }
-    
+
     public bool AutoLocation { get; set; }
-    public string Latitude{ get; set; }
-    public string Longitude{ get; set; }
+    public string Latitude { get; set; }
+    public string Longitude { get; set; }
 
     public bool HvEnabled { get; set; }
     public bool LvEnabled { get; set; }

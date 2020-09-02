@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using AutoMapper;
 using Dess.Models;
+using Dess.Models.ElectroFence;
 using Dess.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -41,7 +42,7 @@ namespace Dess.Controllers
         ef.Log.Add(ef.Status);
       }
 
-      if(ef.AutoLocation)
+      if (ef.AutoLocation)
       {
         ef.Latitude = ef.Status.Latitude;
         ef.Longitude = ef.Status.Longitude;
