@@ -19,7 +19,7 @@ namespace Dess.Controllers
 {
   [Authorize]
   [ApiController]
-  [Route("api/users")]
+  [Route("api/irancell/web/users")]
   public class UsersController : ControllerBase
   {
     private IUserRepository _repository;
@@ -39,7 +39,7 @@ namespace Dess.Controllers
     public async Task<ActionResult<IEnumerable<UserDto>>> GetAllAsync()
     {
       var users = await _repository.GetAllAsync();
-      var dtos = _mapper.Map<UserDto>(users);
+      var dtos = _mapper.Map<IEnumerable<UserDto>>(users);
       return Ok(dtos);
     }
 
@@ -56,36 +56,36 @@ namespace Dess.Controllers
     }
 
     [HttpPost("register")]
-    public IActionResult Register([FromBody] UserRegisterDto model)
+    public async Task<IActionResult> RegisterAsync([FromBody] UserRegisterDto model)
     {
       var user = _mapper.Map<User>(model);
 
       try
       {
-        _service.CreateAsync(user, model.Password);
+        await _service.CreateAsync(user, model.Password);
         return Ok();
       }
       catch (DessException ex) { return BadRequest(ex.Message); }
     }
 
     [HttpPut("{id}")]
-    public IActionResult Update(int id, [FromBody] UserUpdateDto dto)
+    public async Task<IActionResult> UpdateAsync(int id, [FromBody] UserUpdateDto dto)
     {
       var user = _mapper.Map<User>(dto);
       user.Id = id;
 
       try
       {
-        _service.UpdateAsync(user, dto.Password);
+        await _service.UpdateAsync(user, dto.Password);
         return Ok();
       }
       catch (DessException ex) { return BadRequest(ex.Message); }
     }
 
     [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> DeleteAsync(int id)
     {
-      _service.DeleteAsync(id);
+      await _service.DeleteAsync(id);
       return Ok();
     }
 
