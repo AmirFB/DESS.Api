@@ -1,0 +1,32 @@
+{
+  "words": {
+    "ok": "OK",
+    "cancel": "Cancel",
+    "home": "Home",
+    "site": "Site",
+    "sites": "Sites",
+    "settings": "Settings",
+    "Users": "users",
+    "report": "Report",
+    "help": "Help",
+    "activeSites": "Active Sites",
+    "offlineSites": "Offline Sites",
+    "notDefined": "Not Defined",
+    "muteAlarm": "Mute Alarm",
+    "raiseAlarm": "Raise Alarm",
+    "findLocation": "Find Location",
+    "addLocation": "Add Location",
+    "assign": "Assign",
+    "showHide": "Show/Hide",
+    "refresh": "Refresh",
+    "filterSites": "Filter Sites",
+    "fitView": "FitView",
+    "statistics": "Statistics",
+    "schedule": "Schedule",
+    "about": "About"
+  },
+
+  "messages": {
+    "searchSite": "Type site name here."
+  }
+}

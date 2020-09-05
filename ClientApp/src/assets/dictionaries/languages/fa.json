@@ -1,0 +1,32 @@
+{
+  "words": {
+    "ok": "تایید",
+    "cancel": "انصراف",
+    "home": "خانه",
+    "site": "سایت",
+    "sites": "سایت ها",
+    "settings": "تنظیمات",
+    "Users": "کاربر ها",
+    "report": "گزارش",
+    "help": "کمک",
+    "activeSites": "سابت های فعال",
+    "offlineSites": "سایت های فعال",
+    "notDefined": "تعریف نشده",
+    "muteAlarm": "سکوت",
+    "raiseAlarm": "آژیر",
+    "findLocation": "پیدا کردن مکان",
+    "addLocation": "افزودن مکان",
+    "assign": "اعمال",
+    "showHide": "نشان/مخفی",
+    "refresh": "بازیابی",
+    "filterSites": "فیلتر سایت ها",
+    "fitView": "نمایش همه ",
+    "statistics": "آمار",
+    "schedule": "برنامه ریزی",
+    "about": "درباره"
+  },
+
+  "messages": {
+    "searchSite": "نام سایت را وارد کنید."
+  }
+}
