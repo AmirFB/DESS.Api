@@ -14,6 +14,7 @@ namespace DESS
 {
   public class Startup
   {
+    private IConfiguration _configuration;
     private readonly string _connectionString =
       @"Server=localhost;" +
       "Port=315;" +
@@ -24,10 +25,8 @@ namespace DESS
 
     public Startup(IConfiguration configuration)
     {
-      Configuration = configuration;
+      _configuration = configuration;
     }
-
-    public IConfiguration Configuration { get; }
 
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
@@ -37,7 +36,8 @@ namespace DESS
       services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
       services.AddHttpClient();
       services.AddScoped<IElectroFenceRepository, ElectroFenceRepository>();
-      services.AddDbContext<DessDbContext>(o => o.UseMySql(_connectionString));
+      var connectionString = _configuration.GetSection("ConnectionStrings")["DessConnectionString"];
+      services.AddDbContext<DessDbContext>(o => o.UseMySql(connectionString));
 
       // In production, the React files will be served from this directory
       services.AddSpaStaticFiles(configuration =>
