@@ -1,3 +1,4 @@
+using System;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -14,7 +15,7 @@ namespace Dess.Helpers
     public static string GetHashMD5String(string input)
     {
       using (var hash = new MD5CryptoServiceProvider())
-        return Encoding.ASCII.GetString(hash.ComputeHash(Encoding.ASCII.GetBytes(input)));
+        return Convert.ToBase64String(hash.ComputeHash(Encoding.ASCII.GetBytes(input)));
     }
 
     public static byte[] GetHashSHA512(string input)
@@ -26,7 +27,7 @@ namespace Dess.Helpers
     public static string GetHashSHA512String(string input)
     {
       using (var hash = new SHA512CryptoServiceProvider())
-        return Encoding.ASCII.GetString(hash.ComputeHash(Encoding.ASCII.GetBytes(input)));
+        return Convert.ToBase64String(hash.ComputeHash(Encoding.ASCII.GetBytes(input)));
     }
   }
 }
