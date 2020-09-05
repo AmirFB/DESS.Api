@@ -65,7 +65,7 @@ namespace Dess.Controllers
         _service.CreateAsync(user, model.Password);
         return Ok();
       }
-      catch (Exception ex) { return BadRequest(ex.Message); }
+      catch (DessException ex) { return BadRequest(ex.Message); }
     }
 
     [HttpPut("{id}")]
@@ -79,7 +79,7 @@ namespace Dess.Controllers
         _service.UpdateAsync(user, dto.Password);
         return Ok();
       }
-      catch (Exception ex) { return BadRequest(ex.Message); }
+      catch (DessException ex) { return BadRequest(ex.Message); }
     }
 
     [HttpDelete("{id}")]

@@ -34,7 +34,7 @@ namespace Dess.Services
         throw new ArgumentNullException(nameof(password));
 
       if (await _repository.ExistsAsync(user.Username))
-        throw new Exception($"Username {user.Username} is already taken.");
+        throw new DessException($"Username {user.Username} is already taken.");
 
       user.Password = Cryptography.GetHashSHA512String(password);
 
@@ -49,12 +49,12 @@ namespace Dess.Services
       var userFromRepo = await _repository.GetAsync(user.Id);
 
       if (userFromRepo == null)
-        throw new Exception("User not found.");
+        throw new DessException("User not found.");
 
       if (!string.IsNullOrWhiteSpace(user.Username) && userFromRepo.Username != user.Username)
       {
         if (await _repository.ExistsAsync(user.Username))
-          throw new Exception($"Username {user.Username} is already taken.");
+          throw new DessException($"Username {user.Username} is already taken.");
 
         userFromRepo.Username = user.Username;
       }
@@ -76,7 +76,7 @@ namespace Dess.Services
       var user = await _repository.GetAsync(id);
 
       if (user == null)
-        throw new Exception("User not found.");
+        throw new DessException("User not found.");
 
       _repository.Remove(user);
       await _repository.SaveAsync();
