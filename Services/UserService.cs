@@ -8,9 +8,9 @@ namespace Dess.Services
 {
   public class UserService : IUserService
   {
-    private UserRepository _repository;
+    private IUserRepository _repository;
 
-    public UserService(UserRepository repository) => _repository = repository;
+    public UserService(IUserRepository repository) => _repository = repository;
 
     public async Task<User> AuthenticateAsync(string username, string password)
     {
@@ -34,7 +34,7 @@ namespace Dess.Services
         throw new ArgumentNullException(nameof(password));
 
       if (await _repository.ExistsAsync(user.Username))
-        throw new DessException($"Username {user.Username} is already taken.");
+        throw new DessException($"Username \"{user.Username}\" is already taken.");
 
       user.Password = Cryptography.GetHashSHA512String(password);
 
