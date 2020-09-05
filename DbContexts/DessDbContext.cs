@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Dess.Entities;
+using Dess.Helpers;
 using Dess.Types;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,7 +11,7 @@ namespace Dess.DbContexts
     private IMapper _mapper;
 
     public DessDbContext(DbContextOptions<DessDbContext> options, IMapper mapper) : base(options) =>
-            _mapper = mapper;
+      _mapper = mapper;
 
     public DbSet<ElectroFence> ElectroFences { get; set; }
     public DbSet<ElectroFenceStatus> Statuss { get; set; }
@@ -26,6 +27,8 @@ namespace Dess.DbContexts
           .WithOne(s => s.ElectroFence)
           .HasForeignKey<ElectroFenceStatus>(s => s.ElectroFenceId);
 
+      var user1 = new User { Id = 1, Username = "EHP", Password = Cryptography.GetHashSHA512String("EHP4132112"), FirstName = "Amir", LastName = "Fakhim-Babaei" };
+      modelBuilder.Entity<User>().HasData(user1);
 
       var ef1 = new ElectroFence { Id = 1, Serial = "ehp-ie-tbz1", HvEnabled = true, LvEnabled = true, HvPower = 70, HvRepeat = 2, HvThreshold = 3000 };
       var ef2 = new ElectroFence { Id = 2, Serial = "ehp-ie-tbz2", HvEnabled = true, LvEnabled = false, HvPower = 70, HvRepeat = 3, HvThreshold = 4000 };

@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DESS.Migrations
 {
     [DbContext(typeof(DessDbContext))]
-    [Migration("20200901130952_SomeModificationsMade")]
-    partial class SomeModificationsMade
+    [Migration("20200905130044_InitialDatabase")]
+    partial class InitialDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -408,6 +408,16 @@ namespace DESS.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            FirstName = "Amir",
+                            LastName = "Fakhim-Babaei",
+                            Password = "WEdI52lC2MDoAsn0xlqCCObnnlEZTiwjIBsAYNfXag1ss/hWFeI10IwAOLGQra9U8uZBCttllmmHi1vwB3ugKw==",
+                            Username = "EHP"
+                        });
                 });
 
             modelBuilder.Entity("Dess.Entities.ElectroFenceStatus", b =>

@@ -19,15 +19,37 @@ namespace DESS.Migrations
                     Hash = table.Column<string>(nullable: true),
                     Applied = table.Column<bool>(nullable: false),
                     AutoLocation = table.Column<bool>(nullable: false),
+                    Latitude = table.Column<string>(nullable: true),
+                    Longitude = table.Column<string>(nullable: true),
                     HvEnabled = table.Column<bool>(nullable: false),
                     LvEnabled = table.Column<bool>(nullable: false),
                     HvPower = table.Column<int>(nullable: false),
                     HvThreshold = table.Column<int>(nullable: false),
-                    HvRepeat = table.Column<int>(nullable: false)
+                    HvRepeat = table.Column<int>(nullable: false),
+                    TemperatureMin = table.Column<int>(nullable: false),
+                    TemperatureMax = table.Column<int>(nullable: false),
+                    BatteryMin = table.Column<double>(nullable: false),
+                    BatteryMax = table.Column<double>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ElectroFences", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    FirstName = table.Column<string>(nullable: true),
+                    LastName = table.Column<string>(nullable: true),
+                    Username = table.Column<string>(nullable: true),
+                    Password = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -99,18 +121,18 @@ namespace DESS.Migrations
 
             migrationBuilder.InsertData(
                 table: "ElectroFences",
-                columns: new[] { "Id", "Applied", "AutoLocation", "Hash", "HvEnabled", "HvPower", "HvRepeat", "HvThreshold", "LvEnabled", "PhoneNumber", "Serial" },
-                values: new object[] { 1, false, false, null, true, 70, 2, 3000, true, null, "ehp-ie-tbz1" });
+                columns: new[] { "Id", "Applied", "AutoLocation", "BatteryMax", "BatteryMin", "Hash", "HvEnabled", "HvPower", "HvRepeat", "HvThreshold", "Latitude", "Longitude", "LvEnabled", "PhoneNumber", "Serial", "TemperatureMax", "TemperatureMin" },
+                values: new object[,]
+                {
+                    { 1, false, false, 0.0, 0.0, null, true, 70, 2, 3000, null, null, true, null, "ehp-ie-tbz1", 0, 0 },
+                    { 2, false, false, 0.0, 0.0, null, true, 70, 3, 4000, null, null, false, null, "ehp-ie-tbz2", 0, 0 },
+                    { 3, false, false, 0.0, 0.0, null, true, 80, 2, 5000, null, null, false, null, "ehp-ie-tbz3", 0, 0 }
+                });
 
             migrationBuilder.InsertData(
-                table: "ElectroFences",
-                columns: new[] { "Id", "Applied", "AutoLocation", "Hash", "HvEnabled", "HvPower", "HvRepeat", "HvThreshold", "LvEnabled", "PhoneNumber", "Serial" },
-                values: new object[] { 2, false, false, null, true, 70, 3, 4000, false, null, "ehp-ie-tbz2" });
-
-            migrationBuilder.InsertData(
-                table: "ElectroFences",
-                columns: new[] { "Id", "Applied", "AutoLocation", "Hash", "HvEnabled", "HvPower", "HvRepeat", "HvThreshold", "LvEnabled", "PhoneNumber", "Serial" },
-                values: new object[] { 3, false, false, null, true, 80, 2, 5000, false, null, "ehp-ie-tbz3" });
+                table: "Users",
+                columns: new[] { "Id", "FirstName", "LastName", "Password", "Username" },
+                values: new object[] { 1, "Amir", "Fakhim-Babaei", "WEdI52lC2MDoAsn0xlqCCObnnlEZTiwjIBsAYNfXag1ss/hWFeI10IwAOLGQra9U8uZBCttllmmHi1vwB3ugKw==", "EHP" });
 
             migrationBuilder.InsertData(
                 table: "IOs",
@@ -165,6 +187,9 @@ namespace DESS.Migrations
 
             migrationBuilder.DropTable(
                 name: "Statuss");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "ElectroFences");
