@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-
 using Dess.Entities;
 using Dess.Models.ElectroFence;
 
