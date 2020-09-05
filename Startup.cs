@@ -1,7 +1,12 @@
 using System;
+using System.Text;
+using System.Threading.Tasks;
 using AutoMapper;
 using Dess.DbContexts;
+using Dess.Helpers;
 using Dess.Repositories;
+using Dess.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
@@ -9,35 +14,73 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 
 namespace DESS
 {
   public class Startup
   {
     private IConfiguration _configuration;
-    private readonly string _connectionString =
-      @"Server=localhost;" +
-      "Port=315;" +
-      "Database=Irancel;" +
-      "Uid=AEHP;" +
-      "Pwd=^eNU7cCC_P!8wUfzeoQb;" +
-      "SslMode=Preferred;";
 
-    public Startup(IConfiguration configuration)
-    {
+    public Startup(IConfiguration configuration) =>
       _configuration = configuration;
-    }
 
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
       services.AddControllersWithViews();
-
+      services.AddCors();
       services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
       services.AddHttpClient();
+
       services.AddScoped<IElectroFenceRepository, ElectroFenceRepository>();
+
+      services.AddScoped<IUserRepository, UserRepository>();
+      services.AddScoped<IUserService, UserService>();
+
       var connectionString = _configuration.GetSection("ConnectionStrings")["DessConnectionString"];
       services.AddDbContext<DessDbContext>(o => o.UseMySql(connectionString));
+
+      // configure strongly typed settings objects
+      var appSettingsSection = _configuration.GetSection("AppSettings");
+      services.Configure<AppSettings>(appSettingsSection);
+
+      // configure jwt authentication
+      var appSettings = appSettingsSection.Get<AppSettings>();
+      var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+
+      services.AddAuthentication(x =>
+        {
+          x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+          x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+          .AddJwtBearer(x =>
+          {
+            x.Events = new JwtBearerEvents
+            {
+              OnTokenValidated = context =>
+              {
+                var userRepository = context.HttpContext.RequestServices.GetRequiredService<IUserRepository>();
+                var userId = int.Parse(context.Principal.Identity.Name);
+                var user = userRepository.GetAsync(userId).Result;
+
+                if (user == null)
+                  context.Fail("Unauthorized");
+
+                return Task.CompletedTask;
+              }
+            };
+
+            x.RequireHttpsMetadata = false;
+            x.SaveToken = true;
+            x.TokenValidationParameters = new TokenValidationParameters
+            {
+              ValidateIssuerSigningKey = true,
+              IssuerSigningKey = new SymmetricSecurityKey(key),
+              ValidateIssuer = false,
+              ValidateAudience = false
+            };
+          });
 
       // In production, the React files will be served from this directory
       services.AddSpaStaticFiles(configuration =>
@@ -66,6 +109,14 @@ namespace DESS
       app.UseSpaStaticFiles();
 
       app.UseRouting();
+
+      app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
+
+      app.UseAuthentication();
+      app.UseAuthorization();
 
       app.UseEndpoints(endpoints =>
       {
