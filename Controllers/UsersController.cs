@@ -103,7 +103,7 @@ namespace Dess.Controllers
 
       var tokenDescriptor = new SecurityTokenDescriptor
       {
-        Subject = new System.Security.Claims.ClaimsIdentity(new Claim[]
+        Subject = new ClaimsIdentity(new Claim[]
         {
           new Claim(ClaimTypes.Name, userFromRepo.Id.ToString())
         }),
