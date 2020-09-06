@@ -29,5 +29,11 @@ namespace Dess.Helpers
       using (var hash = new SHA512CryptoServiceProvider())
         return Convert.ToBase64String(hash.ComputeHash(Encoding.ASCII.GetBytes(input)));
     }
+
+    public static string GeneratePasswordHash(string password) =>
+      BCrypt.Net.BCrypt.HashPassword(password);
+
+    public static bool VerifyPasswordHash(string password, string hash) =>
+      BCrypt.Net.BCrypt.EnhancedVerify(password, hash);
   }
 }
