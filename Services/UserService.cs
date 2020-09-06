@@ -22,7 +22,7 @@ namespace Dess.Services
       if (user == null)
         return null;
 
-      if (Cryptography.GetHashSHA512String(password) != user.Password)
+      if (!Cryptography.VerifyPasswordHash(password, user.Password))
         return null;
 
       return user;
@@ -36,7 +36,7 @@ namespace Dess.Services
       if (await _repository.ExistsAsync(user.Username))
         throw new DessException($"Username \"{user.Username}\" is already taken.");
 
-      user.Password = Cryptography.GetHashSHA512String(password);
+      user.Password = Cryptography.GeneratePasswordHash(password);
 
       _repository.Add(user);
       await _repository.SaveAsync();
@@ -66,7 +66,7 @@ namespace Dess.Services
         userFromRepo.LastName = user.LastName;
 
       if (!string.IsNullOrWhiteSpace(password))
-        userFromRepo.Password = Cryptography.GetHashSHA512String(password);
+        userFromRepo.Password = Cryptography.GeneratePasswordHash(password);
 
       await _repository.SaveAsync();
     }
