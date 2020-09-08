@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Dess.DbContexts;
 using Dess.Helpers;
+using Dess.Hubs;
 using Dess.Repositories;
 using Dess.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -32,6 +33,7 @@ namespace DESS
       services.AddCors();
       services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
       services.AddHttpClient();
+      services.AddSignalR();
 
       services.AddScoped<IElectroFenceRepository, ElectroFenceRepository>();
 
@@ -123,6 +125,7 @@ namespace DESS
         endpoints.MapControllerRoute(
                   name: "default",
                   pattern: "{controller}/{action=Index}/{id?}");
+        endpoints.MapHub<ElectroFenceHub>("/api/irancell/web/efhub");
       });
 
       app.UseSpa(spa =>
