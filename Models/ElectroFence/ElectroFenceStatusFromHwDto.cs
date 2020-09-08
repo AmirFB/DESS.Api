@@ -1,11 +1,9 @@
-using Dess.Types;
+﻿using Dess.Types;
 
 namespace Dess.Models.ElectroFence
 {
-  public class ElectroFenceStatusDto
+  public class ElectroFenceStatusFromHwDto : IHashable
   {
-    public int Id { get; set; }
-
     public bool HvAlarm { get; set; }
     public bool LvAlarm { get; set; }
     public bool TamperAlarm { get; set; }
@@ -28,5 +26,13 @@ namespace Dess.Models.ElectroFence
     public string Latitude { get; set; }
     public string Longitude { get; set; }
     public byte SignalStrength { get; set; }
+
+    public string GetHashBase()
+    {
+      var data = $"{HvAlarm}{LvAlarm}{TamperAlarm}" +
+      $"{BatteryStatus}{MainPowerFault}{HvPowerFault}{HvChargeFault}" +
+      $"{HvDischargeFault}{Input1}{Input2}{Output1}{Output2}";
+      return data;
+    }
   }
 }

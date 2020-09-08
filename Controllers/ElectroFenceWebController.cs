@@ -84,14 +84,14 @@ namespace Dess.Controllers
     }
 
     [HttpGet("{id}/status")]
-    public async Task<ActionResult<ElectroFenceStatusDto>> GetStatusAsync(int id)
+    public async Task<ActionResult<ElectroFenceStatusFromHwDto>> GetStatusAsync(int id)
     {
       var ef = await _repository.GetForStatusAsync(id);
 
       if (ef == null)
         return NotFound();
 
-      return Ok(_mapper.Map<ElectroFenceStatusDto>(ef.Status));
+      return Ok(_mapper.Map<ElectroFenceStatusFromHwDto>(ef.Status));
     }
   }
 }

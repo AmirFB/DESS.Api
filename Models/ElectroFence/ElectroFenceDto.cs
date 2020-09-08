@@ -2,8 +2,10 @@
 
 namespace Dess.Models.ElectroFence
 {
-  public class ElectroFenceDto : EntityBase
+  public class ElectroFenceDto
   {
+    public int Id { get; set; }
+
     public string Serial { get; set; }
     public string PhoneNumber { get; set; }
     public bool Applied { get; set; }

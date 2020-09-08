@@ -1,7 +1,5 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Dess.Services;
 using Dess.Types;
 
 namespace Dess.Entities
@@ -14,14 +12,16 @@ namespace Dess.Entities
     public bool HvAlarm { get; set; }
     public bool LvAlarm { get; set; }
     public bool TamperAlarm { get; set; }
-    public double HvVoltage { get; set; }
-    public double Temperature { get; set; }
-    public BatteryStatus BatteryStatus { get; set; }
-    public byte BatteryLevel { get; set; }
+
     public bool MainPowerFault { get; set; }
     public bool HvPowerFault { get; set; }
     public bool HvChargeFault { get; set; }
     public bool HvDischargeFault { get; set; }
+
+    public double HvVoltage { get; set; }
+    public double Temperature { get; set; }
+    public BatteryStatus BatteryStatus { get; set; }
+    public byte BatteryLevel { get; set; }
 
     public bool Input1 { get; set; }
     public bool Input2 { get; set; }
