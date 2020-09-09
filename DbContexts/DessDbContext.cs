@@ -17,15 +17,26 @@ namespace Dess.DbContexts
     public DbSet<ElectroFenceStatus> Statuss { get; set; }
     public DbSet<IO> IOs { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<UserLog> UserLogs { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
       base.OnModelCreating(modelBuilder);
 
       modelBuilder.Entity<ElectroFence>()
-          .HasOne(e => e.Status)
-          .WithOne(s => s.ElectroFence)
-          .HasForeignKey<ElectroFenceStatus>(s => s.ElectroFenceId);
+        .HasOne(e => e.Status)
+        .WithOne(s => s.ElectroFence)
+        .HasForeignKey<ElectroFenceStatus>(s => s.ElectroFenceId);
+
+      modelBuilder.Entity<UserLog>()
+        .HasOne(u => u.User)
+        .WithMany(u => u.UserLogs)
+        .HasForeignKey(u => u.UserId);
+
+      modelBuilder.Entity<UserLog>()
+        .HasOne(u => u.Log)
+        .WithMany(l => l.UserLogs)
+        .HasForeignKey(u => u.LogId);
 
       var user1 = new User { Id = 1, Username = "EHP", Password = Cryptography.GetHashSHA512String("EHP4132112"), FirstName = "Amir", LastName = "Fakhim-Babaei" };
       modelBuilder.Entity<User>().HasData(user1);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Dess.Types;
 
@@ -35,5 +36,7 @@ namespace Dess.Entities
     [Required]
     public int ElectroFenceId { get; set; }
     public ElectroFence ElectroFence { get; set; }
+
+    public ICollection<UserLog> UserLogs { get; set; }
   }
 }

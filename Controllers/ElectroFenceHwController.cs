@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using AutoMapper;
+using Dess.Entities;
 using Dess.Hubs;
 using Dess.Models;
 using Dess.Models.ElectroFence;
@@ -15,13 +16,17 @@ namespace Dess.Controllers
   public class ElectroFenceRepository : ControllerBase
   {
     private readonly IElectroFenceRepository _repository;
+    private readonly IUserLogRepository _userLogRepository;
     private readonly IMapper _mapper;
     private readonly IHubContext<ElectroFenceHub> _hubContext;
 
-    public ElectroFenceRepository(IElectroFenceRepository electroFenceRepository, IMapper mapper, IHubContext<ElectroFenceHub> hubContext)
+    public ElectroFenceRepository(IElectroFenceRepository electroFenceRepository, IUserLogRepository userLogRepository, IMapper mapper, IHubContext<ElectroFenceHub> hubContext)
     {
       _repository = electroFenceRepository ??
           throw new ArgumentNullException(nameof(electroFenceRepository));
+
+      _userLogRepository = userLogRepository ??
+          throw new ArgumentNullException(nameof(userLogRepository));
 
       _mapper = mapper ??
           throw new ArgumentNullException(nameof(mapper));
@@ -49,6 +54,11 @@ namespace Dess.Controllers
 
       if (ef.Status.Hash != statusHash)
       {
+        ElectroFenceHub.UserIds.ForEach(
+          id => _userLogRepository.Add(
+            new UserLog { UserId = id, LogId = ef.Status.Id }));
+            
+        await _userLogRepository.SaveAsync();
         ef.Status.Hash = statusHash;
         ef.Log.Add(ef.Status);
       }
