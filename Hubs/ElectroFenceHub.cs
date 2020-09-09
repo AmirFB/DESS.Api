@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Dess.Repositories;
 using Microsoft.AspNetCore.Authorization;
@@ -8,18 +9,27 @@ namespace Dess.Hubs
   [Authorize]
   public class ElectroFenceHub : Hub
   {
+    public static List<int> UserIds { get; } = new List<int>();
     private readonly IUserRepository _userRepository;
     public ElectroFenceHub(IUserRepository userRepository) =>
       userRepository = _userRepository;
 
-    public async Task RegisterAsync(string token)
+    public override Task OnConnectedAsync()
     {
-      var user = await _userRepository.GetAsync(int.Parse(Context.User.Identity.Name));
+      var id = int.Parse(Context.User.Identity.Name);
 
-      if (user == null)
-        return;
+      if (!UserIds.Contains(id))
+        UserIds.Add(id);
 
+      return base.OnConnectedAsync();
+    }
 
+    public override Task OnDisconnectedAsync(System.Exception exception)
+    {
+      var id = int.Parse(Context.User.Identity.Name);
+      UserIds.Remove(id);
+
+      return base.OnDisconnectedAsync(exception);
     }
   }
 }
