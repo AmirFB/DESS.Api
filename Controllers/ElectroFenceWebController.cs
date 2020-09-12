@@ -20,9 +20,10 @@ namespace Dess.Controllers
     public ElectroFenceWebController(IElectroFenceRepository electroFenceRepository, IMapper mapper)
     {
       _repository = electroFenceRepository ??
-          throw new ArgumentNullException(nameof(electroFenceRepository));
+        throw new ArgumentNullException(nameof(electroFenceRepository));
+
       _mapper = mapper ??
-          throw new ArgumentNullException(nameof(mapper));
+        throw new ArgumentNullException(nameof(mapper));
     }
 
     [HttpGet("{id}", Name = "GetAsync")]
