@@ -5,6 +5,7 @@ namespace Dess.Models.ElectroFence
   public class ElectroFenceStatusDto
   {
     public int Id { get; set; }
+    public bool Applied { get; set; }
 
     public bool HvAlarm { get; set; }
     public bool LvAlarm { get; set; }

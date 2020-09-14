@@ -8,7 +8,6 @@ namespace Dess.Models.ElectroFence
 
     public string Serial { get; set; }
     public string PhoneNumber { get; set; }
-    public bool Applied { get; set; }
 
     public bool AutoLocation { get; set; }
     public string Latitude { get; set; }
