@@ -1,7 +1,18 @@
 {
   "words": {
+    "//Common//": "//",
     "ok": "OK",
     "cancel": "Cancel",
+    "about": "About",
+    "save": "Save",
+    "enable": "Enable",
+    "enabled": "Enabled",
+    "disable": "Disable",
+    "disabled": "Disabled",
+    "min": "Min",
+    "max": "Max",
+    "back": "Back",
+    "reload": "Reload",
     "home": "Home",
     "site": "Site",
     "sites": "Sites",
@@ -9,9 +20,16 @@
     "Users": "users",
     "report": "Report",
     "help": "Help",
+    "name": "Name",
+    "number": "Number",
+    "location": "Location",
+
+    "//Side Panel//": "//",
     "activeSites": "Active Sites",
     "offlineSites": "Offline Sites",
     "notDefined": "Not Defined",
+
+    "//Home//": "//",
     "muteAlarm": "Mute Alarm",
     "raiseAlarm": "Raise Alarm",
     "findLocation": "Find Location",
@@ -23,10 +41,43 @@
     "fitView": "FitView",
     "statistics": "Statistics",
     "schedule": "Schedule",
-    "about": "About"
+
+    "//Sites//": "//",
+    "siteId": "Site ID",
+    "power": "Power",
+    "alarmLevel": "Alarm Level",
+    "repeat": "Repeat",
+    "phoneNumber": "Phone Number",
+    "dataInterval": "Data Interval",
+    "input": "Input",
+    "output": "Output",
+    "group": "Group",
+    "lastUpdate": "Last Update",
+    "addSite": "Add Site",
+    "addList": "Add List",
+    "remove": "Remove",
+    "exportList": "Export List",
+    "addGroup": "Add Group",
+    "editGroup": "Edit Group",
+    "search": "Search",
+    "filter": "Filter",
+
+    "//Edit Site//": "//",
+    "serialNumber": "Serial Num.",
+    "enterName": "Enter Name",
+    "auto": "Auto",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "hvProtection": "HV Protection",
+    "lvProtection": "LV Protection",
+    "boxTamper": "Box Tamper",
+    "teperature": "Temperature",
+    "battery": "Battery",
+    "voltage": "Voltage"
   },
 
   "messages": {
+    "//Side Panel//": "//",
     "searchSite": "Type site name here."
   }
 }
