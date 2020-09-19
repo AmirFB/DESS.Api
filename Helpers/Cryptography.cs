@@ -31,7 +31,7 @@ namespace Dess.Helpers
     }
 
     public static string GeneratePasswordHash(string password) =>
-      BCrypt.Net.BCrypt.HashPassword(password);
+      BCrypt.Net.BCrypt.EnhancedHashPassword(password);
 
     public static bool VerifyPasswordHash(string password, string hash) =>
       BCrypt.Net.BCrypt.EnhancedVerify(password, hash);
