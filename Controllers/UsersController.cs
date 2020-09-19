@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -10,6 +11,7 @@ using Dess.Helpers;
 using Dess.Models.User;
 using Dess.Repositories;
 using Dess.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -17,7 +19,6 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Dess.Controllers
 {
-  [Authorize]
   [ApiController]
   [Route("api/irancell/web/users")]
   public class UsersController : ControllerBase
@@ -95,7 +96,7 @@ namespace Dess.Controllers
     {
       var userFromRepo = await _service.AuthenticateAsync(user.Username, user.Password);
 
-      if (user == null)
+      if (userFromRepo == null)
         return BadRequest("Username or password is wrong.");
 
       var tokenHandler = new JwtSecurityTokenHandler();
@@ -107,10 +108,10 @@ namespace Dess.Controllers
         {
           new Claim(ClaimTypes.Name, userFromRepo.Id.ToString())
         }),
-        Expires = DateTime.UtcNow.AddDays(7),
+        Expires = DateTime.UtcNow.AddSeconds(10),
         SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
       };
-
+      var date = DateTime.UtcNow.AddSeconds(10);
       var token = tokenHandler.CreateToken(tokenDescriptor);
       var tokenString = tokenHandler.WriteToken(token);
 

@@ -10,6 +10,7 @@ using Dess.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -29,7 +30,8 @@ namespace DESS
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
-      services.AddControllersWithViews();
+      // services.AddControllersWithViews();
+      services.AddControllersWithViews(o => o.Filters.Add(new AuthorizeFilter()));
       services.AddCors();
       services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
       services.AddHttpClient();
