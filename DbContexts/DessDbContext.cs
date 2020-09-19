@@ -38,7 +38,7 @@ namespace Dess.DbContexts
         .WithMany(l => l.UserLogs)
         .HasForeignKey(u => u.LogId);
 
-      var user1 = new User { Id = 1, Username = "EHP", Password = Cryptography.GetHashSHA512String("EHP4132112"), FirstName = "Amir", LastName = "Fakhim-Babaei" };
+      var user1 = new User { Id = 1, Username = "EHP", Password = Cryptography.GeneratePasswordHash("EHP4132112"), FirstName = "Amir", LastName = "Fakhim-Babaei" };
       modelBuilder.Entity<User>().HasData(user1);
 
       var ef1 = new ElectroFence { Id = 1, Serial = "ehp-ie-tbz1", HvEnabled = true, LvEnabled = true, HvPower = 70, HvRepeat = 2, HvThreshold = 3000 };
