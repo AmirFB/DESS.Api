@@ -12,7 +12,7 @@ namespace Dess.Hubs
     public static List<int> UserIds { get; } = new List<int>();
     private readonly IUserRepository _userRepository;
     public ElectroFenceHub(IUserRepository userRepository) =>
-      userRepository = _userRepository;
+      _userRepository = userRepository;
 
     public override Task OnConnectedAsync()
     {
