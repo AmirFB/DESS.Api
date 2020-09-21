@@ -14,7 +14,7 @@ namespace DESS.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.7")
+                .HasAnnotation("ProductVersion", "3.1.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Dess.Entities.ElectroFence", b =>
@@ -395,6 +395,9 @@ namespace DESS.Migrations
                         .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
+                    b.Property<int>("GroupId")
+                        .HasColumnType("int");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
@@ -409,6 +412,8 @@ namespace DESS.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("GroupId");
+
                     b.ToTable("Users");
 
                     b.HasData(
@@ -416,9 +421,116 @@ namespace DESS.Migrations
                         {
                             Id = 1,
                             FirstName = "Amir",
+                            GroupId = 1,
                             LastName = "Fakhim-Babaei",
-                            Password = "$2a$11$l/Y/Nww6upYX7cqOnec/N.l3bAKqNdfpg7QkTxNHq8fw7wc.V/r.e",
-                            Username = "EHP"
+                            Password = "$2a$11$bYdNCZ47EfLQgMfqoeUduOr5NXxlXlqexmLAOrMHSd5FBsM5Tv4EK",
+                            Username = "expert"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            FirstName = "Amir",
+                            GroupId = 2,
+                            LastName = "Fakhim-Babaei",
+                            Password = "$2a$11$lAh2a2kYXGLw3jxInUs/AuaTJg6SgOlY7b8PFKcpnXeTkJeSfYGye",
+                            Username = "admin"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            FirstName = "Amir",
+                            GroupId = 3,
+                            LastName = "Fakhim-Babaei",
+                            Password = "$2a$11$jdip192QIJmLdYOCjEY/e.CpNTIV0Mao/2z61JRNbjMpj35LdVHS.",
+                            Username = "operator"
+                        });
+                });
+
+            modelBuilder.Entity("Dess.Entities.UserGroup", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserGroups");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Title = "Expert"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Title = "Admin"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Title = "Operator"
+                        });
+                });
+
+            modelBuilder.Entity("Dess.Entities.UserGroupPermission", b =>
+                {
+                    b.Property<int>("GroupId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PermissionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("GroupId", "PermissionId");
+
+                    b.HasIndex("PermissionId");
+
+                    b.ToTable("UserGroupPermissions");
+
+                    b.HasData(
+                        new
+                        {
+                            GroupId = 1,
+                            PermissionId = 1
+                        },
+                        new
+                        {
+                            GroupId = 1,
+                            PermissionId = 2
+                        },
+                        new
+                        {
+                            GroupId = 1,
+                            PermissionId = 3
+                        },
+                        new
+                        {
+                            GroupId = 1,
+                            PermissionId = 4
+                        },
+                        new
+                        {
+                            GroupId = 2,
+                            PermissionId = 2
+                        },
+                        new
+                        {
+                            GroupId = 2,
+                            PermissionId = 3
+                        },
+                        new
+                        {
+                            GroupId = 2,
+                            PermissionId = 4
+                        },
+                        new
+                        {
+                            GroupId = 3,
+                            PermissionId = 3
                         });
                 });
 
@@ -443,6 +555,42 @@ namespace DESS.Migrations
                     b.ToTable("UserLogs");
                 });
 
+            modelBuilder.Entity("Dess.Entities.UserPermission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserPermissions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Title = "CanEditUserGroups"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Title = "CanEditUsers"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Title = "CanSecureSites"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Title = "CanEditSites"
+                        });
+                });
+
             modelBuilder.Entity("Dess.Entities.ElectroFenceStatus", b =>
                 {
                     b.HasOne("Dess.Entities.ElectroFence", "ElectroFence")
@@ -462,6 +610,30 @@ namespace DESS.Migrations
                         .WithMany()
                         .HasForeignKey("ModuleId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Dess.Entities.User", b =>
+                {
+                    b.HasOne("Dess.Entities.UserGroup", "Group")
+                        .WithMany("Users")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Dess.Entities.UserGroupPermission", b =>
+                {
+                    b.HasOne("Dess.Entities.UserGroup", "Group")
+                        .WithMany("UserGroupPermissions")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Dess.Entities.UserPermission", "Permission")
+                        .WithMany("UserGroupPermissions")
+                        .HasForeignKey("PermissionId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 

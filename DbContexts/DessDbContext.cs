@@ -18,6 +18,9 @@ namespace Dess.DbContexts
     public DbSet<IO> IOs { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<UserLog> UserLogs { get; set; }
+    public DbSet<UserGroup> UserGroups { get; set; }
+    public DbSet<UserPermission> UserPermissions { get; set; }
+    public DbSet<UserGroupPermission> UserGroupPermissions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -38,8 +41,61 @@ namespace Dess.DbContexts
         .WithMany(l => l.UserLogs)
         .HasForeignKey(u => u.LogId);
 
-      var user1 = new User { Id = 1, Username = "EHP", Password = Cryptography.GeneratePasswordHash("EHP4132112"), FirstName = "Amir", LastName = "Fakhim-Babaei" };
-      modelBuilder.Entity<User>().HasData(user1);
+      modelBuilder.Entity<User>()
+        .HasOne(u => u.Group)
+        .WithMany(g => g.Users)
+        .HasForeignKey(u => u.GroupId);
+
+      modelBuilder.Entity<UserGroupPermission>()
+        .HasKey(gp => new { gp.GroupId, gp.PermissionId });
+
+      modelBuilder.Entity<UserGroupPermission>()
+        .HasOne(gp => gp.Group)
+        .WithMany(g => g.UserGroupPermissions)
+        .HasForeignKey(gp => gp.GroupId)
+        .OnDelete(DeleteBehavior.NoAction);
+
+      modelBuilder.Entity<UserGroupPermission>()
+        .HasOne(gp => gp.Permission)
+        .WithMany(p => p.UserGroupPermissions)
+        .HasForeignKey(gp => gp.PermissionId)
+        .OnDelete(DeleteBehavior.NoAction);
+
+      var groups = new UserGroup[] {
+        new UserGroup { Id = 1, Title = "Expert" },
+        new UserGroup { Id = 2, Title = "Admin" },
+        new UserGroup { Id = 3, Title = "Operator" }
+      };
+      modelBuilder.Entity<UserGroup>().HasData(groups);
+
+      var permissions = new UserPermission[] {
+        new UserPermission { Id = 1, Title = "CanEditUserGroups" },
+        new UserPermission { Id = 2, Title = "CanEditUsers" },
+        new UserPermission { Id = 3, Title = "CanSecureSites" },
+        new UserPermission { Id = 4, Title = "CanEditSites" }
+      };
+      modelBuilder.Entity<UserPermission>().HasData(permissions);
+
+      var groupPermissions = new UserGroupPermission[] {
+        new UserGroupPermission { GroupId = 1, PermissionId = 1 },
+        new UserGroupPermission { GroupId = 1, PermissionId = 2 },
+        new UserGroupPermission { GroupId = 1, PermissionId = 3 },
+        new UserGroupPermission { GroupId = 1, PermissionId = 4 },
+
+        new UserGroupPermission { GroupId = 2, PermissionId = 2 },
+        new UserGroupPermission { GroupId = 2, PermissionId = 3 },
+        new UserGroupPermission { GroupId = 2, PermissionId = 4 },
+
+        new UserGroupPermission { GroupId = 3, PermissionId = 3 }
+      };
+      modelBuilder.Entity<UserGroupPermission>().HasData(groupPermissions);
+
+      var users = new User[] {
+        new User { Id = 1, Username = "expert", Password = Cryptography.GeneratePasswordHash("expert"), FirstName = "Amir", LastName = "Fakhim-Babaei",GroupId = 1 },
+        new User { Id = 2, Username = "admin", Password = Cryptography.GeneratePasswordHash("admin"), FirstName = "Amir", LastName = "Fakhim-Babaei",GroupId = 2 },
+        new User { Id = 3, Username = "operator", Password = Cryptography.GeneratePasswordHash("operator"), FirstName = "Amir", LastName = "Fakhim-Babaei",GroupId = 3 }
+        };
+      modelBuilder.Entity<User>().HasData(users);
 
       var ef1 = new ElectroFence { Id = 1, Serial = "ehp-ie-tbz1", HvEnabled = true, LvEnabled = true, HvPower = 70, HvRepeat = 2, HvThreshold = 3000 };
       var ef2 = new ElectroFence { Id = 2, Serial = "ehp-ie-tbz2", HvEnabled = true, LvEnabled = false, HvPower = 70, HvRepeat = 3, HvThreshold = 4000 };

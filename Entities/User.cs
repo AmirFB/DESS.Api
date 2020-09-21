@@ -14,6 +14,10 @@ namespace Dess.Entities
     [Required]
     public string Password { get; set; }
 
+    [Required]
+    public int GroupId { get; set; }
+    public UserGroup Group { get; set; }
+
     public ICollection<UserLog> UserLogs { get; set; }
   }
 }
