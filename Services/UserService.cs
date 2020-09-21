@@ -28,15 +28,15 @@ namespace Dess.Services
       return user;
     }
 
-    public async Task<User> CreateAsync(User user, string password)
+    public async Task<User> CreateAsync(User user)
     {
-      if (string.IsNullOrWhiteSpace(password))
-        throw new ArgumentNullException(nameof(password));
+      if (string.IsNullOrWhiteSpace(user.Password))
+        throw new ArgumentNullException(nameof(user.Password));
 
       if (await _repository.ExistsAsync(user.Username))
         throw new DessException($"Username \"{user.Username}\" is already taken.");
 
-      user.Password = Cryptography.GeneratePasswordHash(password);
+      user.Password = Cryptography.GeneratePasswordHash(user.Password);
 
       _repository.Add(user);
       await _repository.SaveAsync();
@@ -44,7 +44,7 @@ namespace Dess.Services
       return user;
     }
 
-    public async Task UpdateAsync(User user, string password = null)
+    public async Task UpdateAsync(User user)
     {
       var userFromRepo = await _repository.GetAsync(user.Id);
 
@@ -65,8 +65,8 @@ namespace Dess.Services
       if (!string.IsNullOrWhiteSpace(user.LastName))
         userFromRepo.LastName = user.LastName;
 
-      if (!string.IsNullOrWhiteSpace(password))
-        userFromRepo.Password = Cryptography.GeneratePasswordHash(password);
+      if (!string.IsNullOrWhiteSpace(user.Password))
+        userFromRepo.Password = Cryptography.GeneratePasswordHash(user.Password);
 
       await _repository.SaveAsync();
     }

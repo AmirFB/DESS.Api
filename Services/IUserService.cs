@@ -6,8 +6,8 @@ namespace Dess.Services
   public interface IUserService
   {
     Task<User> AuthenticateAsync(string username, string password);
-    Task<User> CreateAsync(User user, string password);
-    Task UpdateAsync(User user, string password);
+    Task<User> CreateAsync(User user);
+    Task UpdateAsync(User user);
     Task DeleteAsync(int id);
   }
 }

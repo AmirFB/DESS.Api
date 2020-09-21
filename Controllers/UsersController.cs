@@ -80,7 +80,7 @@ namespace Dess.Controllers
 
       try
       {
-        await _service.UpdateAsync(user, dto.Password);
+        await _service.UpdateAsync(user);
         return Ok();
       }
       catch (DessException ex) { return BadRequest(ex.Message); }
