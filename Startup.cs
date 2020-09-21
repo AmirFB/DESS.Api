@@ -3,8 +3,10 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Dess.DbContexts;
+using Dess.Entities;
 using Dess.Helpers;
 using Dess.Hubs;
+using Dess.Models.User;
 using Dess.Repositories;
 using Dess.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -38,8 +40,11 @@ namespace DESS
       services.AddSignalR();
 
       services.AddScoped<IElectroFenceRepository, ElectroFenceRepository>();
-
+      services.AddScoped<ILogRepository, LogRepository>();
       services.AddScoped<IUserRepository, UserRepository>();
+      services.AddScoped<IUserLogRepository, UserLogRepository>();
+      services.AddScoped<IPermissionRepository, PermissionRepository>();
+
       services.AddScoped<IUserService, UserService>();
 
       var connectionString = _configuration.GetSection("ConnectionStrings")["DessConnectionString"];
@@ -53,38 +58,55 @@ namespace DESS
       var appSettings = appSettingsSection.Get<AppSettings>();
       var key = Encoding.ASCII.GetBytes(appSettings.Secret);
 
-      services.AddAuthentication(x =>
+      services.AddAuthentication(options =>
+      {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+      })
+        .AddJwtBearer(action =>
         {
-          x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-          x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        })
-          .AddJwtBearer(x =>
+          action.Events = new JwtBearerEvents
           {
-            x.Events = new JwtBearerEvents
+            OnTokenValidated = context =>
             {
-              OnTokenValidated = context =>
-              {
-                var userRepository = context.HttpContext.RequestServices.GetRequiredService<IUserRepository>();
-                var userId = int.Parse(context.Principal.Identity.Name);
-                var user = userRepository.GetAsync(userId).Result;
+              var userRepository = context.HttpContext.RequestServices.GetRequiredService<IUserRepository>();
+              var username = context.Principal.Identity.Name;
+              var user = userRepository.GetAsync(username).Result;
 
-                if (user == null)
-                  context.Fail("Unauthorized");
+              if (user == null)
+                context.Fail("Unauthorized");
 
-                return Task.CompletedTask;
-              }
-            };
+              return Task.CompletedTask;
+            }
+          };
 
-            x.RequireHttpsMetadata = false;
-            x.SaveToken = true;
-            x.TokenValidationParameters = new TokenValidationParameters
-            {
-              ValidateIssuerSigningKey = true,
-              IssuerSigningKey = new SymmetricSecurityKey(key),
-              ValidateIssuer = false,
-              ValidateAudience = false
-            };
+          action.RequireHttpsMetadata = false;
+          action.SaveToken = true;
+          action.TokenValidationParameters = new TokenValidationParameters
+          {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true
+          };
+        });
+
+      var serviceProvider = services.BuildServiceProvider();
+      var permissionRepository = (IPermissionRepository)serviceProvider.GetService<IPermissionRepository>();
+      var permissions = permissionRepository.GetAllAsync().Result;
+
+      services.AddAuthorizationCore(options =>
+      {
+        foreach (var permission in permissions)
+        {
+          options.AddPolicy(permission.Title, builder =>
+          {
+            builder.RequireAuthenticatedUser();
+            builder.RequireClaim("Permission", permission.Title);
           });
+        }
+      });
 
       // In production, the React files will be served from this directory
       services.AddSpaStaticFiles(configuration =>
@@ -97,9 +119,7 @@ namespace DESS
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
       if (env.IsDevelopment())
-      {
         app.UseDeveloperExceptionPage();
-      }
 
       else
       {
@@ -115,9 +135,9 @@ namespace DESS
       app.UseRouting();
 
       app.UseCors(x => x
-                .AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader());
+        .AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader());
 
       app.UseAuthentication();
       app.UseAuthorization();
