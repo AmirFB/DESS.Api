@@ -8,7 +8,9 @@ namespace Dess.Profiles
   {
     public UserProfile()
     {
-      CreateMap<User, UserDto>().ReverseMap();
+      CreateMap<User, UserDto>()
+        .ForAllMembers(options => options
+        .Condition((src, dest, srcMember) => srcMember != null));
       CreateMap<UserRegisterDto, User>();
       CreateMap<UserUpdateDto, User>();
     }

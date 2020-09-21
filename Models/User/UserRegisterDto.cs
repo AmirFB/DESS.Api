@@ -12,5 +12,9 @@ namespace Dess.Models.User
     public string Username { get; set; }
     [Required]
     public string Password { get; set; }
+    [Required]
+    public int GroupId { get; set; }
+
+    public byte[] ImageData { get; set; }
   }
 }

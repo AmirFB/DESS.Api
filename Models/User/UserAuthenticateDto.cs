@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Dess.Models.User
@@ -8,5 +9,7 @@ namespace Dess.Models.User
     public string Username { get; set; }
     [Required]
     public string Password { get; set; }
+
+    public TimeSpan? ValidTime { get; set; }
   }
 }
