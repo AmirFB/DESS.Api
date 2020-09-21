@@ -6,11 +6,13 @@ using Dess.Hubs;
 using Dess.Models;
 using Dess.Models.ElectroFence;
 using Dess.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 
 namespace Dess.Controllers
 {
+  [AllowAnonymous]
   [ApiController]
   [Route("api/irancell/hw")]
   public class ElectroFenceRepository : ControllerBase
@@ -57,7 +59,7 @@ namespace Dess.Controllers
         ElectroFenceHub.UserIds.ForEach(
           id => _userLogRepository.Add(
             new UserLog { UserId = id, LogId = ef.Status.Id }));
-            
+
         await _userLogRepository.SaveAsync();
         ef.Status.Hash = statusHash;
         ef.Log.Add(ef.Status);
