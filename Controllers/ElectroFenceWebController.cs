@@ -6,6 +6,7 @@ using Dess.Entities;
 using Dess.Models;
 using Dess.Models.ElectroFence;
 using Dess.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dess.Controllers
@@ -43,6 +44,7 @@ namespace Dess.Controllers
       return Ok(_mapper.Map<IEnumerable<ElectroFenceDto>>(efs));
     }
 
+    [Authorize(Policy = "CanEditSites")]
     [HttpPost]
     public async Task<IActionResult> AddAsync([FromBody] ElectroFenceDto electroFence)
     {
@@ -57,6 +59,7 @@ namespace Dess.Controllers
           electroFenceToReturn);
     }
 
+    [Authorize(Policy = "CanEditSites")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateAsync(int id, ElectroFenceDto ef)
     {
@@ -68,6 +71,7 @@ namespace Dess.Controllers
       return Ok();
     }
 
+    [Authorize(Policy = "CanEditSites")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAsync(int id)
     {
