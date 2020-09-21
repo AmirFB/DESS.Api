@@ -17,5 +17,12 @@ namespace Dess.Repositories
     public async Task<User> GetWithLogAsync(int id) => await Entities.Include(e => e.UserLogs).FirstOrDefaultAsync(u => u.Id == id);
     public async Task<IEnumerable<ElectroFenceStatus>> GetLogAsync(int userId) =>
       await Context.UserLogs.Where(u => u.UserId == userId).Select(u => u.Log).ToListAsync();
+
+    public async Task<IEnumerable<UserPermission>> GetUserPermissionsAsync(int groupId) =>
+      await Context.UserGroupPermissions
+      .Include(e => e.Permission)
+      .Where(e => e.GroupId == groupId)
+      .Select(e => e.Permission)
+      .ToListAsync();
   }
 }
