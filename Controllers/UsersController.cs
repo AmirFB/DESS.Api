@@ -11,7 +11,6 @@ using Dess.Helpers;
 using Dess.Models.User;
 using Dess.Repositories;
 using Dess.Services;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -36,6 +35,7 @@ namespace Dess.Controllers
       _appSettings = appSettings.Value;
     }
 
+    [Authorize(Policy = "CanEditUsers")]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<UserDto>>> GetAllAsync()
     {
@@ -44,6 +44,7 @@ namespace Dess.Controllers
       return Ok(dtos);
     }
 
+    [Authorize(Policy = "CanEditUsers")]
     [HttpGet("{id}")]
     public async Task<ActionResult<UserDto>> GetAsync([FromRoute] int id)
     {
@@ -56,6 +57,7 @@ namespace Dess.Controllers
       return Ok(dto);
     }
 
+    [Authorize(Policy = "CanEditUsers")]
     [HttpPost("register")]
     public async Task<IActionResult> RegisterAsync([FromBody] UserRegisterDto model)
     {
@@ -63,12 +65,13 @@ namespace Dess.Controllers
 
       try
       {
-        await _service.CreateAsync(user, model.Password);
+        await _service.CreateAsync(user);
         return Ok();
       }
       catch (DessException ex) { return BadRequest(ex.Message); }
     }
 
+    [Authorize(Policy = "CanEditUsers")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateAsync(int id, [FromBody] UserUpdateDto dto)
     {
@@ -99,19 +102,28 @@ namespace Dess.Controllers
       if (userFromRepo == null)
         return BadRequest("Username or password is wrong.");
 
+      // var tokenHandler = new JwtSecurityTokenHandler { TokenLifetimeInMinutes = 1 };
       var tokenHandler = new JwtSecurityTokenHandler();
       var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
 
+      var permissions = await _repository.GetUserPermissionsAsync(userFromRepo.GroupId);
+      var claims = new List<Claim>
+      {
+        new Claim(ClaimTypes.NameIdentifier, userFromRepo.Id.ToString()),
+        new Claim(ClaimTypes.Name, userFromRepo.Username)
+      };
+
+      foreach (var permission in permissions)
+        claims.Add(new Claim("Permission", permission.Title));
+
+      var validTime = user.ValidTime.HasValue ? user.ValidTime.Value : new TimeSpan(days: 1, 0, 0, 0);
       var tokenDescriptor = new SecurityTokenDescriptor
       {
-        Subject = new ClaimsIdentity(new Claim[]
-        {
-          new Claim(ClaimTypes.Name, userFromRepo.Id.ToString())
-        }),
-        Expires = DateTime.UtcNow.AddSeconds(10),
+        Subject = new ClaimsIdentity(claims),
+        Expires = DateTime.UtcNow.Add(validTime),
         SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
       };
-      var date = DateTime.UtcNow.AddSeconds(10);
+
       var token = tokenHandler.CreateToken(tokenDescriptor);
       var tokenString = tokenHandler.WriteToken(token);
 
