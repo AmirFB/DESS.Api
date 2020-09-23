@@ -19,7 +19,7 @@ using Microsoft.IdentityModel.Tokens;
 namespace Dess.Controllers
 {
   [ApiController]
-  [Route("api/irancell/web/users")]
+  [Route("api/web/users")]
   public class UsersController : ControllerBase
   {
     private IUserRepository _repository;
@@ -100,7 +100,7 @@ namespace Dess.Controllers
       var userFromRepo = await _service.AuthenticateAsync(user.Username, user.Password);
 
       if (userFromRepo == null)
-        return BadRequest("Username or password is wrong.");
+        return BadRequest(new { Status = 0 });
 
       // var tokenHandler = new JwtSecurityTokenHandler { TokenLifetimeInMinutes = 1 };
       var tokenHandler = new JwtSecurityTokenHandler();
@@ -127,7 +127,7 @@ namespace Dess.Controllers
       var token = tokenHandler.CreateToken(tokenDescriptor);
       var tokenString = tokenHandler.WriteToken(token);
 
-      return Ok(tokenString);
+      return Ok(new { Status = 1, Token = tokenString });
     }
   }
 }
