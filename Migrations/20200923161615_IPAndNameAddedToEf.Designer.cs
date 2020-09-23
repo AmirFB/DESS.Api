@@ -3,14 +3,16 @@ using System;
 using Dess.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DESS.Migrations
 {
     [DbContext(typeof(DessDbContext))]
-    partial class DessDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200923161615_IPAndNameAddedToEf")]
+    partial class IPAndNameAddedToEf
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -95,8 +97,6 @@ namespace DESS.Migrations
                             HvPower = 70,
                             HvRepeat = 2,
                             HvThreshold = 3000,
-                            Latitude = "31.7",
-                            Longitude = "13.5",
                             LvEnabled = true,
                             Name = "Ef1",
                             Serial = "ehp-ie-tbz1",
@@ -114,8 +114,6 @@ namespace DESS.Migrations
                             HvPower = 70,
                             HvRepeat = 3,
                             HvThreshold = 4000,
-                            Latitude = "-3.4",
-                            Longitude = "113.7",
                             LvEnabled = false,
                             Name = "Ef2",
                             Serial = "ehp-ie-tbz2",
@@ -133,8 +131,6 @@ namespace DESS.Migrations
                             HvPower = 80,
                             HvRepeat = 2,
                             HvThreshold = 5000,
-                            Latitude = "11.57",
-                            Longitude = "-5",
                             LvEnabled = false,
                             Name = "Ef3",
                             Serial = "ehp-ie-tbz3",
@@ -442,7 +438,7 @@ namespace DESS.Migrations
                             FirstName = "Amir",
                             GroupId = 1,
                             LastName = "Fakhim-Babaei",
-                            Password = "$2a$11$RVKn6Mb5t/6hVwftv8h6BOunfd99z/NidcKivjNXegHUgLvjtCfBW",
+                            Password = "$2a$11$fAx1HD.CLiZR9axW4pJZqeIR0LwW944h5wfN9yv1nByWG7v5CVUD2",
                             Username = "expert"
                         },
                         new
@@ -451,7 +447,7 @@ namespace DESS.Migrations
                             FirstName = "Amir",
                             GroupId = 2,
                             LastName = "Fakhim-Babaei",
-                            Password = "$2a$11$/D/Q9Igl0YoKDkB1Sh3p/OfszBNe7tAt27y/LwViz56AjdrijVK6C",
+                            Password = "$2a$11$rTuiMBDl2b56kYzzIhWAC.LihdTIUkR5c40y.foQKHaSpTSezTC3i",
                             Username = "admin"
                         },
                         new
@@ -460,7 +456,7 @@ namespace DESS.Migrations
                             FirstName = "Amir",
                             GroupId = 3,
                             LastName = "Fakhim-Babaei",
-                            Password = "$2a$11$6Txv4oQGTQNC8VP2iZOgcelrmco19JFxHW5lERz/jzYXGo82vO8R2",
+                            Password = "$2a$11$ZlikfJQZmACKq3Ld9vdpAOZfa2zfXBAEcXLxlhGzYbqabncE9Qmny",
                             Username = "operator"
                         });
                 });

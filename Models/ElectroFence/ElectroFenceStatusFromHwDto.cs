@@ -4,6 +4,8 @@ namespace Dess.Models.ElectroFence
 {
   public class ElectroFenceStatusFromHwDto : IHashable
   {
+    public string IpAddress { get; set; }
+
     public bool HvAlarm { get; set; }
     public bool LvAlarm { get; set; }
     public bool TamperAlarm { get; set; }

@@ -97,9 +97,9 @@ namespace Dess.DbContexts
         };
       modelBuilder.Entity<User>().HasData(users);
 
-      var ef1 = new ElectroFence { Id = 1, Serial = "ehp-ie-tbz1", HvEnabled = true, LvEnabled = true, HvPower = 70, HvRepeat = 2, HvThreshold = 3000 };
-      var ef2 = new ElectroFence { Id = 2, Serial = "ehp-ie-tbz2", HvEnabled = true, LvEnabled = false, HvPower = 70, HvRepeat = 3, HvThreshold = 4000 };
-      var ef3 = new ElectroFence { Id = 3, Serial = "ehp-ie-tbz3", HvEnabled = true, LvEnabled = false, HvPower = 80, HvRepeat = 2, HvThreshold = 5000 };
+      var ef1 = new ElectroFence { Id = 1, Name = "Ef1", Serial = "ehp-ie-tbz1", HvEnabled = true, LvEnabled = true, HvPower = 70, HvRepeat = 2, HvThreshold = 3000, Latitude = "31.7", Longitude = "13.5" };
+      var ef2 = new ElectroFence { Id = 2, Name = "Ef2", Serial = "ehp-ie-tbz2", HvEnabled = true, LvEnabled = false, HvPower = 70, HvRepeat = 3, HvThreshold = 4000, Latitude = "-3.4", Longitude = "113.7" };
+      var ef3 = new ElectroFence { Id = 3, Name = "Ef3", Serial = "ehp-ie-tbz3", HvEnabled = true, LvEnabled = false, HvPower = 80, HvRepeat = 2, HvThreshold = 5000, Latitude = "11.57", Longitude = "-5" };
 
       var status1 = new ElectroFenceStatus { Id = 1, ElectroFenceId = 1 };
       var status2 = new ElectroFenceStatus { Id = 2, ElectroFenceId = 2 };

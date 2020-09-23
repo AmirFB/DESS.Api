@@ -5,9 +5,11 @@ namespace Dess.Models.ElectroFence
   public class ElectroFenceDto
   {
     public int Id { get; set; }
+    public string Name { get; set; }
 
     public string Serial { get; set; }
     public string PhoneNumber { get; set; }
+    public string IpAddress { get; set; }
 
     public bool AutoLocation { get; set; }
     public string Latitude { get; set; }

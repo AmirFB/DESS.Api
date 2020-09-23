@@ -7,14 +7,17 @@ namespace Dess.Entities
   public class ElectroFence : EntityBase, IHashable
   {
     [Required]
+    public string Name { get; set; }
+    [Required]
     public string Serial { get; set; }
     public string PhoneNumber { get; set; }
     public string Hash { get; set; }
     public bool Applied { get; set; }
+    public string IpAddress { get; set; }
 
     public bool AutoLocation { get; set; }
-    public string Latitude{ get; set; }
-    public string Longitude{ get; set; }
+    public string Latitude { get; set; }
+    public string Longitude { get; set; }
 
     [Required]
     public bool HvEnabled { get; set; }
@@ -34,7 +37,6 @@ namespace Dess.Entities
     public double BatteryMin { get; set; }
     public double BatteryMax { get; set; }
 
-    [Required]
     public IO Input1, Input2, Output1, Output2;
 
     public ElectroFenceStatus Status { get; set; }

@@ -14,7 +14,7 @@ namespace Dess.Controllers
 {
   [AllowAnonymous]
   [ApiController]
-  [Route("api/irancell/hw")]
+  [Route("api/hw")]
   public class ElectroFenceRepository : ControllerBase
   {
     private readonly IElectroFenceRepository _repository;
@@ -51,6 +51,7 @@ namespace Dess.Controllers
       _mapper.Map(status, ef.Status);
       ef.Status.Date = DateTime.Now;
       ef.Applied = configHash == ef.Hash;
+      ef.IpAddress = status.IpAddress;
 
       var statusHash = (status as IHashable).GetHash();
 
