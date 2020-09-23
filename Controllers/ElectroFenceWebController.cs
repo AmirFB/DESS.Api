@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Dess.Controllers
 {
   [ApiController]
-  [Route("api/irancell/web/efs")]
+  [Route("api/web/efs")]
   public class ElectroFenceWebController : ControllerBase
   {
     private readonly IElectroFenceRepository _repository;
@@ -40,7 +40,7 @@ namespace Dess.Controllers
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ElectroFenceDto>>> GetAllAsync()
     {
-      var efs = await _repository.GetAllAsync();
+      var efs = await _repository.GetAllWithIoAsync();
       return Ok(_mapper.Map<IEnumerable<ElectroFenceDto>>(efs));
     }
 

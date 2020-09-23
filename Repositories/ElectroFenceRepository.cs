@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Dess.DbContexts;
@@ -23,6 +24,13 @@ namespace Dess.Repositories
 
       return await Entities.Include(entity => entity.Status).FirstOrDefaultAsync(entity => entity.Serial == serial);
     }
+
+    public async Task<IEnumerable<ElectroFence>> GetAllWithIoAsync() =>
+      await Entities.Include(entity => entity.Input1)
+      // .Include(e => e.Input2)
+      // .Include(e => e.Output1)
+      // .Include(e => e.Output2)
+      .ToListAsync();
 
     public async Task<ElectroFence> GetForStatusAsync(int id)
     {
