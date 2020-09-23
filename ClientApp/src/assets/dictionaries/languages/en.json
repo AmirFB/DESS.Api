@@ -1,6 +1,5 @@
 {
-  "words": {
-    "//Common//": "//",
+  "common": {
     "ok": "OK",
     "cancel": "Cancel",
     "about": "About",
@@ -22,14 +21,17 @@
     "help": "Help",
     "name": "Name",
     "number": "Number",
-    "location": "Location",
+    "location": "Location"
+  },
 
-    "//Side Panel//": "//",
+  "sidePanel": {
     "activeSites": "Active Sites",
     "offlineSites": "Offline Sites",
     "notDefined": "Not Defined",
+    "searchSite": "Type site name here."
+  },
 
-    "//Home//": "//",
+  "home": {
     "muteAlarm": "Mute Alarm",
     "raiseAlarm": "Raise Alarm",
     "findLocation": "Find Location",
@@ -40,9 +42,10 @@
     "filterSites": "Filter Sites",
     "fitView": "FitView",
     "statistics": "Statistics",
-    "schedule": "Schedule",
+    "schedule": "Schedule"
+  },
 
-    "//Sites//": "//",
+  "sites": {
     "siteId": "Site ID",
     "power": "Power",
     "alarmLevel": "Alarm Level",
@@ -60,9 +63,10 @@
     "addGroup": "Add Group",
     "editGroup": "Edit Group",
     "search": "Search",
-    "filter": "Filter",
+    "filter": "Filter"
+  },
 
-    "//Edit Site//": "//",
+  "editSite": {
     "serialNumber": "Serial Num.",
     "enterName": "Enter Name",
     "auto": "Auto",
@@ -74,10 +78,5 @@
     "teperature": "Temperature",
     "battery": "Battery",
     "voltage": "Voltage"
-  },
-
-  "messages": {
-    "//Side Panel//": "//",
-    "searchSite": "Type site name here."
   }
 }

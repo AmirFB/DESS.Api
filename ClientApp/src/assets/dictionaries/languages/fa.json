@@ -1,6 +1,5 @@
 {
-  "words": {
-    "//Common//": "//",
+  "common": {
     "ok": "تایید",
     "cancel": "انصراف",
     "about": "About",
@@ -22,14 +21,17 @@
     "help": "کمک",
     "name": "نام",
     "number": "شماره",
-    "location": "مکان",
+    "location": "مکان"
+  },
 
-    "//Side Panel//": "//",
+  "sidePanel": {
     "activeSites": "سابت های فعال",
     "offlineSites": "سایت های فعال",
     "notDefined": "تعریف نشده",
+    "searchSite": "نام سایت را وارد کنید."
+  },
 
-    "//Home//": "//",
+  "home": {
     "muteAlarm": "سکوت",
     "raiseAlarm": "آژیر",
     "findLocation": "پیدا کردن مکان",
@@ -40,9 +42,10 @@
     "filterSites": "فیلتر سایت ها",
     "fitView": "نمایش همه ",
     "statistics": "آمار",
-    "schedule": "برنامه ریزی",
+    "schedule": "برنامه ریزی"
+  },
 
-    "//Sites//": "//",
+  "site": {
     "siteId": "مشخصه سایت",
     "power": "توان",
     "alarmLevel": "سطح هشدار",
@@ -60,9 +63,10 @@
     "addGroup": "افزودن گروه",
     "editGroup": "ویرایش گروه",
     "search": "جستجو",
-    "filter": "فیلتر",
+    "filter": "فیلتر"
+  },
 
-    "//Edit Site//": "//",
+  "editSite": {
     "serialNumber": "شماره سریال",
     "enterName": "نام را وارد کنید",
     "auto": "خودکار",
@@ -74,10 +78,5 @@
     "teperature": "دما",
     "battery": "باتری",
     "voltage": "ولتاژ"
-  },
-
-  "messages": {
-    "//Side Panel//": "//",
-    "searchSite": "نام سایت را وارد کنید."
   }
 }
