@@ -37,10 +37,10 @@ namespace Dess.Controllers
           throw new ArgumentNullException(nameof(_hubContext));
     }
 
-    [HttpPost("{serial}/{configHash}")]
-    public async Task<IActionResult> UpdateAsync(string serial, string configHash, [FromBody] ElectroFenceStatusFromHwDto status)
+    [HttpPost("{siteId}/{configHash}")]
+    public async Task<IActionResult> UpdateAsync(string siteId, string configHash, [FromBody] ElectroFenceStatusFromHwDto status)
     {
-      var ef = await _repository.GetAsync(serial);
+      var ef = await _repository.GetAsync(siteId);
 
       if (ef == null)
         return NotFound();
@@ -76,10 +76,10 @@ namespace Dess.Controllers
       return Ok(ef.Hash);
     }
 
-    [HttpGet("{serial}")]
-    public async Task<ActionResult<ElectroFenceForHwDto>> GetConfig(string serial)
+    [HttpGet("{siteId}")]
+    public async Task<ActionResult<ElectroFenceForHwDto>> GetConfig(string siteId)
     {
-      var ef = await _repository.GetAsync(serial);
+      var ef = await _repository.GetAsync(siteId);
 
       if (ef == null)
         return NotFound();
