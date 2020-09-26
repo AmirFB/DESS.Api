@@ -52,41 +52,57 @@ namespace Dess.DbContexts
       modelBuilder.Entity<UserGroupPermission>()
         .HasOne(gp => gp.Group)
         .WithMany(g => g.UserGroupPermissions)
-        .HasForeignKey(gp => gp.GroupId)
-        .OnDelete(DeleteBehavior.NoAction);
+        .HasForeignKey(gp => gp.GroupId);
 
       modelBuilder.Entity<UserGroupPermission>()
         .HasOne(gp => gp.Permission)
         .WithMany(p => p.UserGroupPermissions)
-        .HasForeignKey(gp => gp.PermissionId)
-        .OnDelete(DeleteBehavior.NoAction);
+        .HasForeignKey(gp => gp.PermissionId);
 
-      var groups = new UserGroup[] {
-        new UserGroup { Id = 1, Title = "Expert" },
-        new UserGroup { Id = 2, Title = "Admin" },
-        new UserGroup { Id = 3, Title = "Operator" }
-      };
+      var allMighty = new UserGroup
+      { Id = 1, Title = "Almighty" };
+      var expert = new UserGroup
+      { Id = 2, Title = "Expert" };
+      var admin = new UserGroup
+      { Id = 3, Title = "Admin" };
+      var operate = new UserGroup
+      { Id = 4, Title = "Operator" };
+
+      var groups = new UserGroup[] { allMighty, expert, admin, operate };
       modelBuilder.Entity<UserGroup>().HasData(groups);
 
-      var permissions = new UserPermission[] {
-        new UserPermission { Id = 1, Title = "CanEditUserGroups" },
-        new UserPermission { Id = 2, Title = "CanEditUsers" },
-        new UserPermission { Id = 3, Title = "CanSecureSites" },
-        new UserPermission { Id = 4, Title = "CanEditSites" }
-      };
+      var isAlmighty = new UserPermission
+      { Id = 1, Title = "IsAlmighty" };
+      var canSecureSites = new UserPermission
+      { Id = 2, Title = "CanSecureSites" };
+      var canEditSites = new UserPermission
+      { Id = 3, Title = "CanEditSites" };
+      var canEditUserGroup = new UserPermission
+      { Id = 4, Title = "CanEditUserGroups" };
+      var canEditUsers = new UserPermission
+      { Id = 5, Title = "CanEditUsers" };
+
+      var permissions = new UserPermission[] { isAlmighty, canSecureSites, canEditSites, canEditUserGroup, canEditUsers };
       modelBuilder.Entity<UserPermission>().HasData(permissions);
 
       var groupPermissions = new UserGroupPermission[] {
-        new UserGroupPermission { GroupId = 1, PermissionId = 1 },
-        new UserGroupPermission { GroupId = 1, PermissionId = 2 },
-        new UserGroupPermission { GroupId = 1, PermissionId = 3 },
-        new UserGroupPermission { GroupId = 1, PermissionId = 4 },
+        new UserGroupPermission { GroupId = allMighty.Id, PermissionId = isAlmighty.Id },
+        new UserGroupPermission { GroupId = allMighty.Id, PermissionId = canSecureSites.Id },
+        new UserGroupPermission { GroupId = allMighty.Id, PermissionId = canEditSites.Id },
+        new UserGroupPermission { GroupId = allMighty.Id, PermissionId = canEditUserGroup.Id },
+        new UserGroupPermission { GroupId = allMighty.Id, PermissionId = canEditUsers.Id },
 
-        new UserGroupPermission { GroupId = 2, PermissionId = 2 },
-        new UserGroupPermission { GroupId = 2, PermissionId = 3 },
-        new UserGroupPermission { GroupId = 2, PermissionId = 4 },
+        new UserGroupPermission { GroupId = expert.Id, PermissionId = canSecureSites.Id },
+        new UserGroupPermission { GroupId = expert.Id, PermissionId = canEditSites.Id },
+        new UserGroupPermission { GroupId = expert.Id, PermissionId = canEditUserGroup.Id },
+        new UserGroupPermission { GroupId = expert.Id, PermissionId = canEditUsers.Id },
 
-        new UserGroupPermission { GroupId = 3, PermissionId = 3 }
+        new UserGroupPermission { GroupId = admin.Id, PermissionId = canSecureSites.Id },
+        new UserGroupPermission { GroupId = admin.Id, PermissionId = canEditSites.Id },
+        new UserGroupPermission { GroupId = admin.Id, PermissionId = canEditUsers.Id },
+
+
+        new UserGroupPermission { GroupId = operate.Id, PermissionId = canEditSites.Id }
       };
       modelBuilder.Entity<UserGroupPermission>().HasData(groupPermissions);
 
@@ -97,9 +113,9 @@ namespace Dess.DbContexts
         };
       modelBuilder.Entity<User>().HasData(users);
 
-      var ef1 = new ElectroFence { Id = 1, Name = "Ef1", Serial = "ehp-ie-tbz1", HvEnabled = true, LvEnabled = true, HvPower = 70, HvRepeat = 2, HvThreshold = 3000, Latitude = "31.7", Longitude = "13.5" };
-      var ef2 = new ElectroFence { Id = 2, Name = "Ef2", Serial = "ehp-ie-tbz2", HvEnabled = true, LvEnabled = false, HvPower = 70, HvRepeat = 3, HvThreshold = 4000, Latitude = "-3.4", Longitude = "113.7" };
-      var ef3 = new ElectroFence { Id = 3, Name = "Ef3", Serial = "ehp-ie-tbz3", HvEnabled = true, LvEnabled = false, HvPower = 80, HvRepeat = 2, HvThreshold = 5000, Latitude = "11.57", Longitude = "-5" };
+      var ef1 = new ElectroFence { Id = 1, Name = "Ef1", SiteId = "ehp-ie-tbz1", Serial = "001", HvEnabled = true, LvEnabled = true, HvPower = 70, HvRepeat = 2, HvThreshold = 3000, Latitude = "31.7", Longitude = "13.5" };
+      var ef2 = new ElectroFence { Id = 2, Name = "Ef2", SiteId = "ehp-ie-tbz2", Serial = "002", HvEnabled = true, LvEnabled = false, HvPower = 70, HvRepeat = 3, HvThreshold = 4000, Latitude = "-3.4", Longitude = "113.7" };
+      var ef3 = new ElectroFence { Id = 3, Name = "Ef3", SiteId = "ehp-ie-tbz3", Serial = "003", HvEnabled = true, LvEnabled = false, HvPower = 80, HvRepeat = 2, HvThreshold = 5000, Latitude = "11.57", Longitude = "-5" };
 
       var status1 = new ElectroFenceStatus { Id = 1, ElectroFenceId = 1 };
       var status2 = new ElectroFenceStatus { Id = 2, ElectroFenceId = 2 };
