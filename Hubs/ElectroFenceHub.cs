@@ -14,22 +14,34 @@ namespace Dess.Hubs
     public ElectroFenceHub(IUserRepository userRepository) =>
       _userRepository = userRepository;
 
-    public override Task OnConnectedAsync()
+    public override async Task OnConnectedAsync()
     {
       var id = int.Parse(Context.User.Identity.Name);
 
       if (!UserIds.Contains(id))
         UserIds.Add(id);
 
-      return base.OnConnectedAsync();
+      var user = await _userRepository.GetAsync(id);
+      var groups = await _userRepository.GetPermissionsAsync(id);
+
+      foreach (var group in groups)
+        await Groups.AddToGroupAsync(Context.User.Identity.Name, group.Title);
+
+      await base.OnConnectedAsync();
     }
 
-    public override Task OnDisconnectedAsync(System.Exception exception)
+    public override async Task OnDisconnectedAsync(System.Exception exception)
     {
       var id = int.Parse(Context.User.Identity.Name);
       UserIds.Remove(id);
 
-      return base.OnDisconnectedAsync(exception);
+      var user = await _userRepository.GetAsync(id);
+      var groups = await _userRepository.GetPermissionsAsync(id);
+
+      foreach (var group in groups)
+        await Groups.RemoveFromGroupAsync(Context.User.Identity.Name, group.Title);
+
+      await base.OnDisconnectedAsync(exception);
     }
   }
 }
