@@ -1,15 +1,14 @@
 ﻿using AutoMapper;
-
 using Dess.Entities;
-using Dess.Models;
+using Dess.Models.ElectroFence;
 
 namespace Dess.Profiles
 {
-	public class IOProfile : Profile
+  public class IOProfile : Profile
+  {
+    public IOProfile()
     {
-        public IOProfile()
-		{
-			CreateMap<IO, IODto>();
-		}
+      CreateMap<IO, IODto>();
     }
+  }
 }
