@@ -106,7 +106,7 @@ namespace Dess.Controllers
       var tokenHandler = new JwtSecurityTokenHandler();
       var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
 
-      var permissions = await _repository.GetUserPermissionsAsync(userFromRepo.GroupId);
+      var permissions = await _repository.GetPermissionsAsync(userFromRepo.GroupId);
       var claims = new List<Claim>
       {
         new Claim(ClaimTypes.NameIdentifier, userFromRepo.Id.ToString()),
@@ -128,6 +128,30 @@ namespace Dess.Controllers
       var tokenString = tokenHandler.WriteToken(token);
 
       return Ok(new { Status = 1, Token = tokenString });
+    }
+
+    [HttpGet("groups")]
+    public async Task<ActionResult<IEnumerable<UserGroup>>> GetGroupsAsync([FromQuery] bool users)
+    {
+      IEnumerable<UserGroup> gropus;
+
+      if (users == true)
+        gropus = await _repository.GetGroupsWithUsersAsync();
+
+      else
+        gropus = await _repository.GetGroupsWithoutAlmightyAsync();
+
+      var dtos = _mapper.Map<IEnumerable<UserGroupDto>>(gropus);
+      return Ok(dtos);
+    }
+
+    [HttpGet("permissions")]
+    public async Task<ActionResult<IEnumerable<UserGroup>>> GetPermissionsAsync()
+    {
+      var permissions = await _repository.GetPermissionsWithoutAlmightyAsync();
+
+      var dtos = _mapper.Map<IEnumerable<UserPermissionDto>>(permissions);
+      return Ok(dtos);
     }
   }
 }
