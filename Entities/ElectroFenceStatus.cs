@@ -10,6 +10,7 @@ namespace Dess.Entities
     public DateTime Date { get; set; }
     public string Hash { get; set; }
     public string IpAddress { get; set; }
+    public string SerialNo { get; set; }
 
     public bool HvAlarm { get; set; }
     public bool LvAlarm { get; set; }

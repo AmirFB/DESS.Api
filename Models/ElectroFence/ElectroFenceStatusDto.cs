@@ -7,6 +7,7 @@ namespace Dess.Models.ElectroFence
     public int Id { get; set; }
     public bool Applied { get; set; }
     public string IpAddress { get; set; }
+    public string SerialNo { get; set; }
 
     public bool HvAlarm { get; set; }
     public bool LvAlarm { get; set; }
