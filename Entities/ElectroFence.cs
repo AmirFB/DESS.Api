@@ -9,11 +9,18 @@ namespace Dess.Entities
     [Required]
     public string Name { get; set; }
     [Required]
+    public string SiteId { get; set; }
+    public string SerialNo { get; set; }
+
+    [Required]
     public string Serial { get; set; }
     public string PhoneNumber { get; set; }
     public string Hash { get; set; }
     public bool Applied { get; set; }
     public string IpAddress { get; set; }
+
+    public bool UseGlobalIntervarl { get; set; }
+    public int Interval { get; set; }
 
     public bool AutoLocation { get; set; }
     public string Latitude { get; set; }
