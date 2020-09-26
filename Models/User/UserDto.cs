@@ -10,5 +10,6 @@ namespace Dess.Models.User
     public int GroupId { get; set; }
 
     public byte[] ImageData { get; set; }
+    public int[] PermissionIds { get; set; }
   }
 }
