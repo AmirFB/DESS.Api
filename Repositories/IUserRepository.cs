@@ -8,6 +8,11 @@ namespace Dess.Repositories
   {
     Task<User> GetAsync(string username);
     Task<bool> ExistsAsync(string username);
-    Task<IEnumerable<UserPermission>> GetUserPermissionsAsync(int groupId);
+    Task<IEnumerable<UserGroup>> GetGroupsAsync();
+    Task<IEnumerable<UserGroup>> GetGroupsWithoutAlmightyAsync();
+    Task<IEnumerable<UserGroup>> GetGroupsWithUsersAsync();
+    Task<IEnumerable<UserPermission>> GetPermissionsAsync();
+    Task<IEnumerable<UserPermission>> GetPermissionsWithoutAlmightyAsync();
+    Task<IEnumerable<UserPermission>> GetPermissionsAsync(int groupId);
   }
 }
