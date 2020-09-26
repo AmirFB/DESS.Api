@@ -1,5 +1,3 @@
-using Dess.Entities;
-
 namespace Dess.Models.ElectroFence
 {
   public class ElectroFenceForHwDto
@@ -11,6 +9,6 @@ namespace Dess.Models.ElectroFence
     public int HvThreshold { get; set; }
     public int HvRepeat { get; set; }
 
-    public IO Input1, Input2, Output1, Output2;
+    public IODto Input1, Input2, Output1, Output2;
   }
 }
