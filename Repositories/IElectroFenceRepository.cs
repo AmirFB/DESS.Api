@@ -8,6 +8,9 @@ namespace Dess.Repositories
   {
     Task<ElectroFence> GetAsync(string serial);
     Task<IEnumerable<ElectroFence>> GetAllWithIoAsync();
-    Task<ElectroFence> GetForStatusAsync(int id);
+    Task<ElectroFence> GetWithStatusAsync(int id);
+    Task<IEnumerable<ElectroFenceStatus>> GetAllLogAsync();
+    Task<IEnumerable<ElectroFenceStatus>> GetLogAsync(int id);
+    Task<ElectroFenceStatus> GetStatusAsync(int id);
   }
 }
