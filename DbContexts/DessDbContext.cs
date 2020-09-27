@@ -14,7 +14,7 @@ namespace Dess.DbContexts
       _mapper = mapper;
 
     public DbSet<ElectroFence> ElectroFences { get; set; }
-    public DbSet<ElectroFenceStatus> Statuss { get; set; }
+    public DbSet<ElectroFenceStatus> Logs { get; set; }
     public DbSet<IO> IOs { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<UserLog> UserLogs { get; set; }
@@ -30,6 +30,11 @@ namespace Dess.DbContexts
         .HasOne(e => e.Status)
         .WithOne(s => s.ElectroFence)
         .HasForeignKey<ElectroFenceStatus>(s => s.ElectroFenceId);
+
+      modelBuilder.Entity<ElectroFence>()
+        .HasMany(e => e.IOs)
+        .WithOne(i => i.Module)
+        .HasForeignKey(i => i.ModuleId);
 
       modelBuilder.Entity<UserLog>()
         .HasOne(u => u.User)

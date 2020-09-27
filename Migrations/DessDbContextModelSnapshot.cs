@@ -470,7 +470,7 @@ namespace DESS.Migrations
                             FirstName = "Amir",
                             GroupId = 1,
                             LastName = "Fakhim-Babaei",
-                            Password = "$2a$11$SpueU3OEzBSvONvNvn0dZeZvTDFcytH.HTq2emPfvt1mWNPcIWwo2",
+                            Password = "$2a$11$T./eX6hqb4EZ0TF0wJKs1OCTqgoER80qlvXG0yQqV.O6t6qrmc3mC",
                             Username = "expert"
                         },
                         new
@@ -479,7 +479,7 @@ namespace DESS.Migrations
                             FirstName = "Amir",
                             GroupId = 2,
                             LastName = "Fakhim-Babaei",
-                            Password = "$2a$11$ru5bQNzuKWIKRxQNwID.Xe2GTybmR4.tcnPm3EWOIHJcVkeR44mrO",
+                            Password = "$2a$11$veWUjoIAMbF3cYYNjbDv/OYwUxLpJ.E9TDlDrOoYrnZEl7UVkZNrm",
                             Username = "admin"
                         },
                         new
@@ -488,7 +488,7 @@ namespace DESS.Migrations
                             FirstName = "Amir",
                             GroupId = 3,
                             LastName = "Fakhim-Babaei",
-                            Password = "$2a$11$fSpn1dS0o55KfU881mrvhex8p.TLdfOnM4ZnXEAkdccEo8loPAzaS",
+                            Password = "$2a$11$sYRck6okOu6DLc2LAbfEpOuH8Jt1YXyXTt.RNhoQsAZhQH7USDWiC",
                             Username = "operator"
                         });
                 });
@@ -689,7 +689,7 @@ namespace DESS.Migrations
             modelBuilder.Entity("Dess.Entities.IO", b =>
                 {
                     b.HasOne("Dess.Entities.ElectroFence", "Module")
-                        .WithMany()
+                        .WithMany("IOs")
                         .HasForeignKey("ModuleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

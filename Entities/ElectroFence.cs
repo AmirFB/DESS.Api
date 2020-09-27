@@ -44,16 +44,15 @@ namespace Dess.Entities
     public double BatteryMin { get; set; }
     public double BatteryMax { get; set; }
 
-    public IO Input1, Input2, Output1, Output2;
-
     public ElectroFenceStatus Status { get; set; }
 
+    public IList<IO> IOs { get; set; }
     public ICollection<ElectroFenceStatus> Log { get; set; }
 
     public string GetHashBase()
     {
       var data = $"{HvEnabled}{LvEnabled}{HvPower}{HvThreshold}" +
-      $"{HvRepeat}{Input1}{Input2}{Output1}{Output2}";
+      $"{HvRepeat}{IOs[0]}{IOs[1]}{IOs[2]}{IOs[3]}";
       return data;
     }
   }

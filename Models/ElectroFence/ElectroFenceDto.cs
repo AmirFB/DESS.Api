@@ -32,6 +32,9 @@ namespace Dess.Models.ElectroFence
     public double BatteryMin { get; set; }
     public double BatteryMax { get; set; }
 
-    public IO Input1, Input2, Output1, Output2;
+    public IODto Input1 { get; set; }
+    public IODto Input2 { get; set; }
+    public IODto Output1 { get; set; }
+    public IODto Output2 { get; set; }
   }
 }
