@@ -92,21 +92,21 @@ namespace DESS
           };
         });
 
-      var serviceProvider = services.BuildServiceProvider();
-      var permissionRepository = (IPermissionRepository)serviceProvider.GetService<IPermissionRepository>();
-      var permissions = permissionRepository.GetAllAsync().Result;
+      // var serviceProvider = services.BuildServiceProvider();
+      // var permissionRepository = (IPermissionRepository)serviceProvider.GetService<IPermissionRepository>();
+      // var permissions = permissionRepository.GetAllAsync().Result;
 
-      services.AddAuthorizationCore(options =>
-      {
-        foreach (var permission in permissions)
-        {
-          options.AddPolicy(permission.Title, builder =>
-          {
-            builder.RequireAuthenticatedUser();
-            builder.RequireClaim("Permission", permission.Title);
-          });
-        }
-      });
+      // services.AddAuthorizationCore(options =>
+      // {
+      //   foreach (var permission in permissions)
+      //   {
+      //     options.AddPolicy(permission.Title, builder =>
+      //     {
+      //       builder.RequireAuthenticatedUser();
+      //       builder.RequireClaim("Permission", permission.Title);
+      //     });
+      //   }
+      // });
 
       // In production, the React files will be served from this directory
       services.AddSpaStaticFiles(configuration =>
