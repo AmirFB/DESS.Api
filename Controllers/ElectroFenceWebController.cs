@@ -91,12 +91,39 @@ namespace Dess.Controllers
     [HttpGet("{id}/status")]
     public async Task<ActionResult<ElectroFenceStatusFromHwDto>> GetStatusAsync(int id)
     {
-      var ef = await _repository.GetForStatusAsync(id);
+      var ef = await _repository.GetWithStatusAsync(id);
 
       if (ef == null)
         return NotFound();
 
       return Ok(_mapper.Map<ElectroFenceStatusFromHwDto>(ef.Status));
+    }
+
+    [HttpGet("log")]
+    public async Task<ActionResult<IEnumerable<ElectroFenceStatusDto>>> GetAllLogAsync(int id)
+    {
+      var logs = await _repository.GetAllLogAsync();
+      var dtos = _mapper.Map<IEnumerable<ElectroFenceStatusDto>>(logs);
+
+      return Ok(dtos);
+    }
+
+    [HttpGet("{id}/log")]
+    public async Task<ActionResult<IEnumerable<ElectroFenceStatusDto>>> GetModuleLogAsync(int id)
+    {
+      var logs = await _repository.GetLogAsync(id);
+      var dtos = _mapper.Map<IEnumerable<ElectroFenceStatusDto>>(logs);
+
+      return Ok(dtos);
+    }
+
+    [HttpGet("{id}/status")]
+    public async Task<ActionResult<ElectroFenceStatusDto>> GetModuleStatusAsync(int id)
+    {
+      var status = await _repository.GetStatusAsync(id);
+      var dto = _mapper.Map<ElectroFenceStatusDto>(status);
+
+      return Ok(dto);
     }
   }
 }
