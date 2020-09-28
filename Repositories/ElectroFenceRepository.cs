@@ -28,7 +28,7 @@ namespace Dess.Repositories
     }
 
     public async Task<IEnumerable<ElectroFence>> GetAllWithIoAsync() =>
-      await Entities.Include(entity => entity.Log)
+      await Entities.Include(entity => entity.IOs)
         .ToListAsync();
 
     public async Task<ElectroFence> GetWithStatusAsync(int id)
