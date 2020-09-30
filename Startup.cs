@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,7 +32,7 @@ namespace DESS
     public void ConfigureServices(IServiceCollection services)
     {
       // services.AddControllersWithViews();
-      services.AddControllersWithViews(o => o.Filters.Add(new AuthorizeFilter()));
+      services.AddControllers(o => o.Filters.Add(new AuthorizeFilter()));
       services.AddCors();
       services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
       services.AddHttpClient();
@@ -107,12 +106,6 @@ namespace DESS
       //     });
       //   }
       // });
-
-      // In production, the React files will be served from this directory
-      services.AddSpaStaticFiles(configuration =>
-      {
-        configuration.RootPath = "ClientApp/build";
-      });
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -130,7 +123,6 @@ namespace DESS
 
       app.UseHttpsRedirection();
       app.UseStaticFiles();
-      app.UseSpaStaticFiles();
 
       app.UseRouting();
 
@@ -148,16 +140,6 @@ namespace DESS
                   name: "default",
                   pattern: "{controller}/{action=Index}/{id?}");
         endpoints.MapHub<ElectroFenceHub>("/api/irancell/web/efhub");
-      });
-
-      app.UseSpa(spa =>
-      {
-        spa.Options.SourcePath = "ClientApp";
-
-        if (env.IsDevelopment())
-        {
-          spa.UseReactDevelopmentServer(npmScript: "start");
-        }
       });
 
       using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
