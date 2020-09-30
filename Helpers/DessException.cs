@@ -1,7 +1,7 @@
 using System;
 using System.Globalization;
 
-namespace Dess.Helpers
+namespace Dess.Api.Helpers
 {
   public class DessException : Exception
   {

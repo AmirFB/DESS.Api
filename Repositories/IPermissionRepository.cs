@@ -1,6 +1,6 @@
-using Dess.Entities;
+using Dess.Api.Entities;
 
-namespace Dess.Repositories
+namespace Dess.Api.Repositories
 {
   public interface IPermissionRepository : IRepositoryBase<UserPermission>
   {

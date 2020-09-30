@@ -1,4 +1,4 @@
-namespace Dess.Models.ElectroFence
+namespace Dess.Api.Models.ElectroFence
 {
   public class ElectroFenceForHwDto
   {

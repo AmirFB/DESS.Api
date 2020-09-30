@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Dess.DbContexts;
-using Dess.Entities;
+using Dess.Api.DbContexts;
+using Dess.Api.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Dess.Repositories
+namespace Dess.Api.Repositories
 {
   public class UserRepository : RepositoryBase<User, DessDbContext>, IUserRepository
   {

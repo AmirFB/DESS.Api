@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Dess.DbContexts;
-using Dess.Entities;
+using Dess.Api.DbContexts;
+using Dess.Api.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Dess.Repositories
+namespace Dess.Api.Repositories
 {
   public class ElectroFenceRepository : RepositoryBase<ElectroFence, DessDbContext>, IElectroFenceRepository
   {

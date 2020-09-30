@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-using Dess.Entities;
+using Dess.Api.Entities;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Dess.Repositories
+namespace Dess.Api.Repositories
 {
   public class RepositoryBase<TEntity, TContext> : IRepositoryBase<TEntity>
     where TEntity : EntityBase

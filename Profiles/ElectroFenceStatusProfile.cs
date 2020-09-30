@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using Dess.Entities;
-using Dess.Models.ElectroFence;
+using Dess.Api.Entities;
+using Dess.Api.Models.ElectroFence;
 
-namespace Dess.Profiles
+namespace Dess.Api.Profiles
 {
   public class ElectroFenceStatusProfile : Profile
   {

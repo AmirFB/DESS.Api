@@ -1,9 +1,7 @@
-﻿using System;
-
-namespace Dess.Entities
+﻿namespace Dess.Api.Entities
 {
-    public interface IEntityBase
-    {
-        public int Id { get; set; }
-    }
+  public interface IEntityBase
+  {
+    public int Id { get; set; }
+  }
 }

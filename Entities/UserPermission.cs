@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Dess.Entities
+namespace Dess.Api.Entities
 {
   public class UserPermission : EntityBase
   {

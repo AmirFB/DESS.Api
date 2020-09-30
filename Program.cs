@@ -2,7 +2,7 @@ using System.Net;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace DESS
+namespace Dess.Api
 {
   public class Program
   {

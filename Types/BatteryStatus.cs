@@ -1,10 +1,10 @@
-﻿namespace Dess.Types
+﻿namespace Dess.Api.Types
 {
-	public enum BatteryStatus
-    {
-        Charging,
-        Charged,
-        Low,
-        Fault
-    }
+  public enum BatteryStatus
+  {
+    Charging,
+    Charged,
+    Low,
+    Fault
+  }
 }

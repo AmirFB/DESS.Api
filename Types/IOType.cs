@@ -1,4 +1,4 @@
-﻿namespace Dess.Types
+﻿namespace Dess.Api.Types
 {
-	public enum IOType { NO, NC }
+  public enum IOType { NO, NC }
 }

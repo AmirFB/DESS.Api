@@ -1,8 +1,8 @@
 using AutoMapper;
-using Dess.Entities;
-using Dess.Models.User;
+using Dess.Api.Entities;
+using Dess.Api.Models.User;
 
-namespace Dess.Profiles
+namespace Dess.Api.Profiles
 {
   public class UserProfile : Profile
   {

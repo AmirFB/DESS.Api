@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Dess.Models.User
+namespace Dess.Api.Models.User
 {
   public class UserAuthenticateDto
   {

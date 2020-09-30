@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using Dess.Entities;
-using Dess.Models;
-using Dess.Models.ElectroFence;
-using Dess.Repositories;
+using Dess.Api.Entities;
+using Dess.Api.Models;
+using Dess.Api.Models.ElectroFence;
+using Dess.Api.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Dess.Controllers
+namespace Dess.Api.Controllers
 {
   [ApiController]
   [Route("api/web/efs")]

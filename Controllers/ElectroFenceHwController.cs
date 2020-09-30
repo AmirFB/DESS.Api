@@ -1,16 +1,16 @@
 using System;
 using System.Threading.Tasks;
 using AutoMapper;
-using Dess.Entities;
-using Dess.Hubs;
-using Dess.Models;
-using Dess.Models.ElectroFence;
-using Dess.Repositories;
+using Dess.Api.Entities;
+using Dess.Api.Hubs;
+using Dess.Api.Models;
+using Dess.Api.Models.ElectroFence;
+using Dess.Api.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 
-namespace Dess.Controllers
+namespace Dess.Api.Controllers
 {
   [AllowAnonymous]
   [ApiController]

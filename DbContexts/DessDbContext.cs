@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using Dess.Entities;
-using Dess.Helpers;
-using Dess.Types;
+using Dess.Api.Entities;
+using Dess.Api.Helpers;
+using Dess.Api.Types;
 using Microsoft.EntityFrameworkCore;
 
-namespace Dess.DbContexts
+namespace Dess.Api.DbContexts
 {
   public class DessDbContext : DbContext
   {

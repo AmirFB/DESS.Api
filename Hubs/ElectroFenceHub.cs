@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Dess.Repositories;
+using Dess.Api.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
-namespace Dess.Hubs
+namespace Dess.Api.Hubs
 {
   [Authorize]
   public class ElectroFenceHub : Hub

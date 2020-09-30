@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using Dess.Entities;
 
-namespace Dess.Models.User
+namespace Dess.Api.Models.User
 {
   public class UserGroupDto
   {

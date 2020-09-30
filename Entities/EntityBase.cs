@@ -1,6 +1,6 @@
-﻿using Dess.Models;
+﻿using Dess.Api.Models;
 
-namespace Dess.Entities
+namespace Dess.Api.Entities
 {
   public abstract class EntityBase : IEntityBase
   {

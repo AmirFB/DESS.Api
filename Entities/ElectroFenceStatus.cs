@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Dess.Types;
+using Dess.Api.Types;
 
-namespace Dess.Entities
+namespace Dess.Api.Entities
 {
   public class ElectroFenceStatus : EntityBase
   {

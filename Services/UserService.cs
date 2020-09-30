@@ -1,10 +1,10 @@
 using System;
 using System.Threading.Tasks;
-using Dess.Entities;
-using Dess.Helpers;
-using Dess.Repositories;
+using Dess.Api.Entities;
+using Dess.Api.Helpers;
+using Dess.Api.Repositories;
 
-namespace Dess.Services
+namespace Dess.Api.Services
 {
   public class UserService : IUserService
   {

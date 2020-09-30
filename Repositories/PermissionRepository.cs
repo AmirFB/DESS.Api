@@ -1,7 +1,7 @@
-using Dess.DbContexts;
-using Dess.Entities;
+using Dess.Api.DbContexts;
+using Dess.Api.Entities;
 
-namespace Dess.Repositories
+namespace Dess.Api.Repositories
 {
   public class PermissionRepository : RepositoryBase<UserPermission, DessDbContext>, IPermissionRepository
   {

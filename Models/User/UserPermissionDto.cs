@@ -1,4 +1,4 @@
-namespace Dess.Models.User
+namespace Dess.Api.Models.User
 {
   public class UserPermissionDto
   {

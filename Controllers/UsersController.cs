@@ -1,22 +1,21 @@
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
-using Dess.Entities;
-using Dess.Helpers;
-using Dess.Models.User;
-using Dess.Repositories;
-using Dess.Services;
+using Dess.Api.Entities;
+using Dess.Api.Helpers;
+using Dess.Api.Models.User;
+using Dess.Api.Repositories;
+using Dess.Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Dess.Controllers
+namespace Dess.Api.Controllers
 {
   [ApiController]
   [Route("api/web/users")]

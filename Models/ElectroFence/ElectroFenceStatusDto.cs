@@ -1,6 +1,6 @@
-using Dess.Types;
+using Dess.Api.Types;
 
-namespace Dess.Models.ElectroFence
+namespace Dess.Api.Models.ElectroFence
 {
   public class ElectroFenceStatusDto
   {

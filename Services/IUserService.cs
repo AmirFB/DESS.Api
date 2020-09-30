@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
-using Dess.Entities;
+using Dess.Api.Entities;
 
-namespace Dess.Services
+namespace Dess.Api.Services
 {
   public interface IUserService
   {

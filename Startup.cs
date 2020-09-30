@@ -2,13 +2,11 @@ using System;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
-using Dess.DbContexts;
-using Dess.Entities;
-using Dess.Helpers;
-using Dess.Hubs;
-using Dess.Models.User;
-using Dess.Repositories;
-using Dess.Services;
+using Dess.Api.DbContexts;
+using Dess.Api.Helpers;
+using Dess.Api.Hubs;
+using Dess.Api.Repositories;
+using Dess.Api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -19,7 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 
-namespace DESS
+namespace Dess.Api
 {
   public class Startup
   {

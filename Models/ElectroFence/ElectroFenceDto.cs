@@ -1,6 +1,4 @@
-﻿using Dess.Entities;
-
-namespace Dess.Models.ElectroFence
+﻿namespace Dess.Api.Models.ElectroFence
 {
   public class ElectroFenceDto
   {

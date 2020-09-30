@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Dess.Repositories
+namespace Dess.Api.Repositories
 {
   public interface IRepositoryBase<T> : IDisposable
   {
