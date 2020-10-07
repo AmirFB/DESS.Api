@@ -2,11 +2,13 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Dess.Api.Repositories;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR;
 
 namespace Dess.Api.Hubs
 {
   [Authorize]
+  [Route("api/web/hub/ef")]
   public class ElectroFenceHub : Hub
   {
     public static List<int> UserIds { get; } = new List<int>();
