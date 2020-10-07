@@ -45,7 +45,7 @@ namespace Dess.Api.Controllers
       if (ef == null)
         return NotFound();
 
-      var statusDto = _mapper.Map<ElectroFenceDto>(status);
+      var statusDto = _mapper.Map<ElectroFenceStatusDto>(status);
       await _hubContext.Clients.All.SendAsync("UpdateStatus", statusDto);
 
       _mapper.Map(status, ef.Status);
