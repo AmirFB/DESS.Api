@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -29,7 +32,6 @@ namespace Dess.Api
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
-      // services.AddControllersWithViews();
       services.AddControllers(o => o.Filters.Add(new AuthorizeFilter()));
       services.AddCors();
       services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -64,15 +66,28 @@ namespace Dess.Api
         {
           action.Events = new JwtBearerEvents
           {
-            OnTokenValidated = context =>
+            OnTokenValidated = async (context) =>
             {
               var userRepository = context.HttpContext.RequestServices.GetRequiredService<IUserRepository>();
-              var username = context.Principal.Identity.Name;
-              var user = userRepository.GetAsync(username).Result;
+              var id = int.Parse(context.Principal.Claims.ToList()[0].Value);
+              var user = await userRepository.GetAsync(id);
 
               if (user == null)
                 context.Fail("Unauthorized");
+            },
 
+            OnMessageReceived = context =>
+            {
+              var accessToken = context.Request.Query["access_token"];
+
+              // If the request is for our hub...
+              var path = context.HttpContext.Request.Path;
+              if (!string.IsNullOrEmpty(accessToken) &&
+                  (path.StartsWithSegments("/api/web/hub/ef")))
+              {
+                // Read the token out of the query string
+                context.Token = accessToken;
+              }
               return Task.CompletedTask;
             }
           };
@@ -83,27 +98,27 @@ namespace Dess.Api
           {
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(key),
-            ValidateIssuer = false,
-            ValidateAudience = false,
-            ValidateLifetime = true
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
           };
         });
 
-      // var serviceProvider = services.BuildServiceProvider();
-      // var permissionRepository = (IPermissionRepository)serviceProvider.GetService<IPermissionRepository>();
-      // var permissions = permissionRepository.GetAllAsync().Result;
+      var serviceProvider = services.BuildServiceProvider();
+      var permissionRepository = (IPermissionRepository)serviceProvider.GetService<IPermissionRepository>();
+      var permissions = permissionRepository.GetAllAsync().Result;
 
-      // services.AddAuthorizationCore(options =>
-      // {
-      //   foreach (var permission in permissions)
-      //   {
-      //     options.AddPolicy(permission.Title, builder =>
-      //     {
-      //       builder.RequireAuthenticatedUser();
-      //       builder.RequireClaim("Permission", permission.Title);
-      //     });
-      //   }
-      // });
+      services.AddAuthorizationCore(options =>
+      {
+        foreach (var permission in permissions)
+        {
+          options.AddPolicy(permission.Title, builder =>
+          {
+            builder.RequireAuthenticatedUser();
+            builder.RequireClaim("Permission", permission.Title);
+          });
+        }
+      });
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -137,7 +152,7 @@ namespace Dess.Api
         endpoints.MapControllerRoute(
                   name: "default",
                   pattern: "{controller}/{action=Index}/{id?}");
-        endpoints.MapHub<ElectroFenceHub>("/api/irancell/web/efhub");
+        endpoints.MapHub<ElectroFenceHub>("api/web/hub/ef");
       });
 
       using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
