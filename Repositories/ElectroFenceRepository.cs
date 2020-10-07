@@ -17,14 +17,14 @@ namespace Dess.Api.Repositories
       IHttpClientFactory httpClientFactory) : base(context) =>
       _httpClientFactory = httpClientFactory;
 
-    public async Task<ElectroFence> GetAsync(string serial)
+    public async Task<ElectroFence> GetAsync(string siteId)
     {
-      if (serial == null)
-        throw new ArgumentNullException(nameof(serial));
+      if (siteId == null)
+        throw new ArgumentNullException(nameof(siteId));
 
       return await Entities
         .Include(entity => entity.Status)
-        .FirstOrDefaultAsync(entity => entity.Serial == serial);
+        .FirstOrDefaultAsync(entity => entity.SiteId == siteId);
     }
 
     public async Task<IEnumerable<ElectroFence>> GetAllWithIoAsync() =>
