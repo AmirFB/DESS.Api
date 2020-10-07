@@ -9,6 +9,7 @@ namespace Dess.Api.Profiles
     public ElectroFenceStatusProfile()
     {
       CreateMap<ElectroFenceStatus, ElectroFenceStatusFromHwDto>().ReverseMap();
+      CreateMap<ElectroFenceStatusFromHwDto, ElectroFenceStatusDto>();
     }
   }
 }
