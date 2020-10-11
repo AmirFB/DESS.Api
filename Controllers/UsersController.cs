@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -125,8 +126,10 @@ namespace Dess.Api.Controllers
 
       var token = tokenHandler.CreateToken(tokenDescriptor);
       var tokenString = tokenHandler.WriteToken(token);
+      var result = new { Token = tokenString, permissions = new List<string>() };
+      foreach (var permission in permissions) result.permissions.Add(permission.Title);
 
-      return Ok(new { Status = 1, Token = tokenString });
+      return Ok(result);
     }
 
     [HttpGet("groups")]
