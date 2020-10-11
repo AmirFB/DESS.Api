@@ -106,15 +106,14 @@ namespace Dess.Api.DbContexts
         new UserGroupPermission { GroupId = admin.Id, PermissionId = canEditSites.Id },
         new UserGroupPermission { GroupId = admin.Id, PermissionId = canEditUsers.Id },
 
-
         new UserGroupPermission { GroupId = operate.Id, PermissionId = canEditSites.Id }
       };
       modelBuilder.Entity<UserGroupPermission>().HasData(groupPermissions);
 
       var users = new User[] {
-        new User { Id = 1, Username = "expert", Password = Cryptography.GeneratePasswordHash("expert"), FirstName = "Amir", LastName = "Fakhim-Babaei",GroupId = 1 },
-        new User { Id = 2, Username = "admin", Password = Cryptography.GeneratePasswordHash("admin"), FirstName = "Amir", LastName = "Fakhim-Babaei",GroupId = 2 },
-        new User { Id = 3, Username = "operator", Password = Cryptography.GeneratePasswordHash("operator"), FirstName = "Amir", LastName = "Fakhim-Babaei",GroupId = 3 }
+        new User { Id = 1, Username = "expert", Password = Cryptography.GeneratePasswordHash(Cryptography.GenerateHashSHA256String("expert")), FirstName = "Amir", LastName = "Fakhim-Babaei", GroupId = 1 },
+        new User { Id = 2, Username = "admin", Password = Cryptography.GeneratePasswordHash(Cryptography.GenerateHashSHA256String("admin")), FirstName = "Amir", LastName = "Fakhim-Babaei", GroupId = 2 },
+        new User { Id = 3, Username = "operator", Password = Cryptography.GeneratePasswordHash(Cryptography.GenerateHashSHA256String("operator")), FirstName = "Amir", LastName = "Fakhim-Babaei", GroupId = 3 }
         };
       modelBuilder.Entity<User>().HasData(users);
 
