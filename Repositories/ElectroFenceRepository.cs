@@ -23,7 +23,8 @@ namespace Dess.Api.Repositories
         throw new ArgumentNullException(nameof(siteId));
 
       return await Entities
-        .Include(entity => entity.Status)
+        .Include(e => e.Status)
+        .Include(e => e.Log)
         .FirstOrDefaultAsync(entity => entity.SiteId == siteId);
     }
 

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -100,9 +99,8 @@ namespace Dess.Api.Controllers
       var userFromRepo = await _service.AuthenticateAsync(user.Username, user.Password);
 
       if (userFromRepo == null)
-        return BadRequest(new { Status = 0 });
+        return BadRequest();
 
-      // var tokenHandler = new JwtSecurityTokenHandler { TokenLifetimeInMinutes = 1 };
       var tokenHandler = new JwtSecurityTokenHandler();
       var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
 
