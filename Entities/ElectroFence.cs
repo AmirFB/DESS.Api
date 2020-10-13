@@ -17,7 +17,6 @@ namespace Dess.Api.Entities
     public string PhoneNumber { get; set; }
     public string Hash { get; set; }
     public bool Applied { get; set; }
-    public string IpAddress { get; set; }
 
     public bool UseGlobalIntervarl { get; set; }
     public int Interval { get; set; }

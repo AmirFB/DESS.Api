@@ -46,12 +46,12 @@ namespace Dess.Api.Controllers
         return NotFound();
 
       var statusDto = _mapper.Map<ElectroFenceStatusDto>(status);
+      statusDto.IpAddress = HttpContext.Connection.RemoteIpAddress.ToString();
       await _hubContext.Clients.All.SendAsync("UpdateStatus", statusDto);
 
       _mapper.Map(status, ef.Status);
       ef.Status.Date = DateTime.Now;
       ef.Applied = configHash == ef.Hash;
-      ef.IpAddress = status.IpAddress;
 
       var statusHash = (status as IHashable).GetHash();
 
