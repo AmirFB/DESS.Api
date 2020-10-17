@@ -1,15 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using AutoMapper;
-using Dess.Api.DbContexts;
-using Dess.Api.Helpers;
-using Dess.Api.Hubs;
-using Dess.Api.Repositories;
-using Dess.Api.Services;
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -19,6 +12,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+
+using AutoMapper;
+
+using Dess.Api.DbContexts;
+using Dess.Api.Helpers;
+using Dess.Api.Hubs;
+using Dess.Api.Repositories;
+using Dess.Api.Services;
 
 namespace Dess.Api
 {
@@ -46,7 +47,7 @@ namespace Dess.Api
 
       services.AddScoped<IUserService, UserService>();
 
-      var connectionString = _configuration.GetSection("ConnectionStrings")["DessConnectionString"];
+      var connectionString = _configuration.GetSection("ConnectionStrings") ["DessConnectionString"];
       services.AddDbContext<DessDbContext>(o => o.UseMySql(connectionString));
 
       // configure strongly typed settings objects
@@ -58,38 +59,38 @@ namespace Dess.Api
       var key = Encoding.ASCII.GetBytes(appSettings.Secret);
 
       services.AddAuthentication(options =>
-      {
-        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-      })
+        {
+          options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+          options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
         .AddJwtBearer(action =>
         {
           action.Events = new JwtBearerEvents
           {
-            OnTokenValidated = async (context) =>
-            {
-              var userRepository = context.HttpContext.RequestServices.GetRequiredService<IUserRepository>();
-              var id = int.Parse(context.Principal.Claims.ToList()[0].Value);
-              var user = await userRepository.GetAsync(id);
-
-              if (user == null)
-                context.Fail("Unauthorized");
-            },
-
-            OnMessageReceived = context =>
-            {
-              var accessToken = context.Request.Query["access_token"];
-
-              // If the request is for our hub...
-              var path = context.HttpContext.Request.Path;
-              if (!string.IsNullOrEmpty(accessToken) &&
-                  (path.StartsWithSegments("/api/web/hub/ef")))
+            OnTokenValidated = async(context) =>
               {
-                // Read the token out of the query string
-                context.Token = accessToken;
+                var userRepository = context.HttpContext.RequestServices.GetRequiredService<IUserRepository>();
+                var id = int.Parse(context.Principal.Claims.ToList() [0].Value);
+                var user = await userRepository.GetAsync(id);
+
+                if (user == null)
+                  context.Fail("Unauthorized");
+              },
+
+              OnMessageReceived = context =>
+              {
+                var accessToken = context.Request.Query["access_token"];
+
+                // If the request is for our hub...
+                var path = context.HttpContext.Request.Path;
+                if (!string.IsNullOrEmpty(accessToken) &&
+                  (path.StartsWithSegments("/api/web/hub/ef")))
+                {
+                  // Read the token out of the query string
+                  context.Token = accessToken;
+                }
+                return Task.CompletedTask;
               }
-              return Task.CompletedTask;
-            }
           };
 
           action.RequireHttpsMetadata = false;
@@ -105,20 +106,25 @@ namespace Dess.Api
         });
 
       var serviceProvider = services.BuildServiceProvider();
-      var permissionRepository = (IPermissionRepository)serviceProvider.GetService<IPermissionRepository>();
-      var permissions = permissionRepository.GetAllAsync().Result;
+      var permissionRepository = (IPermissionRepository) serviceProvider.GetService<IPermissionRepository>();
 
-      services.AddAuthorizationCore(options =>
+      try
       {
-        foreach (var permission in permissions)
+        var permissions = permissionRepository.GetAllAsync().Result;
+
+        services.AddAuthorizationCore(options =>
         {
-          options.AddPolicy(permission.Title, builder =>
+          foreach (var permission in permissions)
           {
-            builder.RequireAuthenticatedUser();
-            builder.RequireClaim("Permission", permission.Title);
-          });
-        }
-      });
+            options.AddPolicy(permission.Title, builder =>
+            {
+              builder.RequireAuthenticatedUser();
+              builder.RequireClaim("Permission", permission.Title);
+            });
+          }
+        });
+      }
+      catch (Exception ex) { }
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -150,16 +156,18 @@ namespace Dess.Api
       app.UseEndpoints(endpoints =>
       {
         endpoints.MapControllerRoute(
-                  name: "default",
-                  pattern: "{controller}/{action=Index}/{id?}");
+          name: "default",
+          pattern: "{controller}/{action=Index}/{id?}");
         endpoints.MapHub<ElectroFenceHub>("api/web/hub/ef");
       });
 
-      using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+      using(var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
       {
         var context = serviceScope.ServiceProvider.GetService<DessDbContext>();
 
-        context.Database.EnsureDeleted();
+        if (env.IsDevelopment())
+          context.Database.EnsureDeleted();
+
         context.Database.Migrate();
         context.Database.EnsureCreated();
       }

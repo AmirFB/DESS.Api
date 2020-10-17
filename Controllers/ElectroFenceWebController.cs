@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
 using AutoMapper;
+
 using Dess.Api.Entities;
 using Dess.Api.Models;
 using Dess.Api.Models.ElectroFence;
 using Dess.Api.Repositories;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Dess.Api.Controllers
 {
@@ -55,8 +58,8 @@ namespace Dess.Api.Controllers
 
       var electroFenceToReturn = _mapper.Map<ElectroFenceDto>(electroFenceEntity);
       return CreatedAtRoute("GetAsync",
-          new { id = electroFenceToReturn.Id },
-          electroFenceToReturn);
+        new { id = electroFenceToReturn.Id },
+        electroFenceToReturn);
     }
 
     [Authorize(Policy = "CanEditSites")]
