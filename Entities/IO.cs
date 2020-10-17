@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
+
 using Dess.Api.Models;
 using Dess.Api.Types;
 
 namespace Dess.Api.Entities
 {
-  public class IO : EntityBase, IHashable
+  public class Io : EntityBase, IHashable
   {
     public string Name { get; set; }
 

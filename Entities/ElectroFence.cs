@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+
 using Dess.Api.Models;
 
 namespace Dess.Api.Entities
@@ -8,6 +9,7 @@ namespace Dess.Api.Entities
   {
     [Required]
     public string Name { get; set; }
+
     [Required]
     public string SiteId { get; set; }
     public string SerialNo { get; set; }
@@ -27,13 +29,16 @@ namespace Dess.Api.Entities
 
     [Required]
     public bool HvEnabled { get; set; }
+
     [Required]
     public bool LvEnabled { get; set; }
 
     [Required]
     public int HvPower { get; set; }
+
     [Required]
     public int HvThreshold { get; set; }
+
     [Required]
     public int HvRepeat { get; set; }
 
@@ -45,13 +50,13 @@ namespace Dess.Api.Entities
 
     public ElectroFenceStatus Status { get; set; }
 
-    public IList<IO> IOs { get; set; }
+    public IList<Io> IOs { get; set; }
     public ICollection<ElectroFenceStatus> Log { get; set; } = new List<ElectroFenceStatus>();
 
     public string GetHashBase()
     {
       var data = $"{HvEnabled}{LvEnabled}{HvPower}{HvThreshold}" +
-      $"{HvRepeat}{IOs[0]}{IOs[1]}{IOs[2]}{IOs[3]}";
+        $"{HvRepeat}{IOs[0]}{IOs[1]}{IOs[2]}{IOs[3]}";
       return data;
     }
   }

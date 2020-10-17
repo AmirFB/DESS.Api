@@ -1,4 +1,6 @@
-﻿using Dess.Api.Types;
+﻿using System.Collections.Generic;
+
+using Dess.Api.Types;
 
 namespace Dess.Api.Models.ElectroFence
 {
@@ -20,10 +22,7 @@ namespace Dess.Api.Models.ElectroFence
     public BatteryStatus BatteryStatus { get; set; }
     public byte BatteryLevel { get; set; }
 
-    public bool Input1 { get; set; }
-    public bool Input2 { get; set; }
-    public bool Output1 { get; set; }
-    public bool Output2 { get; set; }
+    public IList<bool> Ios { get; set; }
 
     public string Latitude { get; set; }
     public string Longitude { get; set; }
@@ -32,8 +31,8 @@ namespace Dess.Api.Models.ElectroFence
     public string GetHashBase()
     {
       var data = $"{HvAlarm}{LvAlarm}{TamperAlarm}" +
-      $"{BatteryStatus}{MainPowerFault}{HvPowerFault}{HvChargeFault}" +
-      $"{HvDischargeFault}{Input1}{Input2}{Output1}{Output2}";
+        $"{BatteryStatus}{MainPowerFault}{HvPowerFault}{HvChargeFault}" +
+        $"{HvDischargeFault}{Ios[0]}{Ios[1]}{Ios[2]}{Ios[3]}";
       return data;
     }
   }

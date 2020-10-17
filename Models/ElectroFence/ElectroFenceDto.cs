@@ -1,4 +1,6 @@
-﻿namespace Dess.Api.Models.ElectroFence
+﻿using System.Collections.Generic;
+
+namespace Dess.Api.Models.ElectroFence
 {
   public class ElectroFenceDto
   {
@@ -8,7 +10,6 @@
     public string SerialNo { get; set; }
 
     public string PhoneNumber { get; set; }
-    public string IpAddress { get; set; }
 
     public bool UseGlobalIntervarl { get; set; }
     public int Interval { get; set; }
@@ -30,9 +31,8 @@
     public double BatteryMin { get; set; }
     public double BatteryMax { get; set; }
 
-    public IODto Input1 { get; set; }
-    public IODto Input2 { get; set; }
-    public IODto Output1 { get; set; }
-    public IODto Output2 { get; set; }
+    public ElectroFenceStatusDto Status { get; set; }
+
+    public ICollection<IoDto> Ios { get; set; }
   }
 }

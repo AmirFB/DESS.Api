@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Dess.Api.Models.ElectroFence
 {
   public class ElectroFenceForHwDto
@@ -9,6 +11,6 @@ namespace Dess.Api.Models.ElectroFence
     public int HvThreshold { get; set; }
     public int HvRepeat { get; set; }
 
-    public IODto Input1, Input2, Output1, Output2;
+    public IEnumerable<IoDto> Ios { get; set; }
   }
 }
