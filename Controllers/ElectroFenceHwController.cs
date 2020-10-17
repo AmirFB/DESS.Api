@@ -1,14 +1,17 @@
 using System;
 using System.Threading.Tasks;
+
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+
 using AutoMapper;
+
 using Dess.Api.Entities;
 using Dess.Api.Hubs;
 using Dess.Api.Models;
 using Dess.Api.Models.ElectroFence;
 using Dess.Api.Repositories;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 
 namespace Dess.Api.Controllers
 {
@@ -25,16 +28,16 @@ namespace Dess.Api.Controllers
     public ElectroFenceRepository(IElectroFenceRepository electroFenceRepository, IUserLogRepository userLogRepository, IMapper mapper, IHubContext<ElectroFenceHub> hubContext)
     {
       _repository = electroFenceRepository ??
-          throw new ArgumentNullException(nameof(electroFenceRepository));
+        throw new ArgumentNullException(nameof(electroFenceRepository));
 
       _userLogRepository = userLogRepository ??
-          throw new ArgumentNullException(nameof(userLogRepository));
+        throw new ArgumentNullException(nameof(userLogRepository));
 
       _mapper = mapper ??
-          throw new ArgumentNullException(nameof(mapper));
+        throw new ArgumentNullException(nameof(mapper));
 
       _hubContext = hubContext ??
-          throw new ArgumentNullException(nameof(_hubContext));
+        throw new ArgumentNullException(nameof(_hubContext));
     }
 
     [HttpPost("{siteId}/{configHash}")]
@@ -47,6 +50,7 @@ namespace Dess.Api.Controllers
 
       var statusDto = _mapper.Map<ElectroFenceStatusDto>(status);
       statusDto.IpAddress = HttpContext.Connection.RemoteIpAddress.ToString();
+      statusDto.SiteId = ef.Id;
       await _hubContext.Clients.All.SendAsync("UpdateStatus", statusDto);
 
       _mapper.Map(status, ef.Status);
