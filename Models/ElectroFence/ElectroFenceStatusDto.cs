@@ -1,3 +1,5 @@
+using System;
+
 using Dess.Api.Types;
 
 namespace Dess.Api.Models.ElectroFence
@@ -5,9 +7,10 @@ namespace Dess.Api.Models.ElectroFence
   public class ElectroFenceStatusDto
   {
     public int Id { get; set; }
-    public bool Applied { get; set; }
+    public long Date { get; set; }
     public string IpAddress { get; set; }
     public string SerialNo { get; set; }
+    public bool Applied { get; set; }
     public int SiteId { get; set; }
 
     public bool HvAlarm { get; set; }

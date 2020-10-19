@@ -4,16 +4,19 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+
 using AutoMapper;
+
 using Dess.Api.Entities;
 using Dess.Api.Helpers;
 using Dess.Api.Models.User;
 using Dess.Api.Repositories;
 using Dess.Api.Services;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Dess.Api.Controllers
 {
@@ -36,6 +39,7 @@ namespace Dess.Api.Controllers
 
     [Authorize(Policy = "CanEditUsers")]
     [HttpGet]
+    [HttpHead]
     public async Task<ActionResult<IEnumerable<UserDto>>> GetAllAsync()
     {
       var users = await _repository.GetAllAsync();
