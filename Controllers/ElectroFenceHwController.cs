@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.SignalR;
 using AutoMapper;
 
 using Dess.Api.Entities;
+using Dess.Api.Helpers;
 using Dess.Api.Hubs;
 using Dess.Api.Models;
 using Dess.Api.Models.ElectroFence;
@@ -51,10 +52,11 @@ namespace Dess.Api.Controllers
       var statusDto = _mapper.Map<ElectroFenceStatusDto>(status);
       statusDto.IpAddress = HttpContext.Connection.RemoteIpAddress.ToString();
       statusDto.SiteId = ef.Id;
+      statusDto.Date = DateTime.UtcNow.JavascriptDate();
       await _hubContext.Clients.All.SendAsync("UpdateStatus", statusDto);
 
+      ef.Status.Date = DateTime.UtcNow;
       _mapper.Map(status, ef.Status);
-      ef.Status.Date = DateTime.Now;
       ef.Applied = configHash == ef.Hash;
 
       var statusHash = (status as IHashable).GetHash();
@@ -77,7 +79,11 @@ namespace Dess.Api.Controllers
       }
 
       await _repository.SaveAsync();
-      return Ok(ef.Hash);
+
+      if (ef.Applied)
+        return NoContent();
+
+      return Ok(_mapper.Map<ElectroFenceForHwDto>(ef));
     }
 
     [HttpGet("{siteId}")]
