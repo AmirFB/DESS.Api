@@ -63,11 +63,11 @@ namespace Dess.Api.Controllers
     }
 
     [Authorize(Policy = "CanEditSites")]
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateAsync(int id, ElectroFenceDto ef)
+    [HttpPut()]
+    public async Task<IActionResult> UpdateAsync(ElectroFenceDto ef)
     {
-      var efFromRepo = await _repository.GetWithIoAsync(id);
-      _mapper.Map(efFromRepo, ef);
+      var efFromRepo = await _repository.GetWithIoAsync(ef.Id);
+      _mapper.Map(ef, efFromRepo);
       efFromRepo.Hash = (efFromRepo as IHashable).GetHash();
       await _repository.SaveAsync();
 

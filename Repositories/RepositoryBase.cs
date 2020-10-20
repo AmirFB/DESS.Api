@@ -3,21 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-using Dess.Api.Entities;
-
 using Microsoft.EntityFrameworkCore;
+
+using Dess.Api.Entities;
 
 namespace Dess.Api.Repositories
 {
   public class RepositoryBase<TEntity, TContext> : IRepositoryBase<TEntity>
     where TEntity : EntityBase
-    where TContext : DbContext
+  where TContext : DbContext
   {
     protected TContext Context { get; set; }
     protected DbSet<TEntity> Entities => Context.Set<TEntity>();
 
     public RepositoryBase(TContext context) =>
-      Context = context ?? throw new ArgumentNullException(nameof(context));
+      Context = context ??
+      throw new ArgumentNullException(nameof(context));
 
     public async Task<bool> ExistsAsync(int id) =>
       await Entities.AnyAsync(e => e.Id == id);
