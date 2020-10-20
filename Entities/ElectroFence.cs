@@ -21,7 +21,7 @@ namespace Dess.Api.Entities
     public bool Applied { get; set; }
 
     public bool UseGlobalIntervarl { get; set; }
-    public int Interval { get; set; }
+    public byte Interval { get; set; }
 
     public bool AutoLocation { get; set; }
     public string Latitude { get; set; }
@@ -34,29 +34,31 @@ namespace Dess.Api.Entities
     public bool LvEnabled { get; set; }
 
     [Required]
-    public int HvPower { get; set; }
+    public byte HvPower { get; set; }
 
     [Required]
-    public int HvThreshold { get; set; }
+    public short HvThreshold { get; set; }
 
     [Required]
-    public int HvRepeat { get; set; }
+    public byte HvRepeat { get; set; }
 
-    public int TemperatureMin { get; set; }
-    public int TemperatureMax { get; set; }
+    public sbyte TemperatureMin { get; set; }
+    public sbyte TemperatureMax { get; set; }
 
-    public double BatteryMin { get; set; }
-    public double BatteryMax { get; set; }
+    public bool TamperEnabled { set; get; }
+
+    public byte BatteryMin { get; set; }
 
     public ElectroFenceStatus Status { get; set; }
 
-    public IList<Io> Ios { get; set; }
+    public IList<Io> Inputs { get; set; }
+    public IList<Io> Outputs { get; set; }
     public ICollection<ElectroFenceStatus> Log { get; set; } = new List<ElectroFenceStatus>();
 
     public string GetHashBase()
     {
-      var data = $"{HvEnabled}{LvEnabled}{HvPower}{HvThreshold}" +
-        $"{HvRepeat}{Ios[0]}{Ios[1]}{Ios[2]}{Ios[3]}";
+      var data = $"{HvEnabled}{LvEnabled}{HvPower}{HvThreshold}"
+        + $"{HvRepeat}{Inputs[0]}{Inputs[1]}{Outputs[2]}{Outputs[3]}";
       return data;
     }
   }
