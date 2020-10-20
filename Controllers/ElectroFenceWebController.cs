@@ -66,7 +66,7 @@ namespace Dess.Api.Controllers
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateAsync(int id, ElectroFenceDto ef)
     {
-      var efFromRepo = await _repository.GetAsync(id);
+      var efFromRepo = await _repository.GetWithIoAsync(id);
       _mapper.Map(efFromRepo, ef);
       efFromRepo.Hash = (efFromRepo as IHashable).GetHash();
       await _repository.SaveAsync();

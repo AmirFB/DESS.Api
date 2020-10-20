@@ -33,6 +33,6 @@ namespace Dess.Api.Models.ElectroFence
 
     public ElectroFenceStatusDto Status { get; set; }
 
-    public ICollection<IoDto> Ios { get; set; }
+    public IList<IoDto> Ios { get; set; }
   }
 }

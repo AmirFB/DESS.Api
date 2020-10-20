@@ -7,10 +7,11 @@ namespace Dess.Api.Repositories
   public interface IElectroFenceRepository : IRepositoryBase<ElectroFence>
   {
     Task<ElectroFence> GetAsync(string siteId);
+    Task<ElectroFence> GetWithIoAsync(int id);
     Task<IEnumerable<ElectroFence>> GetAllWithIoAsync();
     Task<ElectroFence> GetWithStatusAsync(int id);
     Task<IEnumerable<ElectroFenceStatus>> GetAllLogAsync();
     Task<IEnumerable<ElectroFenceStatus>> GetLogAsync(int id);
     Task<ElectroFenceStatus> GetStatusAsync(int id);
-  }
+    }
 }
