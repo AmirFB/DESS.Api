@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 
 using Dess.Api.Entities;
+using Dess.Api.Helpers;
 using Dess.Api.Models.ElectroFence;
 
 namespace Dess.Api.Profiles
@@ -12,7 +13,8 @@ namespace Dess.Api.Profiles
       CreateMap<ElectroFenceStatus, ElectroFenceStatusFromHwDto>().ReverseMap();
       CreateMap<ElectroFenceStatusFromHwDto, ElectroFenceStatusDto>();
       CreateMap<ElectroFenceStatus, ElectroFenceStatusDto>()
-        .ForMember(d => d.SiteId, o => o.MapFrom(e => e.ElectroFenceId));
+        .ForMember(d => d.SiteId, o => o.MapFrom(e => e.ElectroFenceId))
+        .ForMember(d => d.Date, o => o.MapFrom(e => e.Date.JavascriptDate()));
     }
   }
 }

@@ -112,9 +112,9 @@ namespace Dess.Api.DbContexts
       };
       modelBuilder.Entity<User>().HasData(users);
 
-      var ef1 = new ElectroFence { Id = 1, Name = "Ef1", SiteId = "ehp-ie-tbz", Serial = "001", HvEnabled = true, LvEnabled = true, HvPower = 70, HvRepeat = 2, HvThreshold = 3000, Latitude = "38.0962", Longitude = "46.2738" };
-      var ef2 = new ElectroFence { Id = 2, Name = "Ef2", SiteId = "ehp-ie-thr", Serial = "002", HvEnabled = true, LvEnabled = false, HvPower = 70, HvRepeat = 3, HvThreshold = 4000, Latitude = "35.6892", Longitude = "51.3890" };
-      var ef3 = new ElectroFence { Id = 3, Name = "Ef3", SiteId = "ehp-ie-isf", Serial = "003", HvEnabled = true, LvEnabled = false, HvPower = 80, HvRepeat = 2, HvThreshold = 5000, Latitude = "32.6539", Longitude = "51.6660" };
+      var ef1 = new ElectroFence { Id = 1, Name = "Ef1", SiteId = "ehp-ie-tbz", Serial = "001", Interval = 10, HvEnabled = true, LvEnabled = true, HvPower = 70, HvRepeat = 2, HvThreshold = 3000, Latitude = "38.0962", Longitude = "46.2738" };
+      var ef2 = new ElectroFence { Id = 2, Name = "Ef2", SiteId = "ehp-ie-thr", Serial = "002", Interval = 15, HvEnabled = true, LvEnabled = false, HvPower = 70, HvRepeat = 3, HvThreshold = 4000, Latitude = "35.6892", Longitude = "51.3890" };
+      var ef3 = new ElectroFence { Id = 3, Name = "Ef3", SiteId = "ehp-ie-isf", Serial = "003", Interval = 20, HvEnabled = true, LvEnabled = false, HvPower = 80, HvRepeat = 2, HvThreshold = 5000, Latitude = "32.6539", Longitude = "51.6660" };
 
       var status1 = new ElectroFenceStatus { Id = 1, ElectroFenceId = 1 };
       var status2 = new ElectroFenceStatus { Id = 2, ElectroFenceId = 2 };
