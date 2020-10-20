@@ -51,8 +51,8 @@ namespace Dess.Api.Entities
 
     public ElectroFenceStatus Status { get; set; }
 
-    public IList<Io> Inputs { get; set; }
-    public IList<Io> Outputs { get; set; }
+    public IList<Input> Inputs { get; set; }
+    public IList<Output> Outputs { get; set; }
     public ICollection<ElectroFenceStatus> Log { get; set; } = new List<ElectroFenceStatus>();
 
     public string GetHashBase()

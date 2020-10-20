@@ -11,6 +11,7 @@ namespace Dess.Api.Models.ElectroFence
     public short HvThreshold { get; set; }
     public byte HvRepeat { get; set; }
 
-    public IEnumerable<IoDto> Ios { get; set; }
+    public IEnumerable<InputDto> Inputs { get; set; }
+    public IEnumerable<OutputDto> Outputs { get; set; }
   }
 }

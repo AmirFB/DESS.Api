@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-using Microsoft.EntityFrameworkCore;
-
 using Dess.Api.DbContexts;
 using Dess.Api.Entities;
+
+using Microsoft.EntityFrameworkCore;
 
 namespace Dess.Api.Repositories
 {
@@ -32,12 +32,14 @@ namespace Dess.Api.Repositories
 
     public async Task<ElectroFence> GetWithIoAsync(int id) =>
       await Entities
-      .Include(e => e.Ios)
+      .Include(e => e.Inputs)
+      .Include(e => e.Outputs)
       .FirstOrDefaultAsync(e => e.Id == id);
 
     public async Task<IEnumerable<ElectroFence>> GetAllWithIoAsync() =>
       await Entities
-      .Include(e => e.Ios)
+      .Include(e => e.Inputs)
+      .Include(e => e.Outputs)
       .Include(e => e.Status)
       .ToListAsync();
 

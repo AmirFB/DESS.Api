@@ -6,8 +6,9 @@ namespace Dess.Api.Entities
 {
   public class Output : Io
   {
-    public ICollection<TriggerType> Triggers { get; set; }
     public short ResetTime { get; set; }
+
+    public byte[] Triggers { get; set; }
 
     public override string GetHashBase()
     {

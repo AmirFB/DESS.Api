@@ -17,7 +17,8 @@ namespace Dess.Api.DbContexts
 
     public DbSet<ElectroFence> ElectroFences { get; set; }
     public DbSet<ElectroFenceStatus> Logs { get; set; }
-    public DbSet<Io> IOs { get; set; }
+    public DbSet<Input> Inputs { get; set; }
+    public DbSet<Output> Outputs { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<UserLog> UserLogs { get; set; }
     public DbSet<UserGroup> UserGroups { get; set; }

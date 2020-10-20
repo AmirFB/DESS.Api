@@ -9,7 +9,8 @@ namespace Dess.Api.Profiles
   {
     public IOProfile()
     {
-      CreateMap<Io, IoDto>().ReverseMap();
+      CreateMap<Input, InputDto>().ReverseMap();
+      CreateMap<Output, OutputDto>().ReverseMap();
     }
   }
 }
