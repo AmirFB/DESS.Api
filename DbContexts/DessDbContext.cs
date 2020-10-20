@@ -1,10 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-using AutoMapper;
+﻿using AutoMapper;
 
 using Dess.Api.Entities;
 using Dess.Api.Helpers;
 using Dess.Api.Types;
+
+using Microsoft.EntityFrameworkCore;
 
 namespace Dess.Api.DbContexts
 {
@@ -34,7 +34,12 @@ namespace Dess.Api.DbContexts
         .HasForeignKey<ElectroFenceStatus>(s => s.ElectroFenceId);
 
       modelBuilder.Entity<ElectroFence>()
-        .HasMany(e => e.Ios)
+        .HasMany(e => e.Inputs)
+        .WithOne(i => i.Module)
+        .HasForeignKey(i => i.ModuleId);
+
+      modelBuilder.Entity<ElectroFence>()
+        .HasMany(e => e.Inputs)
         .WithOne(i => i.Module)
         .HasForeignKey(i => i.ModuleId);
 
@@ -123,13 +128,15 @@ namespace Dess.Api.DbContexts
       modelBuilder.Entity<ElectroFence>().HasData(ef1, ef2, ef3);
       modelBuilder.Entity<ElectroFenceStatus>().HasData(status1, status2, status3);
 
-      for (int i = 0; i < 4; i++)
+      for (int i = 0; i < 2; i++)
       {
-        var io1 = new Io { Id = i * 3 + 1, Enabled = i < 2, Type = i % 2 == 0 ? IOType.NO : IOType.NC, ModuleId = ef1.Id };
-        var io2 = new Io { Id = i * 3 + 2, Enabled = i < 3, Type = i % 2 == 1 ? IOType.NO : IOType.NC, ModuleId = ef2.Id };
-        var io3 = new Io { Id = i * 3 + 3, Enabled = i < 1, Type = i % 2 == 0 ? IOType.NO : IOType.NC, ModuleId = ef3.Id };
+        var io1 = new Input { Id = i * 3 + 1, Enabled = i < 2, Type = i % 2 == 0 ? IOType.NO : IOType.NC, ModuleId = ef1.Id };
+        var io2 = new Input { Id = i * 3 + 2, Enabled = i < 3, Type = i % 2 == 1 ? IOType.NO : IOType.NC, ModuleId = ef2.Id };
+        var io3 = new Output { Id = i * 3 + 1, Enabled = i < 2, Type = i % 2 == 0 ? IOType.NO : IOType.NC, ModuleId = ef1.Id };
+        var io4 = new Output { Id = i * 3 + 2, Enabled = i < 3, Type = i % 2 == 1 ? IOType.NO : IOType.NC, ModuleId = ef2.Id };
 
-        modelBuilder.Entity<Io>().HasData(io1, io2, io3);
+        modelBuilder.Entity<Input>().HasData(io1, io2);
+        modelBuilder.Entity<Output>().HasData(io3, io4);
       }
     }
   }

@@ -7,9 +7,9 @@ namespace Dess.Api.Models.ElectroFence
     public bool HvEnabled { get; set; }
     public bool LvEnabled { get; set; }
 
-    public int HvPower { get; set; }
-    public int HvThreshold { get; set; }
-    public int HvRepeat { get; set; }
+    public byte HvPower { get; set; }
+    public short HvThreshold { get; set; }
+    public byte HvRepeat { get; set; }
 
     public IEnumerable<IoDto> Ios { get; set; }
   }

@@ -12,7 +12,7 @@ namespace Dess.Api.Models.ElectroFence
     public string PhoneNumber { get; set; }
 
     public bool UseGlobalIntervarl { get; set; }
-    public int Interval { get; set; }
+    public byte Interval { get; set; }
 
     public bool AutoLocation { get; set; }
     public string Latitude { get; set; }
@@ -21,18 +21,20 @@ namespace Dess.Api.Models.ElectroFence
     public bool HvEnabled { get; set; }
     public bool LvEnabled { get; set; }
 
-    public int HvPower { get; set; }
-    public int HvThreshold { get; set; }
-    public int HvRepeat { get; set; }
+    public byte HvPower { get; set; }
+    public short HvThreshold { get; set; }
+    public byte HvRepeat { get; set; }
 
-    public int TemperatureMin { get; set; }
-    public int TemperatureMax { get; set; }
+    public sbyte TemperatureMin { get; set; }
+    public sbyte TemperatureMax { get; set; }
 
-    public double BatteryMin { get; set; }
-    public double BatteryMax { get; set; }
+    public bool TamperEnabled { get; set; }
+
+    public byte BatteryMin { get; set; }
 
     public ElectroFenceStatusDto Status { get; set; }
 
-    public IList<IoDto> Ios { get; set; }
+    public IList<IoDto> Inputs { get; set; }
+    public IList<IoDto> Outputs { get; set; }
   }
 }
