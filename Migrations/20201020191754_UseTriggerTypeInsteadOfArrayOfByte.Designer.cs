@@ -3,14 +3,16 @@ using System;
 using Dess.Api.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Dess.Api.Migrations
 {
     [DbContext(typeof(DessDbContext))]
-    partial class DessDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201020191754_UseTriggerTypeInsteadOfArrayOfByte")]
+    partial class UseTriggerTypeInsteadOfArrayOfByte
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -359,13 +361,6 @@ namespace Dess.Api.Migrations
                         },
                         new
                         {
-                            Id = 3,
-                            Enabled = true,
-                            ModuleId = 3,
-                            Type = 0
-                        },
-                        new
-                        {
                             Id = 4,
                             Enabled = true,
                             ModuleId = 1,
@@ -377,13 +372,6 @@ namespace Dess.Api.Migrations
                             Enabled = true,
                             ModuleId = 2,
                             Type = 0
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Enabled = false,
-                            ModuleId = 3,
-                            Type = 1
                         });
                 });
 
@@ -438,15 +426,6 @@ namespace Dess.Api.Migrations
                         },
                         new
                         {
-                            Id = 3,
-                            Enabled = true,
-                            ModuleId = 3,
-                            ResetTime = (short)0,
-                            Triggers = "2;3",
-                            Type = 0
-                        },
-                        new
-                        {
                             Id = 4,
                             Enabled = true,
                             ModuleId = 1,
@@ -462,15 +441,6 @@ namespace Dess.Api.Migrations
                             ResetTime = (short)0,
                             Triggers = "1;3",
                             Type = 0
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Enabled = false,
-                            ModuleId = 3,
-                            ResetTime = (short)0,
-                            Triggers = "2;3",
-                            Type = 1
                         });
                 });
 
@@ -512,7 +482,7 @@ namespace Dess.Api.Migrations
                             FirstName = "Amir",
                             GroupId = 1,
                             LastName = "Fakhim-Babaei",
-                            Password = "$2a$11$CQA7BDyYDY3fZHxbO66IXut0FVkMvczTLZM/jZRcq1AOm.1Whqhq.",
+                            Password = "$2a$11$zYJP/hCq00HwjsOJgRwm7uVXTnQfqtRzbC1AQceoxCCBmkootkhja",
                             Username = "expert"
                         },
                         new
@@ -521,7 +491,7 @@ namespace Dess.Api.Migrations
                             FirstName = "Amir",
                             GroupId = 2,
                             LastName = "Fakhim-Babaei",
-                            Password = "$2a$11$hCrBZKM1hvc3SfWIEU.ixedwb0/ecHZuhXM8qGZc5VHDWRCvXRDXG",
+                            Password = "$2a$11$qILP/ohBmMJGHoV1X5A6AuX.eh9401Q5m.xBPbYBDPXO4PSxY/wye",
                             Username = "admin"
                         },
                         new
@@ -530,7 +500,7 @@ namespace Dess.Api.Migrations
                             FirstName = "Amir",
                             GroupId = 3,
                             LastName = "Fakhim-Babaei",
-                            Password = "$2a$11$8uajTKdHHcQQmO5QO.O73uPm43uS3eT2BEMoYQiCOQPRmpUu5pWIy",
+                            Password = "$2a$11$qVqP51SyrKmUwM.cUpAfNuxvU6.5DbQLBdjVUhN9I9PpdIFAIsWI.",
                             Username = "operator"
                         });
                 });

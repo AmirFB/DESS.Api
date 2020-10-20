@@ -1,10 +1,15 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+
+using AutoMapper;
 
 using Dess.Api.Entities;
 using Dess.Api.Helpers;
 using Dess.Api.Types;
-
-using Microsoft.EntityFrameworkCore;
 
 namespace Dess.Api.DbContexts
 {
@@ -40,9 +45,17 @@ namespace Dess.Api.DbContexts
         .HasForeignKey(i => i.ModuleId);
 
       modelBuilder.Entity<ElectroFence>()
-        .HasMany(e => e.Inputs)
-        .WithOne(i => i.Module)
-        .HasForeignKey(i => i.ModuleId);
+        .HasMany(e => e.Outputs)
+        .WithOne(o => o.Module)
+        .HasForeignKey(o => o.ModuleId);
+
+      var converter = new ValueConverter<ICollection<TriggerType>, string>(
+          t => string.Join(";", t.ToList().ConvertAll(t => (int) t)),
+          t => t.Split(";", StringSplitOptions.RemoveEmptyEntries).Select(val => (TriggerType) int.Parse(val)).ToList());
+
+      modelBuilder.Entity<Output>()
+        .Property(e => e.Triggers)
+        .HasConversion(converter);
 
       modelBuilder.Entity<UserLog>()
         .HasOne(u => u.User)
@@ -131,13 +144,15 @@ namespace Dess.Api.DbContexts
 
       for (int i = 0; i < 2; i++)
       {
-        var io1 = new Input { Id = i * 3 + 1, Enabled = i < 2, Type = i % 2 == 0 ? IOType.NO : IOType.NC, ModuleId = ef1.Id };
-        var io2 = new Input { Id = i * 3 + 2, Enabled = i < 3, Type = i % 2 == 1 ? IOType.NO : IOType.NC, ModuleId = ef2.Id };
-        var io3 = new Output { Id = i * 3 + 1, Enabled = i < 2, Type = i % 2 == 0 ? IOType.NO : IOType.NC, ModuleId = ef1.Id };
-        var io4 = new Output { Id = i * 3 + 2, Enabled = i < 3, Type = i % 2 == 1 ? IOType.NO : IOType.NC, ModuleId = ef2.Id };
+        var i1 = new Input { Id = i * 3 + 1, Enabled = i < 2, Type = i % 2 == 0 ? IOType.NO : IOType.NC, ModuleId = ef1.Id };
+        var i2 = new Input { Id = i * 3 + 2, Enabled = i < 3, Type = i % 2 == 1 ? IOType.NO : IOType.NC, ModuleId = ef2.Id };
+        var i3 = new Input { Id = i * 3 + 3, Enabled = i < 1, Type = i % 2 == 0 ? IOType.NO : IOType.NC, ModuleId = ef3.Id };
+        var o1 = new Output { Id = i * 3 + 1, Enabled = i < 2, Type = i % 2 == 0 ? IOType.NO : IOType.NC, Triggers = new List<TriggerType> { TriggerType.Faults }, ModuleId = ef1.Id };
+        var o2 = new Output { Id = i * 3 + 2, Enabled = i < 3, Type = i % 2 == 1 ? IOType.NO : IOType.NC, Triggers = new List<TriggerType> { TriggerType.Input1, TriggerType.Power }, ModuleId = ef2.Id };
+        var o3 = new Output { Id = i * 3 + 3, Enabled = i < 1, Type = i % 2 == 0 ? IOType.NO : IOType.NC, Triggers = new List<TriggerType> { TriggerType.Input2, TriggerType.Power }, ModuleId = ef3.Id };
 
-        modelBuilder.Entity<Input>().HasData(io1, io2);
-        modelBuilder.Entity<Output>().HasData(io3, io4);
+        modelBuilder.Entity<Input>().HasData(i1, i2, i3);
+        modelBuilder.Entity<Output>().HasData(o1, o2, o3);
       }
     }
   }

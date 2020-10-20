@@ -3,14 +3,16 @@ using System;
 using Dess.Api.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Dess.Api.Migrations
 {
     [DbContext(typeof(DessDbContext))]
-    partial class DessDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201020190302_OutputsSeededWithTriggers")]
+    partial class OutputsSeededWithTriggers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -359,13 +361,6 @@ namespace Dess.Api.Migrations
                         },
                         new
                         {
-                            Id = 3,
-                            Enabled = true,
-                            ModuleId = 3,
-                            Type = 0
-                        },
-                        new
-                        {
                             Id = 4,
                             Enabled = true,
                             ModuleId = 1,
@@ -377,13 +372,6 @@ namespace Dess.Api.Migrations
                             Enabled = true,
                             ModuleId = 2,
                             Type = 0
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Enabled = false,
-                            ModuleId = 3,
-                            Type = 1
                         });
                 });
 
@@ -405,8 +393,8 @@ namespace Dess.Api.Migrations
                     b.Property<short>("ResetTime")
                         .HasColumnType("smallint");
 
-                    b.Property<string>("Triggers")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                    b.Property<byte[]>("Triggers")
+                        .HasColumnType("longblob");
 
                     b.Property<int>("Type")
                         .HasColumnType("int");
@@ -424,7 +412,7 @@ namespace Dess.Api.Migrations
                             Enabled = true,
                             ModuleId = 1,
                             ResetTime = (short)0,
-                            Triggers = "0",
+                            Triggers = new byte[] { 0 },
                             Type = 0
                         },
                         new
@@ -433,17 +421,8 @@ namespace Dess.Api.Migrations
                             Enabled = true,
                             ModuleId = 2,
                             ResetTime = (short)0,
-                            Triggers = "1;3",
+                            Triggers = new byte[] { 0, 3 },
                             Type = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Enabled = true,
-                            ModuleId = 3,
-                            ResetTime = (short)0,
-                            Triggers = "2;3",
-                            Type = 0
                         },
                         new
                         {
@@ -451,7 +430,7 @@ namespace Dess.Api.Migrations
                             Enabled = true,
                             ModuleId = 1,
                             ResetTime = (short)0,
-                            Triggers = "0",
+                            Triggers = new byte[] { 0 },
                             Type = 1
                         },
                         new
@@ -460,17 +439,8 @@ namespace Dess.Api.Migrations
                             Enabled = true,
                             ModuleId = 2,
                             ResetTime = (short)0,
-                            Triggers = "1;3",
+                            Triggers = new byte[] { 0, 3 },
                             Type = 0
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Enabled = false,
-                            ModuleId = 3,
-                            ResetTime = (short)0,
-                            Triggers = "2;3",
-                            Type = 1
                         });
                 });
 
@@ -512,7 +482,7 @@ namespace Dess.Api.Migrations
                             FirstName = "Amir",
                             GroupId = 1,
                             LastName = "Fakhim-Babaei",
-                            Password = "$2a$11$CQA7BDyYDY3fZHxbO66IXut0FVkMvczTLZM/jZRcq1AOm.1Whqhq.",
+                            Password = "$2a$11$.IeGNWxxdQ/KEqBVclEpc.9fPaijAevQg/5OaSS9HFHoF5p5gRLte",
                             Username = "expert"
                         },
                         new
@@ -521,7 +491,7 @@ namespace Dess.Api.Migrations
                             FirstName = "Amir",
                             GroupId = 2,
                             LastName = "Fakhim-Babaei",
-                            Password = "$2a$11$hCrBZKM1hvc3SfWIEU.ixedwb0/ecHZuhXM8qGZc5VHDWRCvXRDXG",
+                            Password = "$2a$11$.8Pf10866.Itz4dgtMZRhumL7xuyxKQItUPAx8.VzeTf25JPf/sAK",
                             Username = "admin"
                         },
                         new
@@ -530,7 +500,7 @@ namespace Dess.Api.Migrations
                             FirstName = "Amir",
                             GroupId = 3,
                             LastName = "Fakhim-Babaei",
-                            Password = "$2a$11$8uajTKdHHcQQmO5QO.O73uPm43uS3eT2BEMoYQiCOQPRmpUu5pWIy",
+                            Password = "$2a$11$.EBtR1hD3kvDJGZCf43z/et93K9JJpD6/Ezmf/KJSoymD74mN6PMm",
                             Username = "operator"
                         });
                 });

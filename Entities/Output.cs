@@ -8,7 +8,7 @@ namespace Dess.Api.Entities
   {
     public short ResetTime { get; set; }
 
-    public byte[] Triggers { get; set; }
+    public ICollection<TriggerType> Triggers { get; set; }
 
     public override string GetHashBase()
     {
