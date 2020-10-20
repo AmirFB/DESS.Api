@@ -21,8 +21,8 @@ namespace Dess.Api.Entities
     public bool HvChargeFault { get; set; }
     public bool HvDischargeFault { get; set; }
 
-    public double HvVoltage { get; set; }
-    public double Temperature { get; set; }
+    public short HvVoltage { get; set; }
+    public short Temperature { get; set; }
     public BatteryStatus BatteryStatus { get; set; }
     public byte BatteryLevel { get; set; }
 
