@@ -50,13 +50,13 @@ namespace Dess.Api.Entities
 
     public ElectroFenceStatus Status { get; set; }
 
-    public IList<Io> IOs { get; set; }
+    public IList<Io> Ios { get; set; }
     public ICollection<ElectroFenceStatus> Log { get; set; } = new List<ElectroFenceStatus>();
 
     public string GetHashBase()
     {
       var data = $"{HvEnabled}{LvEnabled}{HvPower}{HvThreshold}" +
-        $"{HvRepeat}{IOs[0]}{IOs[1]}{IOs[2]}{IOs[3]}";
+        $"{HvRepeat}{Ios[0]}{Ios[1]}{Ios[2]}{Ios[3]}";
       return data;
     }
   }

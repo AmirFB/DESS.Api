@@ -34,7 +34,7 @@ namespace Dess.Api.DbContexts
         .HasForeignKey<ElectroFenceStatus>(s => s.ElectroFenceId);
 
       modelBuilder.Entity<ElectroFence>()
-        .HasMany(e => e.IOs)
+        .HasMany(e => e.Ios)
         .WithOne(i => i.Module)
         .HasForeignKey(i => i.ModuleId);
 

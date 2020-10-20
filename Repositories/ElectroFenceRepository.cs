@@ -30,9 +30,14 @@ namespace Dess.Api.Repositories
         .FirstOrDefaultAsync(entity => entity.SiteId == siteId);
     }
 
+    public async Task<ElectroFence> GetWithIoAsync(int id) =>
+      await Entities
+      .Include(e => e.Ios)
+      .FirstOrDefaultAsync(e => e.Id == id);
+
     public async Task<IEnumerable<ElectroFence>> GetAllWithIoAsync() =>
       await Entities
-      .Include(e => e.IOs)
+      .Include(e => e.Ios)
       .Include(e => e.Status)
       .ToListAsync();
 
