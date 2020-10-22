@@ -47,24 +47,24 @@ namespace Dess.Api.Controllers
       return Ok(_mapper.Map<IEnumerable<ElectroFenceDto>>(efs));
     }
 
-    [Authorize(Policy = "CanEditSites")]
     [HttpPost]
-    public async Task<IActionResult> AddAsync([FromBody] ElectroFenceDto electroFence)
+    public async Task<IActionResult> AddAsync([FromBody] ElectroFenceDto ef)
     {
-      var electroFenceEntity = _mapper.Map<ElectroFence>(electroFence);
-      _repository.Add(electroFenceEntity);
-      electroFenceEntity.Hash = (electroFenceEntity as IHashable).GetHash();
+      var efRepo = _mapper.Map<ElectroFence>(ef);
+      _repository.Add(efRepo);
+      efRepo.Hash = (efRepo as IHashable).GetHash();
       await _repository.SaveAsync();
 
-      var electroFenceToReturn = _mapper.Map<ElectroFenceDto>(electroFenceEntity);
+      var electroFenceToReturn = _mapper.Map<ElectroFenceDto>(efRepo);
+
       return CreatedAtRoute("GetAsync",
         new { id = electroFenceToReturn.Id },
         electroFenceToReturn);
     }
 
     [Authorize(Policy = "CanEditSites")]
-    [HttpPut()]
-    public async Task<IActionResult> UpdateAsync(ElectroFenceDto ef)
+    [HttpPut]
+    public async Task<IActionResult> UpdateAsync([FromBody] ElectroFenceDto ef)
     {
       var efFromRepo = await _repository.GetWithIoAsync(ef.Id);
       _mapper.Map(ef, efFromRepo);

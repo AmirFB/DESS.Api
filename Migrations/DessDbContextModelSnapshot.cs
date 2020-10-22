@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Dess.Api.Migrations
+namespace DESS.Migrations
 {
     [DbContext(typeof(DessDbContext))]
     partial class DessDbContextModelSnapshot : ModelSnapshot
@@ -31,6 +31,9 @@ namespace Dess.Api.Migrations
 
                     b.Property<byte>("BatteryMin")
                         .HasColumnType("tinyint unsigned");
+
+                    b.Property<bool>("BatteryWarning")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Hash")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
@@ -66,11 +69,8 @@ namespace Dess.Api.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<string>("Serial")
-                        .IsRequired()
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
                     b.Property<string>("SerialNo")
+                        .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<string>("SiteId")
@@ -86,7 +86,10 @@ namespace Dess.Api.Migrations
                     b.Property<sbyte>("TemperatureMin")
                         .HasColumnType("tinyint");
 
-                    b.Property<bool>("UseGlobalIntervarl")
+                    b.Property<bool>("TemperatureWarning")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("UseGlobalInterval")
                         .HasColumnType("tinyint(1)");
 
                     b.HasKey("Id");
@@ -100,6 +103,7 @@ namespace Dess.Api.Migrations
                             Applied = false,
                             AutoLocation = false,
                             BatteryMin = (byte)0,
+                            BatteryWarning = false,
                             HvEnabled = true,
                             HvPower = (byte)70,
                             HvRepeat = (byte)2,
@@ -109,12 +113,13 @@ namespace Dess.Api.Migrations
                             Longitude = "46.2738",
                             LvEnabled = true,
                             Name = "Ef1",
-                            Serial = "001",
+                            SerialNo = "001",
                             SiteId = "ehp-ie-tbz",
                             TamperEnabled = false,
                             TemperatureMax = (sbyte)0,
                             TemperatureMin = (sbyte)0,
-                            UseGlobalIntervarl = false
+                            TemperatureWarning = false,
+                            UseGlobalInterval = false
                         },
                         new
                         {
@@ -122,6 +127,7 @@ namespace Dess.Api.Migrations
                             Applied = false,
                             AutoLocation = false,
                             BatteryMin = (byte)0,
+                            BatteryWarning = false,
                             HvEnabled = true,
                             HvPower = (byte)70,
                             HvRepeat = (byte)3,
@@ -131,12 +137,13 @@ namespace Dess.Api.Migrations
                             Longitude = "51.3890",
                             LvEnabled = false,
                             Name = "Ef2",
-                            Serial = "002",
+                            SerialNo = "002",
                             SiteId = "ehp-ie-thr",
                             TamperEnabled = false,
                             TemperatureMax = (sbyte)0,
                             TemperatureMin = (sbyte)0,
-                            UseGlobalIntervarl = false
+                            TemperatureWarning = false,
+                            UseGlobalInterval = false
                         },
                         new
                         {
@@ -144,6 +151,7 @@ namespace Dess.Api.Migrations
                             Applied = false,
                             AutoLocation = false,
                             BatteryMin = (byte)0,
+                            BatteryWarning = false,
                             HvEnabled = true,
                             HvPower = (byte)80,
                             HvRepeat = (byte)2,
@@ -153,12 +161,13 @@ namespace Dess.Api.Migrations
                             Longitude = "51.6660",
                             LvEnabled = false,
                             Name = "Ef3",
-                            Serial = "003",
+                            SerialNo = "003",
                             SiteId = "ehp-ie-isf",
                             TamperEnabled = false,
                             TemperatureMax = (sbyte)0,
                             TemperatureMin = (sbyte)0,
-                            UseGlobalIntervarl = false
+                            TemperatureWarning = false,
+                            UseGlobalInterval = false
                         });
                 });
 
@@ -512,7 +521,7 @@ namespace Dess.Api.Migrations
                             FirstName = "Amir",
                             GroupId = 1,
                             LastName = "Fakhim-Babaei",
-                            Password = "$2a$11$CQA7BDyYDY3fZHxbO66IXut0FVkMvczTLZM/jZRcq1AOm.1Whqhq.",
+                            Password = "$2a$11$syodHRO7/bsFxdWreT0Vg.xBbbbcN7E2qQLMl/I4XlLbGApSH2gby",
                             Username = "expert"
                         },
                         new
@@ -521,7 +530,7 @@ namespace Dess.Api.Migrations
                             FirstName = "Amir",
                             GroupId = 2,
                             LastName = "Fakhim-Babaei",
-                            Password = "$2a$11$hCrBZKM1hvc3SfWIEU.ixedwb0/ecHZuhXM8qGZc5VHDWRCvXRDXG",
+                            Password = "$2a$11$SKPH5iEiESXbIKGq19Vtie23aCjBMP2ztF5iFYicU00NC11kL.OUi",
                             Username = "admin"
                         },
                         new
@@ -530,7 +539,7 @@ namespace Dess.Api.Migrations
                             FirstName = "Amir",
                             GroupId = 3,
                             LastName = "Fakhim-Babaei",
-                            Password = "$2a$11$8uajTKdHHcQQmO5QO.O73uPm43uS3eT2BEMoYQiCOQPRmpUu5pWIy",
+                            Password = "$2a$11$dBNDCQYKmRO6VifdjSaLXuRSPu4O0mMNT8RIGfvgwlg8mGtjNgEse",
                             Username = "operator"
                         });
                 });

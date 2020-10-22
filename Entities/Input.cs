@@ -6,7 +6,7 @@ namespace Dess.Api.Entities
 
     public override string GetHashBase()
     {
-      var data = $"{Type}{Enabled}{Timer}";
+      var data = $"{(int)Type}{Enabled}{Timer}";
       return data;
     }
   }
