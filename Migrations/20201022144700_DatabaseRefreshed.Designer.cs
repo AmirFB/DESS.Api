@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Dess.Api.Migrations
+namespace DESS.Migrations
 {
     [DbContext(typeof(DessDbContext))]
-    [Migration("20201011165042_UserSeededWithSHA256Password")]
-    partial class UserSeededWithSHA256Password
+    [Migration("20201022144700_DatabaseRefreshed")]
+    partial class DatabaseRefreshed
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,11 +31,11 @@ namespace Dess.Api.Migrations
                     b.Property<bool>("AutoLocation")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<double>("BatteryMax")
-                        .HasColumnType("double");
+                    b.Property<byte>("BatteryMin")
+                        .HasColumnType("tinyint unsigned");
 
-                    b.Property<double>("BatteryMin")
-                        .HasColumnType("double");
+                    b.Property<bool>("BatteryWarning")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Hash")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
@@ -43,20 +43,17 @@ namespace Dess.Api.Migrations
                     b.Property<bool>("HvEnabled")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<int>("HvPower")
-                        .HasColumnType("int");
+                    b.Property<byte>("HvPower")
+                        .HasColumnType("tinyint unsigned");
 
-                    b.Property<int>("HvRepeat")
-                        .HasColumnType("int");
+                    b.Property<byte>("HvRepeat")
+                        .HasColumnType("tinyint unsigned");
 
-                    b.Property<int>("HvThreshold")
-                        .HasColumnType("int");
+                    b.Property<short>("HvThreshold")
+                        .HasColumnType("smallint");
 
-                    b.Property<int>("Interval")
-                        .HasColumnType("int");
-
-                    b.Property<string>("IpAddress")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                    b.Property<byte>("Interval")
+                        .HasColumnType("tinyint unsigned");
 
                     b.Property<string>("Latitude")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
@@ -74,24 +71,27 @@ namespace Dess.Api.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<string>("Serial")
-                        .IsRequired()
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
                     b.Property<string>("SerialNo")
+                        .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<string>("SiteId")
                         .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<int>("TemperatureMax")
-                        .HasColumnType("int");
+                    b.Property<bool>("TamperEnabled")
+                        .HasColumnType("tinyint(1)");
 
-                    b.Property<int>("TemperatureMin")
-                        .HasColumnType("int");
+                    b.Property<sbyte>("TemperatureMax")
+                        .HasColumnType("tinyint");
 
-                    b.Property<bool>("UseGlobalIntervarl")
+                    b.Property<sbyte>("TemperatureMin")
+                        .HasColumnType("tinyint");
+
+                    b.Property<bool>("TemperatureWarning")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("UseGlobalInterval")
                         .HasColumnType("tinyint(1)");
 
                     b.HasKey("Id");
@@ -104,66 +104,72 @@ namespace Dess.Api.Migrations
                             Id = 1,
                             Applied = false,
                             AutoLocation = false,
-                            BatteryMax = 0.0,
-                            BatteryMin = 0.0,
+                            BatteryMin = (byte)0,
+                            BatteryWarning = false,
                             HvEnabled = true,
-                            HvPower = 70,
-                            HvRepeat = 2,
-                            HvThreshold = 3000,
-                            Interval = 0,
-                            Latitude = "31.7",
-                            Longitude = "13.5",
+                            HvPower = (byte)70,
+                            HvRepeat = (byte)2,
+                            HvThreshold = (short)3000,
+                            Interval = (byte)10,
+                            Latitude = "38.0962",
+                            Longitude = "46.2738",
                             LvEnabled = true,
                             Name = "Ef1",
-                            Serial = "001",
-                            SiteId = "ehp-ie-tbz1",
-                            TemperatureMax = 0,
-                            TemperatureMin = 0,
-                            UseGlobalIntervarl = false
+                            SerialNo = "001",
+                            SiteId = "ehp-ie-tbz",
+                            TamperEnabled = false,
+                            TemperatureMax = (sbyte)0,
+                            TemperatureMin = (sbyte)0,
+                            TemperatureWarning = false,
+                            UseGlobalInterval = false
                         },
                         new
                         {
                             Id = 2,
                             Applied = false,
                             AutoLocation = false,
-                            BatteryMax = 0.0,
-                            BatteryMin = 0.0,
+                            BatteryMin = (byte)0,
+                            BatteryWarning = false,
                             HvEnabled = true,
-                            HvPower = 70,
-                            HvRepeat = 3,
-                            HvThreshold = 4000,
-                            Interval = 0,
-                            Latitude = "-3.4",
-                            Longitude = "113.7",
+                            HvPower = (byte)70,
+                            HvRepeat = (byte)3,
+                            HvThreshold = (short)4000,
+                            Interval = (byte)15,
+                            Latitude = "35.6892",
+                            Longitude = "51.3890",
                             LvEnabled = false,
                             Name = "Ef2",
-                            Serial = "002",
-                            SiteId = "ehp-ie-tbz2",
-                            TemperatureMax = 0,
-                            TemperatureMin = 0,
-                            UseGlobalIntervarl = false
+                            SerialNo = "002",
+                            SiteId = "ehp-ie-thr",
+                            TamperEnabled = false,
+                            TemperatureMax = (sbyte)0,
+                            TemperatureMin = (sbyte)0,
+                            TemperatureWarning = false,
+                            UseGlobalInterval = false
                         },
                         new
                         {
                             Id = 3,
                             Applied = false,
                             AutoLocation = false,
-                            BatteryMax = 0.0,
-                            BatteryMin = 0.0,
+                            BatteryMin = (byte)0,
+                            BatteryWarning = false,
                             HvEnabled = true,
-                            HvPower = 80,
-                            HvRepeat = 2,
-                            HvThreshold = 5000,
-                            Interval = 0,
-                            Latitude = "11.57",
-                            Longitude = "-5",
+                            HvPower = (byte)80,
+                            HvRepeat = (byte)2,
+                            HvThreshold = (short)5000,
+                            Interval = (byte)20,
+                            Latitude = "32.6539",
+                            Longitude = "51.6660",
                             LvEnabled = false,
                             Name = "Ef3",
-                            Serial = "003",
-                            SiteId = "ehp-ie-tbz3",
-                            TemperatureMax = 0,
-                            TemperatureMin = 0,
-                            UseGlobalIntervarl = false
+                            SerialNo = "003",
+                            SiteId = "ehp-ie-isf",
+                            TamperEnabled = false,
+                            TemperatureMax = (sbyte)0,
+                            TemperatureMin = (sbyte)0,
+                            TemperatureWarning = false,
+                            UseGlobalInterval = false
                         });
                 });
 
@@ -203,8 +209,8 @@ namespace Dess.Api.Migrations
                     b.Property<bool>("HvPowerFault")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<double>("HvVoltage")
-                        .HasColumnType("double");
+                    b.Property<short>("HvVoltage")
+                        .HasColumnType("smallint");
 
                     b.Property<bool>("Input1")
                         .HasColumnType("tinyint(1)");
@@ -242,8 +248,8 @@ namespace Dess.Api.Migrations
                     b.Property<bool>("TamperAlarm")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<double>("Temperature")
-                        .HasColumnType("double");
+                    b.Property<short>("Temperature")
+                        .HasColumnType("smallint");
 
                     b.HasKey("Id");
 
@@ -266,7 +272,7 @@ namespace Dess.Api.Migrations
                             HvChargeFault = false,
                             HvDischargeFault = false,
                             HvPowerFault = false,
-                            HvVoltage = 0.0,
+                            HvVoltage = (short)0,
                             Input1 = false,
                             Input2 = false,
                             LvAlarm = false,
@@ -275,7 +281,7 @@ namespace Dess.Api.Migrations
                             Output2 = false,
                             SignalStrength = (byte)0,
                             TamperAlarm = false,
-                            Temperature = 0.0
+                            Temperature = (short)0
                         },
                         new
                         {
@@ -288,7 +294,7 @@ namespace Dess.Api.Migrations
                             HvChargeFault = false,
                             HvDischargeFault = false,
                             HvPowerFault = false,
-                            HvVoltage = 0.0,
+                            HvVoltage = (short)0,
                             Input1 = false,
                             Input2 = false,
                             LvAlarm = false,
@@ -297,7 +303,7 @@ namespace Dess.Api.Migrations
                             Output2 = false,
                             SignalStrength = (byte)0,
                             TamperAlarm = false,
-                            Temperature = 0.0
+                            Temperature = (short)0
                         },
                         new
                         {
@@ -310,7 +316,7 @@ namespace Dess.Api.Migrations
                             HvChargeFault = false,
                             HvDischargeFault = false,
                             HvPowerFault = false,
-                            HvVoltage = 0.0,
+                            HvVoltage = (short)0,
                             Input1 = false,
                             Input2 = false,
                             LvAlarm = false,
@@ -319,11 +325,11 @@ namespace Dess.Api.Migrations
                             Output2 = false,
                             SignalStrength = (byte)0,
                             TamperAlarm = false,
-                            Temperature = 0.0
+                            Temperature = (short)0
                         });
                 });
 
-            modelBuilder.Entity("Dess.Api.Entities.IO", b =>
+            modelBuilder.Entity("Dess.Api.Entities.Input", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -345,7 +351,7 @@ namespace Dess.Api.Migrations
 
                     b.HasIndex("ModuleId");
 
-                    b.ToTable("IOs");
+                    b.ToTable("Inputs");
 
                     b.HasData(
                         new
@@ -389,47 +395,92 @@ namespace Dess.Api.Migrations
                             Enabled = false,
                             ModuleId = 3,
                             Type = 1
-                        },
+                        });
+                });
+
+            modelBuilder.Entity("Dess.Api.Entities.Output", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<int>("ModuleId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<short>("ResetTime")
+                        .HasColumnType("smallint");
+
+                    b.Property<string>("Triggers")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ModuleId");
+
+                    b.ToTable("Outputs");
+
+                    b.HasData(
                         new
                         {
-                            Id = 7,
-                            Enabled = false,
+                            Id = 1,
+                            Enabled = true,
                             ModuleId = 1,
+                            ResetTime = (short)0,
+                            Triggers = "0",
                             Type = 0
                         },
                         new
                         {
-                            Id = 8,
+                            Id = 2,
                             Enabled = true,
                             ModuleId = 2,
+                            ResetTime = (short)0,
+                            Triggers = "1;3",
                             Type = 1
                         },
                         new
                         {
-                            Id = 9,
-                            Enabled = false,
+                            Id = 3,
+                            Enabled = true,
                             ModuleId = 3,
+                            ResetTime = (short)0,
+                            Triggers = "2;3",
                             Type = 0
                         },
                         new
                         {
-                            Id = 10,
-                            Enabled = false,
+                            Id = 4,
+                            Enabled = true,
                             ModuleId = 1,
+                            ResetTime = (short)0,
+                            Triggers = "0",
                             Type = 1
                         },
                         new
                         {
-                            Id = 11,
-                            Enabled = false,
+                            Id = 5,
+                            Enabled = true,
                             ModuleId = 2,
+                            ResetTime = (short)0,
+                            Triggers = "1;3",
                             Type = 0
                         },
                         new
                         {
-                            Id = 12,
+                            Id = 6,
                             Enabled = false,
                             ModuleId = 3,
+                            ResetTime = (short)0,
+                            Triggers = "2;3",
                             Type = 1
                         });
                 });
@@ -472,7 +523,7 @@ namespace Dess.Api.Migrations
                             FirstName = "Amir",
                             GroupId = 1,
                             LastName = "Fakhim-Babaei",
-                            Password = "$2a$11$X7PdWv3W9yCJWZJ91kLVtOtx8st1S5qiKNNqIlBkiOk16xmzyrIbO",
+                            Password = "$2a$11$syodHRO7/bsFxdWreT0Vg.xBbbbcN7E2qQLMl/I4XlLbGApSH2gby",
                             Username = "expert"
                         },
                         new
@@ -481,7 +532,7 @@ namespace Dess.Api.Migrations
                             FirstName = "Amir",
                             GroupId = 2,
                             LastName = "Fakhim-Babaei",
-                            Password = "$2a$11$OgnMPB.S9SRY1GZ0EvD7q.saSg//v6JFE2xt7fEv52C9yZ4BetKFO",
+                            Password = "$2a$11$SKPH5iEiESXbIKGq19Vtie23aCjBMP2ztF5iFYicU00NC11kL.OUi",
                             Username = "admin"
                         },
                         new
@@ -490,7 +541,7 @@ namespace Dess.Api.Migrations
                             FirstName = "Amir",
                             GroupId = 3,
                             LastName = "Fakhim-Babaei",
-                            Password = "$2a$11$b3Q2xPBpHyozdlPsFfCe4.LME6fNv6BE4daoZ55wZOxLk8szWuL1O",
+                            Password = "$2a$11$dBNDCQYKmRO6VifdjSaLXuRSPu4O0mMNT8RIGfvgwlg8mGtjNgEse",
                             Username = "operator"
                         });
                 });
@@ -688,10 +739,19 @@ namespace Dess.Api.Migrations
                         .HasForeignKey("ElectroFenceId1");
                 });
 
-            modelBuilder.Entity("Dess.Api.Entities.IO", b =>
+            modelBuilder.Entity("Dess.Api.Entities.Input", b =>
                 {
                     b.HasOne("Dess.Api.Entities.ElectroFence", "Module")
-                        .WithMany("IOs")
+                        .WithMany("Inputs")
+                        .HasForeignKey("ModuleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Dess.Api.Entities.Output", b =>
+                {
+                    b.HasOne("Dess.Api.Entities.ElectroFence", "Module")
+                        .WithMany("Outputs")
                         .HasForeignKey("ModuleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

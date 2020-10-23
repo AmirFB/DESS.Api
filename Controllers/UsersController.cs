@@ -39,7 +39,6 @@ namespace Dess.Api.Controllers
 
     [Authorize(Policy = "CanEditUsers")]
     [HttpGet]
-    [HttpHead]
     public async Task<ActionResult<IEnumerable<UserDto>>> GetAllAsync()
     {
       var users = await _repository.GetAllAsync();
@@ -59,6 +58,9 @@ namespace Dess.Api.Controllers
       var dto = _mapper.Map<UserDto>(user);
       return Ok(dto);
     }
+
+    [HttpHead]
+    public ActionResult<UserDto> HeadAsync() => Ok();
 
     [Authorize(Policy = "CanEditUsers")]
     [HttpPost("register")]

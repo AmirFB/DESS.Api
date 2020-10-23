@@ -12,15 +12,15 @@ namespace Dess.Api.Entities
 
     [Required]
     public string SiteId { get; set; }
-    public string SerialNo { get; set; }
 
     [Required]
-    public string Serial { get; set; }
+    public string SerialNo { get; set; }
+
     public string PhoneNumber { get; set; }
     public string Hash { get; set; }
     public bool Applied { get; set; }
 
-    public bool UseGlobalIntervarl { get; set; }
+    public bool UseGlobalInterval { get; set; }
     public byte Interval { get; set; }
 
     public bool AutoLocation { get; set; }
@@ -34,6 +34,9 @@ namespace Dess.Api.Entities
     public bool LvEnabled { get; set; }
 
     [Required]
+    public bool TamperEnabled { set; get; }
+
+    [Required]
     public byte HvPower { get; set; }
 
     [Required]
@@ -42,11 +45,11 @@ namespace Dess.Api.Entities
     [Required]
     public byte HvRepeat { get; set; }
 
+    public bool TemperatureWarning { get; set; }
     public sbyte TemperatureMin { get; set; }
     public sbyte TemperatureMax { get; set; }
 
-    public bool TamperEnabled { set; get; }
-
+    public bool BatteryWarning { get; set; }
     public byte BatteryMin { get; set; }
 
     public ElectroFenceStatus Status { get; set; }
@@ -57,8 +60,9 @@ namespace Dess.Api.Entities
 
     public string GetHashBase()
     {
-      var data = $"{HvEnabled}{LvEnabled}{HvPower}{HvThreshold}"
-        + $"{HvRepeat}{Inputs[0]}{Inputs[1]}{Outputs[2]}{Outputs[3]}";
+      var data = $"{HvEnabled}{LvEnabled}{HvPower}{HvThreshold}" +
+        $"{HvRepeat}{Inputs[0].GetHashBase()}{Inputs[1].GetHashBase()}" +
+        $"{Outputs[0].GetHashBase()}{Outputs[1].GetHashBase()}";
       return data;
     }
   }
