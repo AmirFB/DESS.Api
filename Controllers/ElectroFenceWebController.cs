@@ -103,7 +103,7 @@ namespace Dess.Api.Controllers
       if (!await _repository.ExistsAsync(id))
         return NotFound();
 
-      return Ok(_mapper.Map<ElectroFenceStatusDto>(_repository.GetStatusAsync(id)));
+      return Ok(_mapper.Map<ElectroFenceStatusDto>(await _repository.GetStatusAsync(id)));
     }
 
     [HttpGet("log")]

@@ -16,7 +16,8 @@ namespace Dess.Api.Profiles
         .ForMember(d => d.SiteId, o => o.MapFrom(e => e.ElectroFenceId))
         .ForMember(d => d.Date, o => o.MapFrom(e => e.Date.JavascriptDate()));
       CreateMap<ElectroFenceStatus, ElectroFenceStatus>()
-        .ForMember(d => d.Id, o => o.Ignore());
+        .ForMember(d => d.Id, o => o.Ignore())
+        .ForMember(d => d.ElectroFenceId, o => o.Ignore());
     }
   }
 }

@@ -77,7 +77,7 @@ namespace Dess.Api.Controllers
 
       else
       {
-        _mapper.Map(statusFromRepo, statusEntity);
+        _mapper.Map(statusEntity, statusFromRepo);
         _repository.UpdateLog(statusFromRepo);
       }
 
@@ -88,6 +88,7 @@ namespace Dess.Api.Controllers
       }
 
       await _repository.SaveAsync();
+      statusFromRepo = await _repository.GetStatusAsync(ef.Id);
 
       if (ef.Applied)
         return NoContent();
