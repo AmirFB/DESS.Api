@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DESS.Migrations
 {
     [DbContext(typeof(DessDbContext))]
-    [Migration("20201022144700_DatabaseRefreshed")]
+    [Migration("20201023171347_DatabaseRefreshed")]
     partial class DatabaseRefreshed
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -191,9 +191,6 @@ namespace DESS.Migrations
                     b.Property<int>("ElectroFenceId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ElectroFenceId1")
-                        .HasColumnType("int");
-
                     b.Property<string>("Hash")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
@@ -253,10 +250,7 @@ namespace DESS.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ElectroFenceId")
-                        .IsUnique();
-
-                    b.HasIndex("ElectroFenceId1");
+                    b.HasIndex("ElectroFenceId");
 
                     b.ToTable("Logs");
 
@@ -523,7 +517,7 @@ namespace DESS.Migrations
                             FirstName = "Amir",
                             GroupId = 1,
                             LastName = "Fakhim-Babaei",
-                            Password = "$2a$11$syodHRO7/bsFxdWreT0Vg.xBbbbcN7E2qQLMl/I4XlLbGApSH2gby",
+                            Password = "$2a$11$oqiP/XA3NCo5.pcOes9CRehzHB0ffjCgOSsitxdUZxQPRikLClTHW",
                             Username = "expert"
                         },
                         new
@@ -532,7 +526,7 @@ namespace DESS.Migrations
                             FirstName = "Amir",
                             GroupId = 2,
                             LastName = "Fakhim-Babaei",
-                            Password = "$2a$11$SKPH5iEiESXbIKGq19Vtie23aCjBMP2ztF5iFYicU00NC11kL.OUi",
+                            Password = "$2a$11$0yUOIvyraoC/YaFk4ip0z.zTolIaddmW4iXS8xdp4/lOZxGNNIssa",
                             Username = "admin"
                         },
                         new
@@ -541,7 +535,7 @@ namespace DESS.Migrations
                             FirstName = "Amir",
                             GroupId = 3,
                             LastName = "Fakhim-Babaei",
-                            Password = "$2a$11$dBNDCQYKmRO6VifdjSaLXuRSPu4O0mMNT8RIGfvgwlg8mGtjNgEse",
+                            Password = "$2a$11$8deZ26oYOfYxkyse6SXgV.ZMpYrSzC6Tp38zxz7YCSaaDWn6C2LRS",
                             Username = "operator"
                         });
                 });
@@ -660,7 +654,7 @@ namespace DESS.Migrations
                         new
                         {
                             GroupId = 4,
-                            PermissionId = 3
+                            PermissionId = 2
                         });
                 });
 
@@ -729,14 +723,10 @@ namespace DESS.Migrations
             modelBuilder.Entity("Dess.Api.Entities.ElectroFenceStatus", b =>
                 {
                     b.HasOne("Dess.Api.Entities.ElectroFence", "ElectroFence")
-                        .WithOne("Status")
-                        .HasForeignKey("Dess.Api.Entities.ElectroFenceStatus", "ElectroFenceId")
+                        .WithMany("Log")
+                        .HasForeignKey("ElectroFenceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Dess.Api.Entities.ElectroFence", null)
-                        .WithMany("Log")
-                        .HasForeignKey("ElectroFenceId1");
                 });
 
             modelBuilder.Entity("Dess.Api.Entities.Input", b =>

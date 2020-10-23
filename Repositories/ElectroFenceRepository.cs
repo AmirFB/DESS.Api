@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
+using Microsoft.EntityFrameworkCore;
+
 using Dess.Api.DbContexts;
 using Dess.Api.Entities;
-
-using Microsoft.EntityFrameworkCore;
 
 namespace Dess.Api.Repositories
 {
@@ -25,7 +26,6 @@ namespace Dess.Api.Repositories
         throw new ArgumentNullException(nameof(siteId));
 
       return await Entities
-        .Include(e => e.Status)
         .Include(e => e.Log)
         .FirstOrDefaultAsync(entity => entity.SiteId == siteId);
     }
@@ -40,18 +40,7 @@ namespace Dess.Api.Repositories
       await Entities
       .Include(e => e.Inputs)
       .Include(e => e.Outputs)
-      .Include(e => e.Status)
       .ToListAsync();
-
-    public async Task<ElectroFence> GetWithStatusAsync(int id)
-    {
-      if (id <= 0)
-        throw new ArgumentNullException(nameof(id));
-
-      return await Entities
-        .Include(entity => entity.Status)
-        .FirstOrDefaultAsync(entity => entity.Id == id);
-    }
 
     public async Task<IEnumerable<ElectroFenceStatus>> GetAllLogAsync() =>
       await Context.Logs.ToListAsync();
@@ -65,13 +54,15 @@ namespace Dess.Api.Repositories
       return ef.Log;
     }
 
-    public async Task<ElectroFenceStatus> GetStatusAsync(int id)
-    {
-      var ef = await Entities
-        .Include(e => e.Status)
-        .FirstOrDefaultAsync(e => e.Id == id);
+    public void AddLog(ElectroFenceStatus log) => Context.Logs.Add(log);
 
-      return ef.Status;
-    }
+    public void UpdateLog(ElectroFenceStatus log) => Context.Logs.Update(log);
+
+    public async Task<ElectroFenceStatus> GetStatusAsync(int id) =>
+      (await Entities
+        .Include(e => e.Log)
+        .FirstOrDefaultAsync(e => e.Id == id))
+      .Log.Last();
+
   }
 }

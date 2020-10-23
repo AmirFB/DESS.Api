@@ -52,8 +52,6 @@ namespace Dess.Api.Entities
     public bool BatteryWarning { get; set; }
     public byte BatteryMin { get; set; }
 
-    public ElectroFenceStatus Status { get; set; }
-
     public IList<Input> Inputs { get; set; }
     public IList<Output> Outputs { get; set; }
     public ICollection<ElectroFenceStatus> Log { get; set; } = new List<ElectroFenceStatus>();

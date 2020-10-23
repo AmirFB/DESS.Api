@@ -55,27 +55,36 @@ namespace Dess.Api.Controllers
       statusDto.Date = DateTime.UtcNow.JavascriptDate();
       await _hubContext.Clients.All.SendAsync("UpdateStatus", statusDto);
 
-      ef.Status.Date = DateTime.UtcNow;
-      _mapper.Map(status, ef.Status);
+      var statusEntity = _mapper.Map<ElectroFenceStatus>(status);
+      statusEntity.Date = DateTime.UtcNow;
       ef.Applied = configHash == ef.Hash;
 
+      var statusFromRepo = await _repository.GetStatusAsync(ef.Id);
       var statusHash = (status as IHashable).GetHash();
 
-      if (ef.Status.Hash != statusHash)
+      if (statusFromRepo.Hash != statusHash)
       {
+        statusEntity.Hash = statusHash;
+        ef.Log.Add(statusEntity);
+        await _repository.SaveAsync();
+
         ElectroFenceHub.UserIds.ForEach(
           id => _userLogRepository.Add(
-            new UserLog { UserId = id, LogId = ef.Status.Id }));
+            new UserLog { UserId = id, LogId = statusEntity.Id }));
 
         await _userLogRepository.SaveAsync();
-        ef.Status.Hash = statusHash;
-        ef.Log.Add(ef.Status);
+      }
+
+      else
+      {
+        _mapper.Map(statusFromRepo, statusEntity);
+        _repository.UpdateLog(statusFromRepo);
       }
 
       if (ef.AutoLocation)
       {
-        ef.Latitude = ef.Status.Latitude;
-        ef.Longitude = ef.Status.Longitude;
+        ef.Latitude = status.Latitude;
+        ef.Longitude = status.Longitude;
       }
 
       await _repository.SaveAsync();

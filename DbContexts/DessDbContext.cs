@@ -35,9 +35,9 @@ namespace Dess.Api.DbContexts
       base.OnModelCreating(modelBuilder);
 
       modelBuilder.Entity<ElectroFence>()
-        .HasOne(e => e.Status)
-        .WithOne(s => s.ElectroFence)
-        .HasForeignKey<ElectroFenceStatus>(s => s.ElectroFenceId);
+        .HasMany(e => e.Log)
+        .WithOne(l => l.ElectroFence)
+        .HasForeignKey(l => l.ElectroFenceId);
 
       modelBuilder.Entity<ElectroFence>()
         .HasMany(e => e.Inputs)
@@ -119,7 +119,7 @@ namespace Dess.Api.DbContexts
         new UserGroupPermission { GroupId = admin.Id, PermissionId = canEditSites.Id },
         new UserGroupPermission { GroupId = admin.Id, PermissionId = canEditUsers.Id },
 
-        new UserGroupPermission { GroupId = operate.Id, PermissionId = canEditSites.Id }
+        new UserGroupPermission { GroupId = operate.Id, PermissionId = canSecureSites.Id }
       };
       modelBuilder.Entity<UserGroupPermission>().HasData(groupPermissions);
 
