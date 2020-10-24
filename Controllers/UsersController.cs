@@ -41,7 +41,7 @@ namespace Dess.Api.Controllers
     [HttpGet]
     public async Task<ActionResult<IEnumerable<UserDto>>> GetAllAsync()
     {
-      var users = await _repository.GetAllAsync();
+      var users = await _repository.GetAllWithoutAllmightyAsync();
       var dtos = _mapper.Map<IEnumerable<UserDto>>(users);
       return Ok(dtos);
     }
@@ -77,11 +77,10 @@ namespace Dess.Api.Controllers
     }
 
     [Authorize(Policy = "CanEditUsers")]
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateAsync(int id, [FromBody] UserUpdateDto dto)
+    [HttpPut]
+    public async Task<IActionResult> UpdateAsync([FromBody] UserUpdateDto dto)
     {
       var user = _mapper.Map<User>(dto);
-      user.Id = id;
 
       try
       {
@@ -130,7 +129,7 @@ namespace Dess.Api.Controllers
 
       var token = tokenHandler.CreateToken(tokenDescriptor);
       var tokenString = tokenHandler.WriteToken(token);
-      var result = new { Token = tokenString, permissions = new List<string>(), Id = userFromRepo.Id };
+      var result = new { Token = tokenString, permissions = new List<string>(), Id = userFromRepo.Id, FirstName = userFromRepo.FirstName, LastName = userFromRepo.LastName };
       foreach (var permission in permissions) result.permissions.Add(permission.Title);
 
       return Ok(result);

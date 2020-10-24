@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Dess.Api.DbContexts;
 using Dess.Api.Entities;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace Dess.Api.Repositories
@@ -17,10 +19,15 @@ namespace Dess.Api.Repositories
     public async Task<User> GetAsync(string username) =>
       await Entities
       .FirstOrDefaultAsync(u => u.Username == username);
+
+    public async Task<IEnumerable<User>> GetAllWithoutAllmightyAsync() =>
+      await Entities
+      .Where(u => u.GroupId != 1).ToListAsync();
+
     public async Task<User> GetWithLogAsync(int id) =>
-    await Entities
-    .Include(e => e.UserLogs)
-    .FirstOrDefaultAsync(u => u.Id == id);
+      await Entities
+      .Include(e => e.UserLogs)
+      .FirstOrDefaultAsync(u => u.Id == id);
 
     public async Task<IEnumerable<ElectroFenceStatus>> GetLogAsync(int userId) =>
       await Context.UserLogs

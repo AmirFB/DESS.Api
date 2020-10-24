@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+
 using Dess.Api.Entities;
 using Dess.Api.Helpers;
 using Dess.Api.Repositories;
@@ -64,6 +65,8 @@ namespace Dess.Api.Services
 
       if (!string.IsNullOrWhiteSpace(user.LastName))
         userFromRepo.LastName = user.LastName;
+
+      userFromRepo.GroupId = user.GroupId;
 
       if (!string.IsNullOrWhiteSpace(user.Password))
         userFromRepo.Password = Cryptography.GeneratePasswordHash(user.Password);
