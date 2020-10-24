@@ -2,8 +2,9 @@
 {
   public enum BatteryStatus
   {
-    Charging,
     Charged,
+    InUse,
+    Charging,
     Low,
     Fault
   }
