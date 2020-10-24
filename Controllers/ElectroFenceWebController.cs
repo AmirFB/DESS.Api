@@ -44,7 +44,13 @@ namespace Dess.Api.Controllers
     public async Task<ActionResult<IEnumerable<ElectroFenceDto>>> GetAllAsync()
     {
       var efs = await _repository.GetAllWithIoAsync();
-      return Ok(_mapper.Map<IEnumerable<ElectroFenceDto>>(efs));
+      var dtos = _mapper.Map<IEnumerable<ElectroFenceDto>>(efs);
+
+      foreach (var dto in dtos)
+        dto.Status =
+        _mapper.Map<ElectroFenceStatusDto>(await _repository.GetStatusAsync(dto.Id));
+
+      return Ok(dtos);
     }
 
     [HttpPost]
@@ -94,12 +100,10 @@ namespace Dess.Api.Controllers
     [HttpGet("{id}/status")]
     public async Task<ActionResult<ElectroFenceStatusDto>> GetStatusAsync(int id)
     {
-      var ef = await _repository.GetWithStatusAsync(id);
-
-      if (ef == null)
+      if (!await _repository.ExistsAsync(id))
         return NotFound();
 
-      return Ok(_mapper.Map<ElectroFenceStatusDto>(ef.Status));
+      return Ok(_mapper.Map<ElectroFenceStatusDto>(await _repository.GetStatusAsync(id)));
     }
 
     [HttpGet("log")]

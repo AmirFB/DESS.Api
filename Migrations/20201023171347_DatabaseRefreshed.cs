@@ -118,8 +118,7 @@ namespace DESS.Migrations
                     Latitude = table.Column<string>(nullable: true),
                     Longitude = table.Column<string>(nullable: true),
                     SignalStrength = table.Column<byte>(nullable: false),
-                    ElectroFenceId = table.Column<int>(nullable: false),
-                    ElectroFenceId1 = table.Column<int>(nullable: true)
+                    ElectroFenceId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -130,12 +129,6 @@ namespace DESS.Migrations
                         principalTable: "ElectroFences",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Logs_ElectroFences_ElectroFenceId1",
-                        column: x => x.ElectroFenceId1,
-                        principalTable: "ElectroFences",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -283,12 +276,12 @@ namespace DESS.Migrations
 
             migrationBuilder.InsertData(
                 table: "Logs",
-                columns: new[] { "Id", "BatteryLevel", "BatteryStatus", "Date", "ElectroFenceId", "ElectroFenceId1", "Hash", "HvAlarm", "HvChargeFault", "HvDischargeFault", "HvPowerFault", "HvVoltage", "Input1", "Input2", "IpAddress", "Latitude", "Longitude", "LvAlarm", "MainPowerFault", "Output1", "Output2", "SerialNo", "SignalStrength", "TamperAlarm", "Temperature" },
+                columns: new[] { "Id", "BatteryLevel", "BatteryStatus", "Date", "ElectroFenceId", "Hash", "HvAlarm", "HvChargeFault", "HvDischargeFault", "HvPowerFault", "HvVoltage", "Input1", "Input2", "IpAddress", "Latitude", "Longitude", "LvAlarm", "MainPowerFault", "Output1", "Output2", "SerialNo", "SignalStrength", "TamperAlarm", "Temperature" },
                 values: new object[,]
                 {
-                    { 1, (byte)0, 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, null, null, false, false, false, false, (short)0, false, false, null, null, null, false, false, false, false, null, (byte)0, false, (short)0 },
-                    { 3, (byte)0, 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 3, null, null, false, false, false, false, (short)0, false, false, null, null, null, false, false, false, false, null, (byte)0, false, (short)0 },
-                    { 2, (byte)0, 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, null, null, false, false, false, false, (short)0, false, false, null, null, null, false, false, false, false, null, (byte)0, false, (short)0 }
+                    { 1, (byte)0, 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, null, false, false, false, false, (short)0, false, false, null, null, null, false, false, false, false, null, (byte)0, false, (short)0 },
+                    { 3, (byte)0, 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 3, null, false, false, false, false, (short)0, false, false, null, null, null, false, false, false, false, null, (byte)0, false, (short)0 },
+                    { 2, (byte)0, 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, null, false, false, false, false, (short)0, false, false, null, null, null, false, false, false, false, null, (byte)0, false, (short)0 }
                 });
 
             migrationBuilder.InsertData(
@@ -309,13 +302,13 @@ namespace DESS.Migrations
                 columns: new[] { "GroupId", "PermissionId" },
                 values: new object[,]
                 {
-                    { 2, 3 },
+                    { 1, 3 },
                     { 1, 5 },
                     { 2, 4 },
                     { 1, 4 },
-                    { 4, 3 },
                     { 3, 3 },
-                    { 1, 3 },
+                    { 2, 3 },
+                    { 4, 2 },
                     { 3, 5 },
                     { 2, 2 },
                     { 1, 2 },
@@ -329,9 +322,9 @@ namespace DESS.Migrations
                 columns: new[] { "Id", "FirstName", "GroupId", "LastName", "Password", "Username" },
                 values: new object[,]
                 {
-                    { 3, "Amir", 3, "Fakhim-Babaei", "$2a$11$dBNDCQYKmRO6VifdjSaLXuRSPu4O0mMNT8RIGfvgwlg8mGtjNgEse", "operator" },
-                    { 2, "Amir", 2, "Fakhim-Babaei", "$2a$11$SKPH5iEiESXbIKGq19Vtie23aCjBMP2ztF5iFYicU00NC11kL.OUi", "admin" },
-                    { 1, "Amir", 1, "Fakhim-Babaei", "$2a$11$syodHRO7/bsFxdWreT0Vg.xBbbbcN7E2qQLMl/I4XlLbGApSH2gby", "expert" }
+                    { 3, "Amir", 3, "Fakhim-Babaei", "$2a$11$8deZ26oYOfYxkyse6SXgV.ZMpYrSzC6Tp38zxz7YCSaaDWn6C2LRS", "operator" },
+                    { 2, "Amir", 2, "Fakhim-Babaei", "$2a$11$0yUOIvyraoC/YaFk4ip0z.zTolIaddmW4iXS8xdp4/lOZxGNNIssa", "admin" },
+                    { 1, "Amir", 1, "Fakhim-Babaei", "$2a$11$oqiP/XA3NCo5.pcOes9CRehzHB0ffjCgOSsitxdUZxQPRikLClTHW", "expert" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -342,13 +335,7 @@ namespace DESS.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Logs_ElectroFenceId",
                 table: "Logs",
-                column: "ElectroFenceId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Logs_ElectroFenceId1",
-                table: "Logs",
-                column: "ElectroFenceId1");
+                column: "ElectroFenceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Outputs_ModuleId",

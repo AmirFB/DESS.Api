@@ -1,5 +1,3 @@
-using System;
-
 using Dess.Api.Types;
 
 namespace Dess.Api.Models.ElectroFence
