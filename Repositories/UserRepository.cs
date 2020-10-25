@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using Microsoft.EntityFrameworkCore;
+
 using Dess.Api.DbContexts;
 using Dess.Api.Entities;
-
-using Microsoft.EntityFrameworkCore;
 
 namespace Dess.Api.Repositories
 {
@@ -28,12 +28,6 @@ namespace Dess.Api.Repositories
       await Entities
       .Include(e => e.UserLogs)
       .FirstOrDefaultAsync(u => u.Id == id);
-
-    public async Task<IEnumerable<ElectroFenceStatus>> GetLogAsync(int userId) =>
-      await Context.UserLogs
-      .Where(u => u.UserId == userId)
-      .Select(u => u.Log)
-      .ToListAsync();
 
     public async Task<IEnumerable<UserGroup>> GetGroupsAsync() =>
       await Context.UserGroups
