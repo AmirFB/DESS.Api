@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Dess.Api.Repositories;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+
+using Dess.Api.Repositories;
 
 namespace Dess.Api.Hubs
 {
@@ -17,8 +19,7 @@ namespace Dess.Api.Hubs
 
     public override async Task OnConnectedAsync()
     {
-      // var name = Context.User.Identity.Name;
-      var id = int.Parse(Context.User.Identities.ToList()[0].Claims.ToList()[0].Value);
+      var id = int.Parse(Context.User.Identities.ToList() [0].Claims.ToList() [0].Value);
 
       if (!UserIds.Contains(id))
         UserIds.Add(id);
@@ -34,7 +35,7 @@ namespace Dess.Api.Hubs
 
     public override async Task OnDisconnectedAsync(System.Exception exception)
     {
-      var id = int.Parse(Context.User.Identities.ToList()[0].Claims.ToList()[0].Value);
+      var id = int.Parse(Context.User.Identities.ToList() [0].Claims.ToList() [0].Value);
       UserIds.Remove(id);
 
       var user = await _userRepository.GetAsync(id);

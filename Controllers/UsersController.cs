@@ -5,6 +5,11 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+
 using AutoMapper;
 
 using Dess.Api.Entities;
@@ -12,11 +17,6 @@ using Dess.Api.Helpers;
 using Dess.Api.Models.User;
 using Dess.Api.Repositories;
 using Dess.Api.Services;
-
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Dess.Api.Controllers
 {
@@ -111,10 +111,10 @@ namespace Dess.Api.Controllers
 
       var permissions = await _repository.GetPermissionsAsync(userFromRepo.GroupId);
       var claims = new List<Claim>
-        {
-          new Claim(ClaimTypes.NameIdentifier, userFromRepo.Id.ToString()),
-          new Claim(ClaimTypes.Name, userFromRepo.Username)
-        };
+      {
+        new Claim(ClaimTypes.NameIdentifier, userFromRepo.Id.ToString()),
+        new Claim(ClaimTypes.Name, userFromRepo.Username)
+      };
 
       foreach (var permission in permissions)
         claims.Add(new Claim("Permission", permission.Title));
