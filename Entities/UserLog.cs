@@ -6,6 +6,6 @@ namespace Dess.Api.Entities
     public User User { get; set; }
 
     public int LogId { get; set; }
-    public ElectroFenceStatus Log { get; set; }
+    public ElectroFenceFault Log { get; set; }
   }
 }

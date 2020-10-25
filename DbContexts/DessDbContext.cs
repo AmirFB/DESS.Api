@@ -21,7 +21,8 @@ namespace Dess.Api.DbContexts
       _mapper = mapper;
 
     public DbSet<ElectroFence> ElectroFences { get; set; }
-    public DbSet<ElectroFenceStatus> Logs { get; set; }
+    public DbSet<ElectroFenceStatus> Statuses { get; set; }
+    public DbSet<ElectroFenceFault> Logs { get; set; }
     public DbSet<Input> Inputs { get; set; }
     public DbSet<Output> Outputs { get; set; }
     public DbSet<User> Users { get; set; }
@@ -36,7 +37,7 @@ namespace Dess.Api.DbContexts
 
       modelBuilder.Entity<ElectroFence>()
         .HasMany(e => e.Log)
-        .WithOne(l => l.ElectroFence)
+        .WithOne()
         .HasForeignKey(l => l.ElectroFenceId);
 
       modelBuilder.Entity<ElectroFence>()
@@ -49,23 +50,43 @@ namespace Dess.Api.DbContexts
         .WithOne(o => o.Module)
         .HasForeignKey(o => o.ModuleId);
 
-      var converter = new ValueConverter<ICollection<TriggerType>, string>(
-          t => string.Join(";", t.ToList().ConvertAll(t => (int) t)),
-          t => t.Split(";", StringSplitOptions.RemoveEmptyEntries).Select(val => (TriggerType) int.Parse(val)).ToList());
+      var converterTrigger = new ValueConverter<ICollection<TriggerType>, string>(
+          t => string.Join(";", t.ToList().ConvertAll(t => (int)t)),
+          t => t.Split(";", StringSplitOptions.RemoveEmptyEntries).Select(val => (TriggerType)int.Parse(val)).ToList());
 
       modelBuilder.Entity<Output>()
         .Property(e => e.Triggers)
-        .HasConversion(converter);
+        .HasConversion(converterTrigger);
+
+      var converterFault = new ValueConverter<ICollection<int>, string>(
+          u => string.Join(";", u.ToList().ConvertAll(u => u)),
+          u => u.Split(";", StringSplitOptions.RemoveEmptyEntries).Select(val => int.Parse(val)).ToList());
+
+      modelBuilder.Entity<ElectroFenceFault>()
+        .Property(e => e.SeenBy)
+        .HasConversion(converterFault);
+
+      var converterIo = new ValueConverter<IList<bool>, string>(
+          u => string.Join(";", u.ToList().ConvertAll(u => u)),
+          u => u.Split(";", StringSplitOptions.RemoveEmptyEntries).Select(val => bool.Parse(val)).ToList());
+
+      modelBuilder.Entity<ElectroFenceStatus>()
+        .Property(e => e.Inputs)
+        .HasConversion(converterIo);
+
+      modelBuilder.Entity<ElectroFenceStatus>()
+        .Property(e => e.Outputs)
+        .HasConversion(converterIo);
 
       modelBuilder.Entity<UserLog>()
         .HasOne(u => u.User)
         .WithMany(u => u.UserLogs)
         .HasForeignKey(u => u.UserId);
 
-      modelBuilder.Entity<UserLog>()
-        .HasOne(u => u.Log)
-        .WithMany(l => l.UserLogs)
-        .HasForeignKey(u => u.LogId);
+      // modelBuilder.Entity<UserLog>()
+      //   .HasOne(u => u.Log)
+      //   .WithMany(l => l.UserLogs)
+      //   .HasForeignKey(u => u.LogId);
 
       modelBuilder.Entity<User>()
         .HasOne(u => u.Group)
@@ -94,7 +115,7 @@ namespace Dess.Api.DbContexts
       modelBuilder.Entity<UserGroup>().HasData(groups);
 
       var isAlmighty = new UserPermission { Id = 1, Title = "IsAlmighty" };
-      var canSecureSites = new UserPermission { Id = 2, Title = "CanSecureSites" };
+      var canSecureSites = new UserPermission { Id = 2, Title = "CanResetFaults" };
       var canEditSites = new UserPermission { Id = 3, Title = "CanEditSites" };
       var canEditUserGroup = new UserPermission { Id = 4, Title = "CanEditUserGroups" };
       var canEditUsers = new UserPermission { Id = 5, Title = "CanEditUsers" };

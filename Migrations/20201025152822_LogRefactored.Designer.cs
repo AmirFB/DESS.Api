@@ -11,8 +11,8 @@ using Dess.Api.DbContexts;
 namespace DESS.Migrations
 {
     [DbContext(typeof(DessDbContext))]
-    [Migration("20201023171347_DatabaseRefreshed")]
-    partial class DatabaseRefreshed
+    [Migration("20201025152822_LogRefactored")]
+    partial class LogRefactored
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -175,6 +175,40 @@ namespace DESS.Migrations
                     });
             });
 
+            modelBuilder.Entity("Dess.Api.Entities.ElectroFenceFault", b =>
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
+
+                b.Property<int>("ElectroFenceId")
+                    .HasColumnType("int");
+
+                b.Property<DateTime>("ObviatedOn")
+                    .HasColumnType("datetime(6)");
+
+                b.Property<DateTime>("OccuredOn")
+                    .HasColumnType("datetime(6)");
+
+                b.Property<int>("ResetedBy")
+                    .HasColumnType("int");
+
+                b.Property<DateTime>("ResetedOn")
+                    .HasColumnType("datetime(6)");
+
+                b.Property<string>("SeenBy")
+                    .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                b.Property<int>("Type")
+                    .HasColumnType("int");
+
+                b.HasKey("Id");
+
+                b.HasIndex("ElectroFenceId");
+
+                b.ToTable("Logs");
+            });
+
             modelBuilder.Entity("Dess.Api.Entities.ElectroFenceStatus", b =>
             {
                 b.Property<int>("Id")
@@ -211,11 +245,8 @@ namespace DESS.Migrations
                 b.Property<short>("HvVoltage")
                     .HasColumnType("smallint");
 
-                b.Property<bool>("Input1")
-                    .HasColumnType("tinyint(1)");
-
-                b.Property<bool>("Input2")
-                    .HasColumnType("tinyint(1)");
+                b.Property<string>("Inputs")
+                    .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                 b.Property<string>("IpAddress")
                     .HasColumnType("longtext CHARACTER SET utf8mb4");
@@ -232,11 +263,8 @@ namespace DESS.Migrations
                 b.Property<bool>("MainPowerFault")
                     .HasColumnType("tinyint(1)");
 
-                b.Property<bool>("Output1")
-                    .HasColumnType("tinyint(1)");
-
-                b.Property<bool>("Output2")
-                    .HasColumnType("tinyint(1)");
+                b.Property<string>("Outputs")
+                    .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                 b.Property<string>("SerialNo")
                     .HasColumnType("longtext CHARACTER SET utf8mb4");
@@ -252,9 +280,10 @@ namespace DESS.Migrations
 
                 b.HasKey("Id");
 
-                b.HasIndex("ElectroFenceId");
+                b.HasIndex("ElectroFenceId")
+                    .IsUnique();
 
-                b.ToTable("Logs");
+                b.ToTable("Statuses");
 
                 b.HasData(
                     new
@@ -269,12 +298,8 @@ namespace DESS.Migrations
                             HvDischargeFault = false,
                             HvPowerFault = false,
                             HvVoltage = (short)0,
-                            Input1 = false,
-                            Input2 = false,
                             LvAlarm = false,
                             MainPowerFault = false,
-                            Output1 = false,
-                            Output2 = false,
                             SignalStrength = (byte)0,
                             TamperAlarm = false,
                             Temperature = (short)0
@@ -291,12 +316,8 @@ namespace DESS.Migrations
                             HvDischargeFault = false,
                             HvPowerFault = false,
                             HvVoltage = (short)0,
-                            Input1 = false,
-                            Input2 = false,
                             LvAlarm = false,
                             MainPowerFault = false,
-                            Output1 = false,
-                            Output2 = false,
                             SignalStrength = (byte)0,
                             TamperAlarm = false,
                             Temperature = (short)0
@@ -313,12 +334,8 @@ namespace DESS.Migrations
                             HvDischargeFault = false,
                             HvPowerFault = false,
                             HvVoltage = (short)0,
-                            Input1 = false,
-                            Input2 = false,
                             LvAlarm = false,
                             MainPowerFault = false,
-                            Output1 = false,
-                            Output2 = false,
                             SignalStrength = (byte)0,
                             TamperAlarm = false,
                             Temperature = (short)0
@@ -519,7 +536,7 @@ namespace DESS.Migrations
                             FirstName = "Amir",
                             GroupId = 1,
                             LastName = "Fakhim-Babaei",
-                            Password = "$2a$11$oqiP/XA3NCo5.pcOes9CRehzHB0ffjCgOSsitxdUZxQPRikLClTHW",
+                            Password = "$2a$11$f4Ohw7ILtBP4iaAWKhhnCOv.bX9iLfFIaacbx/4QEM0.SRYMQGyTy",
                             Username = "expert"
                     },
                     new
@@ -528,7 +545,7 @@ namespace DESS.Migrations
                             FirstName = "Amir",
                             GroupId = 2,
                             LastName = "Fakhim-Babaei",
-                            Password = "$2a$11$0yUOIvyraoC/YaFk4ip0z.zTolIaddmW4iXS8xdp4/lOZxGNNIssa",
+                            Password = "$2a$11$PqnLX3yA34sN.r.pl8jUDuqSDGGhkLOM4NhnXUIda1knqVAaJNzxe",
                             Username = "admin"
                     },
                     new
@@ -537,7 +554,7 @@ namespace DESS.Migrations
                             FirstName = "Amir",
                             GroupId = 3,
                             LastName = "Fakhim-Babaei",
-                            Password = "$2a$11$8deZ26oYOfYxkyse6SXgV.ZMpYrSzC6Tp38zxz7YCSaaDWn6C2LRS",
+                            Password = "$2a$11$uGDSrTwEysZcE.fI4yZ.IOYGWiWZusW7FHFogmEUwdEjJD/TKcX.a",
                             Username = "operator"
                     });
             });
@@ -722,11 +739,20 @@ namespace DESS.Migrations
                     });
             });
 
-            modelBuilder.Entity("Dess.Api.Entities.ElectroFenceStatus", b =>
+            modelBuilder.Entity("Dess.Api.Entities.ElectroFenceFault", b =>
             {
-                b.HasOne("Dess.Api.Entities.ElectroFence", "ElectroFence")
+                b.HasOne("Dess.Api.Entities.ElectroFence", null)
                     .WithMany("Log")
                     .HasForeignKey("ElectroFenceId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
+
+            modelBuilder.Entity("Dess.Api.Entities.ElectroFenceStatus", b =>
+            {
+                b.HasOne("Dess.Api.Entities.ElectroFence", null)
+                    .WithOne("Status")
+                    .HasForeignKey("Dess.Api.Entities.ElectroFenceStatus", "ElectroFenceId")
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
             });
@@ -775,8 +801,8 @@ namespace DESS.Migrations
 
             modelBuilder.Entity("Dess.Api.Entities.UserLog", b =>
             {
-                b.HasOne("Dess.Api.Entities.ElectroFenceStatus", "Log")
-                    .WithMany("UserLogs")
+                b.HasOne("Dess.Api.Entities.ElectroFenceFault", "Log")
+                    .WithMany()
                     .HasForeignKey("LogId")
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();

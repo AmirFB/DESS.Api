@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Authorization;
@@ -43,12 +44,8 @@ namespace Dess.Api.Controllers
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ElectroFenceDto>>> GetAllAsync()
     {
-      var efs = await _repository.GetAllWithIoAsync();
+      var efs = await _repository.GetAllWithEverythingAsync();
       var dtos = _mapper.Map<IEnumerable<ElectroFenceDto>>(efs);
-
-      foreach (var dto in dtos)
-        dto.Status =
-        _mapper.Map<ElectroFenceStatusDto>(await _repository.GetStatusAsync(dto.Id));
 
       return Ok(dtos);
     }
@@ -97,17 +94,8 @@ namespace Dess.Api.Controllers
       return NoContent();
     }
 
-    [HttpGet("{id}/status")]
-    public async Task<ActionResult<ElectroFenceStatusDto>> GetStatusAsync(int id)
-    {
-      if (!await _repository.ExistsAsync(id))
-        return NotFound();
-
-      return Ok(_mapper.Map<ElectroFenceStatusDto>(await _repository.GetStatusAsync(id)));
-    }
-
     [HttpGet("log")]
-    public async Task<ActionResult<IEnumerable<ElectroFenceStatusDto>>> GetAllLogAsync(int id)
+    public async Task<ActionResult<IEnumerable<ElectroFenceStatusDto>>> GetAllLogAsync()
     {
       var logs = await _repository.GetAllLogAsync();
       var dtos = _mapper.Map<IEnumerable<ElectroFenceStatusDto>>(logs);
@@ -116,12 +104,48 @@ namespace Dess.Api.Controllers
     }
 
     [HttpGet("{id}/log")]
-    public async Task<ActionResult<IEnumerable<ElectroFenceStatusDto>>> GetModuleLogAsync(int id)
+    public async Task<ActionResult<IEnumerable<ElectroFenceStatusDto>>> GetModuleLogAsync([FromRoute] int id)
     {
       var logs = await _repository.GetLogAsync(id);
       var dtos = _mapper.Map<IEnumerable<ElectroFenceStatusDto>>(logs);
 
       return Ok(dtos);
+    }
+
+    [Authorize(Policy = "CanResetFaults")]
+    [HttpPut("reset/{moduleId}/")]
+    [HttpPut("reset/{moduleId}/{faultId}")]
+    public async Task<ActionResult<IEnumerable<ElectroFenceFault>>> ResetFaultAsync([FromRoute] int moduleId, [FromRoute] int? faultId)
+    {
+      var ef = await _repository.GetWithLogAsync(moduleId);
+
+      if (ef == null)
+        return NotFound();
+
+      var faults = ef.ObviatedFaults;
+
+      if (faultId.HasValue)
+      {
+        var fault = faults.FirstOrDefault(f => f.Id == faultId);
+
+        if (fault == null)
+          return NotFound();
+
+        fault.ResetedOn = DateTime.UtcNow;
+        fault.ResetedBy = int.Parse(HttpContext.User.Identities.ToList()[0].Claims.ToList()[0].Value);
+      }
+
+      else
+      {
+        foreach (var fault in faults)
+        {
+          fault.ResetedOn = DateTime.UtcNow;
+          fault.ResetedBy = int.Parse(HttpContext.User.Identities.ToList()[0].Claims.ToList()[0].Value);
+        }
+      }
+
+      await _repository.SaveAsync();
+      return Ok(ef.NotResetedFaults);
     }
   }
 }

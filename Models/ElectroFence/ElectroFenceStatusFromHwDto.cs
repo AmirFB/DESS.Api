@@ -22,7 +22,8 @@ namespace Dess.Api.Models.ElectroFence
     public BatteryStatus BatteryStatus { get; set; }
     public byte BatteryLevel { get; set; }
 
-    public IList<bool> Ios { get; set; }
+    public IList<bool> Inputs { get; set; }
+    public IList<bool> Outputs { get; set; }
 
     public string Latitude { get; set; }
     public string Longitude { get; set; }
@@ -32,7 +33,7 @@ namespace Dess.Api.Models.ElectroFence
     {
       var data = $"{HvAlarm}{LvAlarm}{TamperAlarm}" +
         $"{BatteryStatus}{MainPowerFault}{HvPowerFault}{HvChargeFault}" +
-        $"{HvDischargeFault}{Ios[0]}{Ios[1]}{Ios[2]}{Ios[3]}";
+        $"{HvDischargeFault}{Inputs[0]}{Inputs[1]}";
       return data;
     }
   }

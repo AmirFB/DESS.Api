@@ -20,15 +20,17 @@ namespace Dess.Api.Repositories
         IHttpClientFactory httpClientFactory) : base(context) =>
       _httpClientFactory = httpClientFactory;
 
-    public async Task<ElectroFence> GetAsync(string siteId)
-    {
-      if (siteId == null)
-        throw new ArgumentNullException(nameof(siteId));
+    public async Task<ElectroFence> GetAsync(string siteId) =>
+      await Entities
+      .Include(e => e.Status)
+      .Include(e => e.Log)
+      .FirstOrDefaultAsync(entity => entity.SiteId == siteId);
 
-      return await Entities
-        .Include(e => e.Log)
-        .FirstOrDefaultAsync(entity => entity.SiteId == siteId);
-    }
+    public async Task<ElectroFence> GetWithLogAsync(int id) =>
+      await Entities
+      .Include(e => e.Status)
+      .Include(e => e.Log)
+      .FirstOrDefaultAsync(entity => entity.Id == id);
 
     public async Task<ElectroFence> GetWithIoAsync(int id) =>
       await Entities
@@ -36,33 +38,21 @@ namespace Dess.Api.Repositories
       .Include(e => e.Outputs)
       .FirstOrDefaultAsync(e => e.Id == id);
 
-    public async Task<IEnumerable<ElectroFence>> GetAllWithIoAsync() =>
+    public async Task<IEnumerable<ElectroFence>> GetAllWithEverythingAsync() =>
       await Entities
+      .Include(e => e.Status)
+      .Include(e => e.Log)
       .Include(e => e.Inputs)
       .Include(e => e.Outputs)
       .ToListAsync();
 
-    public async Task<IEnumerable<ElectroFenceStatus>> GetAllLogAsync() =>
+    public async Task<IEnumerable<ElectroFenceFault>> GetAllLogAsync() =>
       await Context.Logs.ToListAsync();
 
-    public async Task<IEnumerable<ElectroFenceStatus>> GetLogAsync(int id)
-    {
-      var ef = await Entities
-        .Include(e => e.Log)
-        .FirstOrDefaultAsync(e => e.Id == id);
+    public async Task<IEnumerable<ElectroFenceFault>> GetLogAsync(int id) =>
+      (await GetWithLogAsync(id)).Log;
 
-      return ef.Log;
-    }
-
-    public void AddLog(ElectroFenceStatus log) => Context.Logs.Add(log);
-
-    public void UpdateLog(ElectroFenceStatus log) => Context.Logs.Update(log);
-
-    public async Task<ElectroFenceStatus> GetStatusAsync(int id) =>
-      (await Entities
-        .Include(e => e.Log)
-        .FirstOrDefaultAsync(e => e.Id == id))
-      .Log.Last();
-
+    public void AddLog(ElectroFenceFault log) => Context.Logs.Add(log);
+    public void UpdateLog(ElectroFenceFault log) => Context.Logs.Update(log);
   }
 }

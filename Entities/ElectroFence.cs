@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 using Dess.Api.Models;
 
@@ -52,9 +54,17 @@ namespace Dess.Api.Entities
     public bool BatteryWarning { get; set; }
     public byte BatteryMin { get; set; }
 
+    public ElectroFenceStatus Status { get; set; }
+
     public IList<Input> Inputs { get; set; }
     public IList<Output> Outputs { get; set; }
-    public ICollection<ElectroFenceStatus> Log { get; set; } = new List<ElectroFenceStatus>();
+    public ICollection<ElectroFenceFault> Log { get; set; } = new List<ElectroFenceFault>();
+    [NotMapped]
+    public ICollection<ElectroFenceFault> NotObviatedFaults => Log.Where(l => l.ObviatedOn.Year < 1000).ToList();
+    [NotMapped]
+    public ICollection<ElectroFenceFault> ObviatedFaults => Log.Where(l => l.ObviatedOn.Year > 1000 && l.ResetedOn.Year < 1000).ToList();
+    [NotMapped]
+    public ICollection<ElectroFenceFault> NotResetedFaults => Log.Where(l => l.ResetedOn.Year < 1000).ToList();
 
     public string GetHashBase()
     {

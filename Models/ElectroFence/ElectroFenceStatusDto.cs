@@ -1,34 +1,23 @@
+using System.Collections.Generic;
+
 using Dess.Api.Types;
 
 namespace Dess.Api.Models.ElectroFence
 {
-  public class ElectroFenceStatusDto
+  public class ElectroFenceStatusDto : ElectroFenceStatisticsDto
   {
-    public int Id { get; set; }
     public long Date { get; set; }
     public string IpAddress { get; set; }
     public string SerialNo { get; set; }
     public bool Applied { get; set; }
     public int SiteId { get; set; }
 
-    public bool HvAlarm { get; set; }
-    public bool LvAlarm { get; set; }
-    public bool TamperAlarm { get; set; }
-
-    public bool MainPowerFault { get; set; }
-    public bool HvPowerFault { get; set; }
-    public bool HvChargeFault { get; set; }
-    public bool HvDischargeFault { get; set; }
-
     public short HvVoltage { get; set; }
     public short Temperature { get; set; }
     public BatteryStatus BatteryStatus { get; set; }
     public byte BatteryLevel { get; set; }
 
-    public bool Input1 { get; set; }
-    public bool Input2 { get; set; }
-    public bool Output1 { get; set; }
-    public bool Output2 { get; set; }
+    public IList<bool> Outputs { get; set; }
 
     public string Latitude { get; set; }
     public string Longitude { get; set; }

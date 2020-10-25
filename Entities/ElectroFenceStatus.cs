@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
+using Dess.Api.Models;
 using Dess.Api.Types;
 
 namespace Dess.Api.Entities
 {
-  public class ElectroFenceStatus : EntityBase
+  public class ElectroFenceStatus : EntityBase, IHashable
   {
     public DateTime Date { get; set; }
-    public string Hash { get; set; }
     public string IpAddress { get; set; }
     public string SerialNo { get; set; }
+
+    public string Hash { get; set; }
 
     public bool HvAlarm { get; set; }
     public bool LvAlarm { get; set; }
@@ -27,19 +29,22 @@ namespace Dess.Api.Entities
     public BatteryStatus BatteryStatus { get; set; }
     public byte BatteryLevel { get; set; }
 
-    public bool Input1 { get; set; }
-    public bool Input2 { get; set; }
-    public bool Output1 { get; set; }
-    public bool Output2 { get; set; }
-
     public string Latitude { get; set; }
     public string Longitude { get; set; }
     public byte SignalStrength { get; set; }
 
     [Required]
     public int ElectroFenceId { get; set; }
-    public ElectroFence ElectroFence { get; set; }
 
-    public ICollection<UserLog> UserLogs { get; set; }
+    public IList<bool> Inputs { get; set; }
+    public IList<bool> Outputs { get; set; }
+
+    public string GetHashBase()
+    {
+      var data = $"{HvAlarm}{LvAlarm}{TamperAlarm}" +
+        $"{BatteryStatus}{MainPowerFault}{HvPowerFault}{HvChargeFault}" +
+        $"{HvDischargeFault}{Inputs[0]}{Inputs[1]}";
+      return data;
+    }
   }
 }
