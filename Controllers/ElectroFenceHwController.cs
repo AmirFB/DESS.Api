@@ -171,6 +171,7 @@ namespace Dess.Api.Controllers
       await _hubContext.Clients.All.SendAsync("UpdateStatus", statusDto);
 
       _mapper.Map(status, ef.Status);
+      ef.Status.IpAddress = HttpContext.Connection.RemoteIpAddress.ToString();
       ef.Status.Date = DateTime.UtcNow;
       ef.Applied = configHash == ef.Hash;
 

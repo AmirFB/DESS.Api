@@ -56,6 +56,7 @@ namespace Dess.Api.Controllers
       var efRepo = _mapper.Map<ElectroFence>(ef);
       _repository.Add(efRepo);
       efRepo.Hash = (efRepo as IHashable).GetHash();
+      efRepo.Status = new ElectroFenceStatus();
       await _repository.SaveAsync();
 
       var electroFenceToReturn = _mapper.Map<ElectroFenceDto>(efRepo);

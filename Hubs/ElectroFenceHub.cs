@@ -19,7 +19,7 @@ namespace Dess.Api.Hubs
 
     public override async Task OnConnectedAsync()
     {
-      var id = int.Parse(Context.User.Identities.ToList() [0].Claims.ToList() [0].Value);
+      var id = int.Parse(Context.User.Identities.ToList()[0].Claims.ToList()[0].Value);
 
       if (!UserIds.Contains(id))
         UserIds.Add(id);
@@ -35,7 +35,7 @@ namespace Dess.Api.Hubs
 
     public override async Task OnDisconnectedAsync(System.Exception exception)
     {
-      var id = int.Parse(Context.User.Identities.ToList() [0].Claims.ToList() [0].Value);
+      var id = int.Parse(Context.User.Identities.ToList()[0].Claims.ToList()[0].Value);
       UserIds.Remove(id);
 
       var user = await _userRepository.GetAsync(id);

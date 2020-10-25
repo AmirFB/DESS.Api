@@ -18,6 +18,6 @@ namespace Dess.Api.Entities
 		[Required]
 		public int ElectroFenceId { get; set; }
 
-		public ICollection<int> SeenBy { get; set; }
+		public ICollection<int> SeenBy { get; set; } = new List<int>();
 	}
 }
