@@ -24,6 +24,8 @@ namespace Dess.Api.Repositories
       await Entities
       .Include(e => e.Status)
       .Include(e => e.Log)
+      .Include(e => e.Inputs)
+      .Include(e => e.Outputs)
       .FirstOrDefaultAsync(entity => entity.SiteId == siteId);
 
     public async Task<ElectroFence> GetWithLogAsync(int id) =>

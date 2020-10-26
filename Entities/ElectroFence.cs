@@ -24,6 +24,7 @@ namespace Dess.Api.Entities
 
     public bool UseGlobalInterval { get; set; }
     public byte Interval { get; set; }
+    public byte Timeout { get; set; }
 
     public bool AutoLocation { get; set; }
     public string Latitude { get; set; }

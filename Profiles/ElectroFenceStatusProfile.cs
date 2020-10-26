@@ -12,6 +12,12 @@ namespace Dess.Api.Profiles
     {
       CreateMap<ElectroFenceStatus, ElectroFenceStatusFromHwDto>().ReverseMap();
       CreateMap<ElectroFenceStatusFromHwDto, ElectroFenceStatusDto>();
+      CreateMap<ElectroFenceFault, ElectroFenceFaultDto>()
+        .ForMember(d => d.OccuredOn, o => o.MapFrom(e => e.OccuredOn.JavascriptDate()))
+        .ForMember(d => d.ObviatedOn, o => o.MapFrom(e => e.ObviatedOn.JavascriptDate()))
+        .ForMember(d => d.ResetedOn, o => o.MapFrom(e => e.ResetedOn.JavascriptDate()))
+        .ForMember(d => d.ResetedBy, o => o.Ignore())
+        .ForMember(d => d.SeenBy, o => o.Ignore());
       CreateMap<ElectroFenceStatus, ElectroFenceStatusDto>()
         .ForMember(d => d.SiteId, o => o.MapFrom(e => e.ElectroFenceId))
         .ForMember(d => d.Date, o => o.MapFrom(e => e.Date.JavascriptDate()));

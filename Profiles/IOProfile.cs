@@ -11,6 +11,8 @@ namespace Dess.Api.Profiles
     {
       CreateMap<Input, InputDto>().ReverseMap();
       CreateMap<Output, OutputDto>().ReverseMap();
+      CreateMap<Input, InputForHwDto>();
+      CreateMap<Output, OutputForHwDto>();
     }
   }
 }
