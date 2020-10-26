@@ -20,11 +20,15 @@ namespace Dess.Api.Controllers
   public class ElectroFenceWebController : ControllerBase
   {
     private readonly IElectroFenceRepository _repository;
+    private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
 
-    public ElectroFenceWebController(IElectroFenceRepository electroFenceRepository, IMapper mapper)
+    public ElectroFenceWebController(IElectroFenceRepository electroFenceRepository, IUserRepository userRepository, IMapper mapper)
     {
       _repository = electroFenceRepository ??
+        throw new ArgumentNullException(nameof(electroFenceRepository));
+
+      _userRepository = userRepository ??
         throw new ArgumentNullException(nameof(electroFenceRepository));
 
       _mapper = mapper ??
@@ -96,15 +100,31 @@ namespace Dess.Api.Controllers
     }
 
     [HttpGet("log")]
-    public async Task<ActionResult<IEnumerable<ElectroFenceStatusDto>>> GetAllLogAsync()
+    public async Task<ActionResult<IEnumerable<ElectroFenceFaultDto>>> GetAllLogAsync()
     {
-      var logs = await _repository.GetAllLogAsync();
-      var dtos = _mapper.Map<IEnumerable<ElectroFenceStatusDto>>(logs);
+      var logs = (await _repository.GetAllLogAsync()).ToList();
+      var dtos = _mapper.Map<IList<ElectroFenceFaultDto>>(logs);
+      var users = await _userRepository.GetAllAsync();
+
+      for (int i = 0; i < dtos.Count(); i++)
+      {
+        if (logs[i].ResetedOn.Year > 1000)
+        {
+          var user = users.FirstOrDefault(u => u.Id == logs[i].ResetedBy);
+          dtos[i].ResetedBy = $"{user.FirstName} {user.LastName}";
+        }
+
+        foreach (var id in logs[i].SeenBy)
+        {
+          var user = users.FirstOrDefault(u => u.Id == id);
+          dtos[i].SeenBy.Add($"{user.FirstName} {user.LastName}");
+        }
+      }
 
       return Ok(dtos);
     }
 
-    [HttpGet("{id}/log")]
+    [HttpGet(" { id } / log ")]
     public async Task<ActionResult<IEnumerable<ElectroFenceStatusDto>>> GetModuleLogAsync([FromRoute] int id)
     {
       var logs = await _repository.GetLogAsync(id);
