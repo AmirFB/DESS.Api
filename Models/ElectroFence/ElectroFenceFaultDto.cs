@@ -5,6 +5,7 @@ namespace Dess.Api.Models.ElectroFence
 {
 	public class ElectroFenceFaultDto
 	{
+		public int Id { get; set; }
 		public long OccuredOn { get; set; }
 		public long ObviatedOn { get; set; }
 		public long ResetedOn { get; set; }
