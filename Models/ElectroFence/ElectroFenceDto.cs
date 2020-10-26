@@ -36,7 +36,8 @@ namespace Dess.Api.Models.ElectroFence
 
     public ElectroFenceStatusDto Status { get; set; } = new ElectroFenceStatusDto();
 
-    public IList<InputDto> Inputs { get; set; }
-    public IList<OutputDto> Outputs { get; set; }
+    public ICollection<InputDto> Inputs { get; set; }
+    public ICollection<OutputDto> Outputs { get; set; }
+    public ICollection<ElectroFenceFaultDto> Faults { get; set; }
   }
 }
