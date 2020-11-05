@@ -12,7 +12,7 @@ namespace Dess.Api.Entities
 
     public override string GetHashBase()
     {
-      var data = $"{Type}{Enabled}{ResetTime}";
+      var data = $"{(int)Type}{Enabled}{ResetTime}";
       foreach (var trigger in Triggers)
         data += (int) trigger;
       return data;

@@ -3,10 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
-
 using AutoMapper;
 
 using Dess.Api.Entities;
@@ -16,6 +12,10 @@ using Dess.Api.Models;
 using Dess.Api.Models.ElectroFence;
 using Dess.Api.Repositories;
 using Dess.Api.Types;
+
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Dess.Api.Controllers
 {
@@ -31,16 +31,20 @@ namespace Dess.Api.Controllers
 
     public ElectroFenceRepository(IElectroFenceRepository electroFenceRepository, IUserLogRepository userLogRepository, IMapper mapper, IHubContext<ElectroFenceHub> hubContext)
     {
-      _repository = electroFenceRepository ??
+      _repository = electroFenceRepository
+        ??
         throw new ArgumentNullException(nameof(electroFenceRepository));
 
-      _userLogRepository = userLogRepository ??
+      _userLogRepository = userLogRepository
+        ??
         throw new ArgumentNullException(nameof(userLogRepository));
 
-      _mapper = mapper ??
+      _mapper = mapper
+        ??
         throw new ArgumentNullException(nameof(mapper));
 
-      _hubContext = hubContext ??
+      _hubContext = hubContext
+        ??
         throw new ArgumentNullException(nameof(_hubContext));
     }
 
@@ -48,10 +52,10 @@ namespace Dess.Api.Controllers
     {
       if (fault == null && status.HvAlarm)
       {
-        var output = new ElectroFenceFault();
+        var output = new ElectroFenceFault { ElectroFenceId = status.ElectroFenceId };
         output.OccuredOn = DateTime.UtcNow;
         output.Type = FaultType.Hv;
-        foreach (var user in users)output.SeenBy.Add(user);
+        foreach (var user in users) output.SeenBy.Add(user);
         return output;
       }
 
@@ -65,10 +69,10 @@ namespace Dess.Api.Controllers
     {
       if (fault == null && status.LvAlarm)
       {
-        var output = new ElectroFenceFault();
+        var output = new ElectroFenceFault { ElectroFenceId = status.ElectroFenceId };
         output.OccuredOn = DateTime.UtcNow;
         output.Type = FaultType.Lv;
-        foreach (var user in users)output.SeenBy.Add(user);
+        foreach (var user in users) output.SeenBy.Add(user);
         return output;
       }
 
@@ -82,10 +86,10 @@ namespace Dess.Api.Controllers
     {
       if (fault == null && status.TamperAlarm)
       {
-        var output = new ElectroFenceFault();
+        var output = new ElectroFenceFault { ElectroFenceId = status.ElectroFenceId };
         output.OccuredOn = DateTime.UtcNow;
         output.Type = FaultType.Tamper;
-        foreach (var user in users)output.SeenBy.Add(user);
+        foreach (var user in users) output.SeenBy.Add(user);
         return output;
       }
 
@@ -99,10 +103,10 @@ namespace Dess.Api.Controllers
     {
       if (fault == null && status.MainPowerFault)
       {
-        var output = new ElectroFenceFault();
+        var output = new ElectroFenceFault { ElectroFenceId = status.ElectroFenceId };
         output.OccuredOn = DateTime.UtcNow;
         output.Type = FaultType.Power;
-        foreach (var user in users)output.SeenBy.Add(user);
+        foreach (var user in users) output.SeenBy.Add(user);
         return output;
       }
 
@@ -116,10 +120,10 @@ namespace Dess.Api.Controllers
     {
       if (fault == null && status.Inputs[0])
       {
-        var output = new ElectroFenceFault();
+        var output = new ElectroFenceFault { ElectroFenceId = status.ElectroFenceId };
         output.OccuredOn = DateTime.UtcNow;
         output.Type = FaultType.Input1;
-        foreach (var user in users)output.SeenBy.Add(user);
+        foreach (var user in users) output.SeenBy.Add(user);
         return output;
       }
 
@@ -133,10 +137,10 @@ namespace Dess.Api.Controllers
     {
       if (fault == null && status.Inputs[1])
       {
-        var output = new ElectroFenceFault();
+        var output = new ElectroFenceFault { ElectroFenceId = status.ElectroFenceId };
         output.OccuredOn = DateTime.UtcNow;
         output.Type = FaultType.Input2;
-        foreach (var user in users)output.SeenBy.Add(user);
+        foreach (var user in users) output.SeenBy.Add(user);
         return output;
       }
 
@@ -162,7 +166,7 @@ namespace Dess.Api.Controllers
       var ef = await _repository.GetAsync(siteId);
 
       if (ef == null)
-        return NotFound();
+        return BadRequest();
 
       var statusDto = _mapper.Map<ElectroFenceStatusDto>(status);
       statusDto.IpAddress = HttpContext.Connection.RemoteIpAddress.ToString();
@@ -196,7 +200,7 @@ namespace Dess.Api.Controllers
     }
 
     [HttpGet("{siteId}")]
-    public async Task<ActionResult<ElectroFenceForHwDto>> GetConfig(string siteId)
+    public async Task<ActionResult<ElectroFenceForHwDto>> GetConfigAsync(string siteId)
     {
       var ef = await _repository.GetAsync(siteId);
 
@@ -205,5 +209,9 @@ namespace Dess.Api.Controllers
 
       return Ok(_mapper.Map<ElectroFenceForHwDto>(ef));
     }
+
+    [HttpGet("id/{serial}")]
+    public async Task<ActionResult<ElectroFenceForHwDto>> GetSiteIdAsync(string serial) =>
+      Ok(new { Id = await _repository.GetSiteIdAsync(serial) });
   }
 }

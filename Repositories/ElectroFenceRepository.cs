@@ -4,10 +4,10 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-using Microsoft.EntityFrameworkCore;
-
 using Dess.Api.DbContexts;
 using Dess.Api.Entities;
+
+using Microsoft.EntityFrameworkCore;
 
 namespace Dess.Api.Repositories
 {
@@ -28,6 +28,10 @@ namespace Dess.Api.Repositories
       .Include(e => e.Outputs)
       .FirstOrDefaultAsync(entity => entity.SiteId == siteId);
 
+    public async Task<string> GetSiteIdAsync(string serial) =>
+      (await Entities
+        .FirstOrDefaultAsync(entity => entity.SerialNo == serial)).SiteId;
+
     public async Task<ElectroFence> GetWithLogAsync(int id) =>
       await Entities
       .Include(e => e.Status)
@@ -43,7 +47,6 @@ namespace Dess.Api.Repositories
     public async Task<IEnumerable<ElectroFence>> GetAllWithEverythingAsync() =>
       await Entities
       .Include(e => e.Status)
-      .Include(e => e.Log)
       .Include(e => e.Inputs)
       .Include(e => e.Outputs)
       .ToListAsync();

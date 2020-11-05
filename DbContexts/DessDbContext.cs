@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-
 using AutoMapper;
 
 using Dess.Api.Entities;
 using Dess.Api.Helpers;
 using Dess.Api.Types;
+
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Dess.Api.DbContexts
 {
@@ -51,8 +51,8 @@ namespace Dess.Api.DbContexts
         .HasForeignKey(o => o.ModuleId);
 
       var converterTrigger = new ValueConverter<ICollection<TriggerType>, string>(
-          t => string.Join(";", t.ToList().ConvertAll(t => (int)t)),
-          t => t.Split(";", StringSplitOptions.RemoveEmptyEntries).Select(val => (TriggerType)int.Parse(val)).ToList());
+          t => string.Join(";", t.ToList().ConvertAll(t => (int) t)),
+          t => t.Split(";", StringSplitOptions.RemoveEmptyEntries).Select(val => (TriggerType) int.Parse(val)).ToList());
 
       modelBuilder.Entity<Output>()
         .Property(e => e.Triggers)
@@ -152,28 +152,28 @@ namespace Dess.Api.DbContexts
       };
       modelBuilder.Entity<User>().HasData(users);
 
-      var ef1 = new ElectroFence { Id = 1, Name = "Ef1", SiteId = "ehp-ie-tbz", SerialNo = "001", Interval = 10, HvEnabled = true, LvEnabled = true, HvPower = 70, HvRepeat = 2, HvThreshold = 3000, Latitude = "38.0962", Longitude = "46.2738" };
-      var ef2 = new ElectroFence { Id = 2, Name = "Ef2", SiteId = "ehp-ie-thr", SerialNo = "002", Interval = 15, HvEnabled = true, LvEnabled = false, HvPower = 70, HvRepeat = 3, HvThreshold = 4000, Latitude = "35.6892", Longitude = "51.3890" };
-      var ef3 = new ElectroFence { Id = 3, Name = "Ef3", SiteId = "ehp-ie-isf", SerialNo = "003", Interval = 20, HvEnabled = true, LvEnabled = false, HvPower = 80, HvRepeat = 2, HvThreshold = 5000, Latitude = "32.6539", Longitude = "51.6660" };
+      var ef1 = new ElectroFence { Id = 1, Name = "Ef1", SiteId = "T5011", SerialNo = "SC20N3001N", Interval = 10, HvEnabled = true, LvEnabled = true, HvPower = 70, HvRepeat = 2, HvThreshold = 3000, Latitude = "38.0962", Longitude = "46.2738" };
+      // var ef2 = new ElectroFence { Id = 2, Name = "Ef2", SiteId = "ehp-ie-thr", SerialNo = "002", Interval = 15, HvEnabled = true, LvEnabled = false, HvPower = 70, HvRepeat = 3, HvThreshold = 4000, Latitude = "35.6892", Longitude = "51.3890" };
+      // var ef3 = new ElectroFence { Id = 3, Name = "Ef3", SiteId = "ehp-ie-isf", SerialNo = "003", Interval = 20, HvEnabled = true, LvEnabled = false, HvPower = 80, HvRepeat = 2, HvThreshold = 5000, Latitude = "32.6539", Longitude = "51.6660" };
 
       var status1 = new ElectroFenceStatus { Id = 1, ElectroFenceId = 1 };
-      var status2 = new ElectroFenceStatus { Id = 2, ElectroFenceId = 2 };
-      var status3 = new ElectroFenceStatus { Id = 3, ElectroFenceId = 3 };
+      // var status2 = new ElectroFenceStatus { Id = 2, ElectroFenceId = 2 };
+      // var status3 = new ElectroFenceStatus { Id = 3, ElectroFenceId = 3 };
 
-      modelBuilder.Entity<ElectroFence>().HasData(ef1, ef2, ef3);
-      modelBuilder.Entity<ElectroFenceStatus>().HasData(status1, status2, status3);
+      modelBuilder.Entity<ElectroFence>().HasData(ef1); //, ef2, ef3);
+      modelBuilder.Entity<ElectroFenceStatus>().HasData(status1); //, status2, status3);
 
       for (int i = 0; i < 2; i++)
       {
         var i1 = new Input { Id = i * 3 + 1, Enabled = i < 2, Type = i % 2 == 0 ? IOType.NO : IOType.NC, ModuleId = ef1.Id };
-        var i2 = new Input { Id = i * 3 + 2, Enabled = i < 3, Type = i % 2 == 1 ? IOType.NO : IOType.NC, ModuleId = ef2.Id };
-        var i3 = new Input { Id = i * 3 + 3, Enabled = i < 1, Type = i % 2 == 0 ? IOType.NO : IOType.NC, ModuleId = ef3.Id };
+        // var i2 = new Input { Id = i * 3 + 2, Enabled = i < 3, Type = i % 2 == 1 ? IOType.NO : IOType.NC, ModuleId = ef2.Id };
+        // var i3 = new Input { Id = i * 3 + 3, Enabled = i < 1, Type = i % 2 == 0 ? IOType.NO : IOType.NC, ModuleId = ef3.Id };
         var o1 = new Output { Id = i * 3 + 1, Enabled = i < 2, Type = i % 2 == 0 ? IOType.NO : IOType.NC, Triggers = new List<TriggerType> { TriggerType.Faults }, ModuleId = ef1.Id };
-        var o2 = new Output { Id = i * 3 + 2, Enabled = i < 3, Type = i % 2 == 1 ? IOType.NO : IOType.NC, Triggers = new List<TriggerType> { TriggerType.Input1, TriggerType.Power }, ModuleId = ef2.Id };
-        var o3 = new Output { Id = i * 3 + 3, Enabled = i < 1, Type = i % 2 == 0 ? IOType.NO : IOType.NC, Triggers = new List<TriggerType> { TriggerType.Input2, TriggerType.Power }, ModuleId = ef3.Id };
+        // var o2 = new Output { Id = i * 3 + 2, Enabled = i < 3, Type = i % 2 == 1 ? IOType.NO : IOType.NC, Triggers = new List<TriggerType> { TriggerType.Input1, TriggerType.Power }, ModuleId = ef2.Id };
+        // var o3 = new Output { Id = i * 3 + 3, Enabled = i < 1, Type = i % 2 == 0 ? IOType.NO : IOType.NC, Triggers = new List<TriggerType> { TriggerType.Input2, TriggerType.Power }, ModuleId = ef3.Id };
 
-        modelBuilder.Entity<Input>().HasData(i1, i2, i3);
-        modelBuilder.Entity<Output>().HasData(o1, o2, o3);
+        modelBuilder.Entity<Input>().HasData(i1); //, i2, i3);
+        modelBuilder.Entity<Output>().HasData(o1); //, o2, o3);
       }
     }
   }

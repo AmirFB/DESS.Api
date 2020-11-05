@@ -60,13 +60,11 @@ namespace Dess.Api.Services
         userFromRepo.Username = user.Username;
       }
 
-      if (!string.IsNullOrWhiteSpace(user.FirstName))
-        userFromRepo.FirstName = user.FirstName;
+      userFromRepo.FirstName = user.FirstName;
+      userFromRepo.LastName = user.LastName;
 
-      if (!string.IsNullOrWhiteSpace(user.LastName))
-        userFromRepo.LastName = user.LastName;
-
-      userFromRepo.GroupId = user.GroupId;
+      if (user.GroupId > 0)
+        userFromRepo.GroupId = user.GroupId;
 
       if (!string.IsNullOrWhiteSpace(user.Password))
         userFromRepo.Password = Cryptography.GeneratePasswordHash(user.Password);

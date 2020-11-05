@@ -3,6 +3,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using AutoMapper;
+
+using Dess.Api.DbContexts;
+using Dess.Api.Helpers;
+using Dess.Api.Hubs;
+using Dess.Api.Repositories;
+using Dess.Api.Services;
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,14 +20,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-
-using AutoMapper;
-
-using Dess.Api.DbContexts;
-using Dess.Api.Helpers;
-using Dess.Api.Hubs;
-using Dess.Api.Repositories;
-using Dess.Api.Services;
 
 namespace Dess.Api
 {
@@ -47,7 +47,7 @@ namespace Dess.Api
 
       services.AddScoped<IUserService, UserService>();
 
-      var connectionString = _configuration.GetSection("ConnectionStrings")["DessConnectionString"];
+      var connectionString = _configuration.GetSection("ConnectionStrings") ["DessConnectionString"];
       services.AddDbContext<DessDbContext>(o => o.UseMySql(connectionString));
 
       // configure strongly typed settings objects
@@ -70,7 +70,7 @@ namespace Dess.Api
             OnTokenValidated = async(context) =>
               {
                 var userRepository = context.HttpContext.RequestServices.GetRequiredService<IUserRepository>();
-                var id = int.Parse(context.Principal.Claims.ToList()[0].Value);
+                var id = int.Parse(context.Principal.Claims.ToList() [0].Value);
                 var user = await userRepository.GetAsync(id);
 
                 if (user == null)
@@ -83,8 +83,8 @@ namespace Dess.Api
 
                 // If the request is for our hub...
                 var path = context.HttpContext.Request.Path;
-                if (!string.IsNullOrEmpty(accessToken) &&
-                  (path.StartsWithSegments("/api/web/hub/ef")))
+                if (!string.IsNullOrEmpty(accessToken)
+                  && (path.StartsWithSegments("/api/web/hub/ef")))
                 {
                   // Read the token out of the query string
                   context.Token = accessToken;
@@ -106,7 +106,7 @@ namespace Dess.Api
         });
 
       var serviceProvider = services.BuildServiceProvider();
-      var permissionRepository = (IPermissionRepository)serviceProvider.GetService<IPermissionRepository>();
+      var permissionRepository = (IPermissionRepository) serviceProvider.GetService<IPermissionRepository>();
 
       try
       {
@@ -165,11 +165,12 @@ namespace Dess.Api
       {
         var context = serviceScope.ServiceProvider.GetService<DessDbContext>();
 
-        if (env.IsDevelopment())
-          context.Database.EnsureDeleted();
+        // if (env.IsDevelopment())
+        //   context.Database.EnsureDeleted();
 
         context.Database.Migrate();
         context.Database.EnsureCreated();
+        
       }
     }
   }

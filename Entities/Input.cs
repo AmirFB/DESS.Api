@@ -2,7 +2,7 @@ namespace Dess.Api.Entities
 {
   public class Input : Io
   {
-    short Timer { get; set; }
+    public byte Timer { get; set; }
 
     public override string GetHashBase()
     {

@@ -3,14 +3,16 @@ using System;
 using Dess.Api.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DESS.Migrations
 {
     [DbContext(typeof(DessDbContext))]
-    partial class DessDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201030190143_EFSeedRemoved")]
+    partial class EFSeedRemoved
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -98,33 +100,6 @@ namespace DESS.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ElectroFences");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Applied = false,
-                            AutoLocation = false,
-                            BatteryMin = (byte)0,
-                            BatteryWarning = false,
-                            HvEnabled = true,
-                            HvPower = (byte)70,
-                            HvRepeat = (byte)2,
-                            HvThreshold = (short)3000,
-                            Interval = (byte)10,
-                            Latitude = "38.0962",
-                            Longitude = "46.2738",
-                            LvEnabled = true,
-                            Name = "Ef1",
-                            SerialNo = "SC20N3001N",
-                            SiteId = "T5011",
-                            TamperEnabled = false,
-                            TemperatureMax = (sbyte)0,
-                            TemperatureMin = (sbyte)0,
-                            TemperatureWarning = false,
-                            Timeout = (byte)0,
-                            UseGlobalInterval = false
-                        });
                 });
 
             modelBuilder.Entity("Dess.Api.Entities.ElectroFenceFault", b =>
@@ -236,26 +211,6 @@ namespace DESS.Migrations
                         .IsUnique();
 
                     b.ToTable("Statuses");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            BatteryLevel = (byte)0,
-                            BatteryStatus = 0,
-                            Date = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ElectroFenceId = 1,
-                            HvAlarm = false,
-                            HvChargeFault = false,
-                            HvDischargeFault = false,
-                            HvPowerFault = false,
-                            HvVoltage = (short)0,
-                            LvAlarm = false,
-                            MainPowerFault = false,
-                            SignalStrength = (byte)0,
-                            TamperAlarm = false,
-                            Temperature = (short)0
-                        });
                 });
 
             modelBuilder.Entity("Dess.Api.Entities.Input", b =>
@@ -273,9 +228,6 @@ namespace DESS.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<byte>("Timer")
-                        .HasColumnType("tinyint unsigned");
-
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
@@ -284,24 +236,6 @@ namespace DESS.Migrations
                     b.HasIndex("ModuleId");
 
                     b.ToTable("Inputs");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Enabled = true,
-                            ModuleId = 1,
-                            Timer = (byte)0,
-                            Type = 0
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Enabled = true,
-                            ModuleId = 1,
-                            Timer = (byte)0,
-                            Type = 1
-                        });
                 });
 
             modelBuilder.Entity("Dess.Api.Entities.Output", b =>
@@ -333,26 +267,6 @@ namespace DESS.Migrations
                     b.HasIndex("ModuleId");
 
                     b.ToTable("Outputs");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Enabled = true,
-                            ModuleId = 1,
-                            ResetTime = (short)0,
-                            Triggers = "0",
-                            Type = 0
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Enabled = true,
-                            ModuleId = 1,
-                            ResetTime = (short)0,
-                            Triggers = "0",
-                            Type = 1
-                        });
                 });
 
             modelBuilder.Entity("Dess.Api.Entities.User", b =>
@@ -393,7 +307,7 @@ namespace DESS.Migrations
                             FirstName = "Amir",
                             GroupId = 1,
                             LastName = "Fakhim-Babaei",
-                            Password = "$2a$11$/gTIntmQnwHndc5MN2tleexdSo13ylL5gszQm.LyNnjJalcXuNo2y",
+                            Password = "$2a$11$fKr4KtIDhveFds3RihECle2AL.6QBm7Al.c/ypSVEo7O/.9ZX3kF6",
                             Username = "expert"
                         },
                         new
@@ -402,7 +316,7 @@ namespace DESS.Migrations
                             FirstName = "Amir",
                             GroupId = 2,
                             LastName = "Fakhim-Babaei",
-                            Password = "$2a$11$kAoAF9d9rOfSI1UapExp5eEAL36/40LShiEutCpRqJnMDJ15ODe/2",
+                            Password = "$2a$11$QMAs9G2EJwKA/Ylk5YOJr.yHObR0CyB.ewyZzkaP4JVnqE/rMTsXS",
                             Username = "admin"
                         },
                         new
@@ -411,7 +325,7 @@ namespace DESS.Migrations
                             FirstName = "Amir",
                             GroupId = 3,
                             LastName = "Fakhim-Babaei",
-                            Password = "$2a$11$cdOHb4himUKHYd20W0GDj.MWGVm9t3NIl68iDDWp8TAUGbyaZBZhm",
+                            Password = "$2a$11$yAta3IAPZJV5ncbCrrUTp.IbPg4ZJ3nbbAiNtHIFd3sxQJW0ohLC6",
                             Username = "operator"
                         });
                 });

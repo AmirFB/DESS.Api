@@ -69,9 +69,9 @@ namespace Dess.Api.Entities
 
     public string GetHashBase()
     {
-      var data = $"{HvEnabled}{LvEnabled}{HvPower}{HvThreshold}" +
-        $"{HvRepeat}{Inputs[0].GetHashBase()}{Inputs[1].GetHashBase()}" +
-        $"{Outputs[0].GetHashBase()}{Outputs[1].GetHashBase()}";
+      var data = $"{Interval}{HvEnabled}{LvEnabled}{TamperEnabled}{HvPower}{HvThreshold}"
+        + $"{HvRepeat}{Inputs[0].GetHashBase()}{Inputs[1].GetHashBase()}"
+        + $"{Outputs[0].GetHashBase()}{Outputs[1].GetHashBase()}";
       return data;
     }
   }
