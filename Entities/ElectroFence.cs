@@ -7,13 +7,10 @@ using Dess.Api.Models;
 
 namespace Dess.Api.Entities
 {
-  public class ElectroFence : EntityBase, IHashable
+  public class Site : EntityBase, IHashable
   {
     [Required]
     public string Name { get; set; }
-
-    [Required]
-    public string SiteId { get; set; }
 
     [Required]
     public string SerialNo { get; set; }
@@ -55,23 +52,23 @@ namespace Dess.Api.Entities
     public bool BatteryWarning { get; set; }
     public byte BatteryMin { get; set; }
 
-    public ElectroFenceStatus Status { get; set; }
+    public SiteStatus Status { get; set; }
 
     public IList<Input> Inputs { get; set; }
     public IList<Output> Outputs { get; set; }
-    public ICollection<ElectroFenceFault> Log { get; set; } = new List<ElectroFenceFault>();
+    public ICollection<SiteFault> Log { get; set; } = new List<SiteFault>();
     [NotMapped]
-    public ICollection<ElectroFenceFault> NotObviatedFaults => Log.Where(l => l.ObviatedOn.Year < 1000).ToList();
+    public ICollection<SiteFault> NotObviatedFaults => Log.Where(l => l.ObviatedOn.Year < 1000).ToList();
     [NotMapped]
-    public ICollection<ElectroFenceFault> ObviatedFaults => Log.Where(l => l.ObviatedOn.Year > 1000 && l.ResetedOn.Year < 1000).ToList();
+    public ICollection<SiteFault> ObviatedFaults => Log.Where(l => l.ObviatedOn.Year > 1000 && l.ResetedOn.Year < 1000).ToList();
     [NotMapped]
-    public ICollection<ElectroFenceFault> NotResetedFaults => Log.Where(l => l.ResetedOn.Year < 1000).ToList();
+    public ICollection<SiteFault> NotResetedFaults => Log.Where(l => l.ResetedOn.Year < 1000).ToList();
 
     public string GetHashBase()
     {
-      var data = $"{Interval}{HvEnabled}{LvEnabled}{TamperEnabled}{HvPower}{HvThreshold}"
-        + $"{HvRepeat}{Inputs[0].GetHashBase()}{Inputs[1].GetHashBase()}"
-        + $"{Outputs[0].GetHashBase()}{Outputs[1].GetHashBase()}";
+      var data = $"{Interval}{HvEnabled}{LvEnabled}{TamperEnabled}{HvPower}{HvThreshold}" +
+        $"{HvRepeat}{Inputs[0].GetHashBase()}{Inputs[1].GetHashBase()}" +
+        $"{Outputs[0].GetHashBase()}{Outputs[1].GetHashBase()}";
       return data;
     }
   }

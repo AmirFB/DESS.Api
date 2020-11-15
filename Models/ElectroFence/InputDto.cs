@@ -1,4 +1,4 @@
-namespace Dess.Api.Models.ElectroFence
+namespace Dess.Api.Models.Site
 {
   public class InputDto : IoDto
   {

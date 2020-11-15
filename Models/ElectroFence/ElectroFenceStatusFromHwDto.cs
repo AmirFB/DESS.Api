@@ -2,9 +2,9 @@
 
 using Dess.Api.Types;
 
-namespace Dess.Api.Models.ElectroFence
+namespace Dess.Api.Models.Site
 {
-  public class ElectroFenceStatusFromHwDto : IHashable
+  public class SiteStatusFromHwDto : IHashable
   {
     public string IpAddress { get; set; }
 

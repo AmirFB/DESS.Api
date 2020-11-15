@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace Dess.Api.Models.ElectroFence
+namespace Dess.Api.Models.Site
 {
-  public class ElectroFenceDto
+  public class SiteDto
   {
     public int Id { get; set; }
     public string Name { get; set; }
@@ -34,10 +34,10 @@ namespace Dess.Api.Models.ElectroFence
     public bool BatteryWarning { get; set; }
     public byte BatteryMin { get; set; }
 
-    public ElectroFenceStatusDto Status { get; set; } = new ElectroFenceStatusDto();
+    public SiteStatusDto Status { get; set; } = new SiteStatusDto();
 
     public ICollection<InputDto> Inputs { get; set; }
     public ICollection<OutputDto> Outputs { get; set; }
-    public ICollection<ElectroFenceFaultDto> Faults { get; set; }
+    public ICollection<SiteFaultDto> Faults { get; set; }
   }
 }

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 
 using Dess.Api.Entities;
-using Dess.Api.Models.ElectroFence;
+using Dess.Api.Models.Site;
 
 namespace Dess.Api.Profiles
 {

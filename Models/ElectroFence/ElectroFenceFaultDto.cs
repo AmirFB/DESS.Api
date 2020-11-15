@@ -2,9 +2,9 @@ using System.Collections.Generic;
 
 using Dess.Api.Types;
 
-namespace Dess.Api.Models.ElectroFence
+namespace Dess.Api.Models.Site
 {
-	public class ElectroFenceFaultDto
+	public class SiteFaultDto
 	{
 		public FaultType Type { get; set; }
 

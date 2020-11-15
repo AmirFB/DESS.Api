@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 
-namespace Dess.Api.Models.ElectroFence
+namespace Dess.Api.Models.Site
 {
-  public class ElectroFenceForHwDto
+  public class SiteForHwDto
   {
     public string Hash { get; set; }
     public bool HvEnabled { get; set; }

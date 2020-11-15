@@ -3,14 +3,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using AutoMapper;
-
-using Dess.Api.DbContexts;
-using Dess.Api.Helpers;
-using Dess.Api.Hubs;
-using Dess.Api.Repositories;
-using Dess.Api.Services;
-
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -20,6 +12,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+
+using AutoMapper;
+
+using Dess.Api.DbContexts;
+using Dess.Api.Helpers;
+using Dess.Api.Hubs;
+using Dess.Api.Repositories;
+using Dess.Api.Services;
 
 namespace Dess.Api
 {
@@ -39,7 +39,7 @@ namespace Dess.Api
       services.AddHttpClient();
       services.AddSignalR();
 
-      services.AddScoped<IElectroFenceRepository, ElectroFenceRepository>();
+      services.AddScoped<ISiteRepository, SiteRepository>();
       services.AddScoped<ILogRepository, LogRepository>();
       services.AddScoped<IUserRepository, UserRepository>();
       services.AddScoped<IUserLogRepository, UserLogRepository>();
@@ -47,7 +47,7 @@ namespace Dess.Api
 
       services.AddScoped<IUserService, UserService>();
 
-      var connectionString = _configuration.GetSection("ConnectionStrings") ["DessConnectionString"];
+      var connectionString = _configuration.GetSection("ConnectionStrings")["DessConnectionString"];
       services.AddDbContext<DessDbContext>(o => o.UseMySql(connectionString));
 
       // configure strongly typed settings objects
@@ -70,7 +70,7 @@ namespace Dess.Api
             OnTokenValidated = async(context) =>
               {
                 var userRepository = context.HttpContext.RequestServices.GetRequiredService<IUserRepository>();
-                var id = int.Parse(context.Principal.Claims.ToList() [0].Value);
+                var id = int.Parse(context.Principal.Claims.ToList()[0].Value);
                 var user = await userRepository.GetAsync(id);
 
                 if (user == null)
@@ -83,8 +83,8 @@ namespace Dess.Api
 
                 // If the request is for our hub...
                 var path = context.HttpContext.Request.Path;
-                if (!string.IsNullOrEmpty(accessToken)
-                  && (path.StartsWithSegments("/api/web/hub/ef")))
+                if (!string.IsNullOrEmpty(accessToken) &&
+                  (path.StartsWithSegments("/api/web/hub/ef")))
                 {
                   // Read the token out of the query string
                   context.Token = accessToken;
@@ -106,7 +106,7 @@ namespace Dess.Api
         });
 
       var serviceProvider = services.BuildServiceProvider();
-      var permissionRepository = (IPermissionRepository) serviceProvider.GetService<IPermissionRepository>();
+      var permissionRepository = (IPermissionRepository)serviceProvider.GetService<IPermissionRepository>();
 
       try
       {
@@ -158,7 +158,7 @@ namespace Dess.Api
         endpoints.MapControllerRoute(
           name: "default",
           pattern: "{controller}/{action=Index}/{id?}");
-        endpoints.MapHub<ElectroFenceHub>("api/web/hub/ef");
+        endpoints.MapHub<SiteHub>("api/web/hub/ef");
       });
 
       using(var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
@@ -170,7 +170,7 @@ namespace Dess.Api
 
         context.Database.Migrate();
         context.Database.EnsureCreated();
-        
+
       }
     }
   }

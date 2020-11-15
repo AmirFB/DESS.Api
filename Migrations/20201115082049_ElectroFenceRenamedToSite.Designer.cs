@@ -9,17 +9,114 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DESS.Migrations
 {
     [DbContext(typeof(DessDbContext))]
-    [Migration("20201030190143_EFSeedRemoved")]
-    partial class EFSeedRemoved
+    [Migration("20201115082049_ElectroFenceRenamedToSite")]
+    partial class ElectroFenceRenamedToSite
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.8")
+                .HasAnnotation("ProductVersion", "3.1.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("Dess.Api.Entities.ElectroFence", b =>
+            modelBuilder.Entity("Dess.Api.Entities.Input", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<int>("ModuleId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<byte>("Timer")
+                        .HasColumnType("tinyint unsigned");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ModuleId");
+
+                    b.ToTable("Inputs");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Enabled = true,
+                            ModuleId = 1,
+                            Timer = (byte)0,
+                            Type = 0
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Enabled = true,
+                            ModuleId = 1,
+                            Timer = (byte)0,
+                            Type = 1
+                        });
+                });
+
+            modelBuilder.Entity("Dess.Api.Entities.Output", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<int>("ModuleId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<short>("ResetTime")
+                        .HasColumnType("smallint");
+
+                    b.Property<string>("Triggers")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ModuleId");
+
+                    b.ToTable("Outputs");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Enabled = true,
+                            ModuleId = 1,
+                            ResetTime = (short)0,
+                            Triggers = "0",
+                            Type = 0
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Enabled = true,
+                            ModuleId = 1,
+                            ResetTime = (short)0,
+                            Triggers = "0",
+                            Type = 1
+                        });
+                });
+
+            modelBuilder.Entity("Dess.Api.Entities.Site", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -75,10 +172,6 @@ namespace DESS.Migrations
                         .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<string>("SiteId")
-                        .IsRequired()
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
                     b.Property<bool>("TamperEnabled")
                         .HasColumnType("tinyint(1)");
 
@@ -99,16 +192,39 @@ namespace DESS.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ElectroFences");
+                    b.ToTable("Sites");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Applied = false,
+                            AutoLocation = false,
+                            BatteryMin = (byte)0,
+                            BatteryWarning = false,
+                            HvEnabled = true,
+                            HvPower = (byte)70,
+                            HvRepeat = (byte)2,
+                            HvThreshold = (short)3000,
+                            Interval = (byte)10,
+                            Latitude = "38.0962",
+                            Longitude = "46.2738",
+                            LvEnabled = true,
+                            Name = "T5011",
+                            SerialNo = "SC20D3001N",
+                            TamperEnabled = false,
+                            TemperatureMax = (sbyte)0,
+                            TemperatureMin = (sbyte)0,
+                            TemperatureWarning = false,
+                            Timeout = (byte)0,
+                            UseGlobalInterval = false
+                        });
                 });
 
-            modelBuilder.Entity("Dess.Api.Entities.ElectroFenceFault", b =>
+            modelBuilder.Entity("Dess.Api.Entities.SiteFault", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("ElectroFenceId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("ObviatedOn")
@@ -126,17 +242,20 @@ namespace DESS.Migrations
                     b.Property<string>("SeenBy")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
+                    b.Property<int>("SiteId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ElectroFenceId");
+                    b.HasIndex("SiteId");
 
                     b.ToTable("Logs");
                 });
 
-            modelBuilder.Entity("Dess.Api.Entities.ElectroFenceStatus", b =>
+            modelBuilder.Entity("Dess.Api.Entities.SiteStatus", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -150,9 +269,6 @@ namespace DESS.Migrations
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<int>("ElectroFenceId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Hash")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
@@ -199,6 +315,9 @@ namespace DESS.Migrations
                     b.Property<byte>("SignalStrength")
                         .HasColumnType("tinyint unsigned");
 
+                    b.Property<int>("SiteId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("TamperAlarm")
                         .HasColumnType("tinyint(1)");
 
@@ -207,66 +326,30 @@ namespace DESS.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ElectroFenceId")
+                    b.HasIndex("SiteId")
                         .IsUnique();
 
                     b.ToTable("Statuses");
-                });
 
-            modelBuilder.Entity("Dess.Api.Entities.Input", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Enabled")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<int>("ModuleId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ModuleId");
-
-                    b.ToTable("Inputs");
-                });
-
-            modelBuilder.Entity("Dess.Api.Entities.Output", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Enabled")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<int>("ModuleId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<short>("ResetTime")
-                        .HasColumnType("smallint");
-
-                    b.Property<string>("Triggers")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ModuleId");
-
-                    b.ToTable("Outputs");
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            BatteryLevel = (byte)0,
+                            BatteryStatus = 0,
+                            Date = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            HvAlarm = false,
+                            HvChargeFault = false,
+                            HvDischargeFault = false,
+                            HvPowerFault = false,
+                            HvVoltage = (short)0,
+                            LvAlarm = false,
+                            MainPowerFault = false,
+                            SignalStrength = (byte)0,
+                            SiteId = 1,
+                            TamperAlarm = false,
+                            Temperature = (short)0
+                        });
                 });
 
             modelBuilder.Entity("Dess.Api.Entities.User", b =>
@@ -307,7 +390,7 @@ namespace DESS.Migrations
                             FirstName = "Amir",
                             GroupId = 1,
                             LastName = "Fakhim-Babaei",
-                            Password = "$2a$11$fKr4KtIDhveFds3RihECle2AL.6QBm7Al.c/ypSVEo7O/.9ZX3kF6",
+                            Password = "$2a$11$FtBN2MxIs12/MOj9fjcAm.nslgRY8fPMGe7jFD8O81.WzUSIzPWiS",
                             Username = "expert"
                         },
                         new
@@ -316,7 +399,7 @@ namespace DESS.Migrations
                             FirstName = "Amir",
                             GroupId = 2,
                             LastName = "Fakhim-Babaei",
-                            Password = "$2a$11$QMAs9G2EJwKA/Ylk5YOJr.yHObR0CyB.ewyZzkaP4JVnqE/rMTsXS",
+                            Password = "$2a$11$oVqN7mxLE15uCbM5kBOvteGYab3/Yic6Ibrzcj28Nf6BeqHD.h1VK",
                             Username = "admin"
                         },
                         new
@@ -325,7 +408,7 @@ namespace DESS.Migrations
                             FirstName = "Amir",
                             GroupId = 3,
                             LastName = "Fakhim-Babaei",
-                            Password = "$2a$11$yAta3IAPZJV5ncbCrrUTp.IbPg4ZJ3nbbAiNtHIFd3sxQJW0ohLC6",
+                            Password = "$2a$11$a.P3ToHmDquwTSpzNELkx.Us2vShCcEh3Uz0pGZCWs53AZwJLi55S",
                             Username = "operator"
                         });
                 });
@@ -510,27 +593,9 @@ namespace DESS.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Dess.Api.Entities.ElectroFenceFault", b =>
-                {
-                    b.HasOne("Dess.Api.Entities.ElectroFence", null)
-                        .WithMany("Log")
-                        .HasForeignKey("ElectroFenceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Dess.Api.Entities.ElectroFenceStatus", b =>
-                {
-                    b.HasOne("Dess.Api.Entities.ElectroFence", null)
-                        .WithOne("Status")
-                        .HasForeignKey("Dess.Api.Entities.ElectroFenceStatus", "ElectroFenceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Dess.Api.Entities.Input", b =>
                 {
-                    b.HasOne("Dess.Api.Entities.ElectroFence", "Module")
+                    b.HasOne("Dess.Api.Entities.Site", "Module")
                         .WithMany("Inputs")
                         .HasForeignKey("ModuleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -539,9 +604,27 @@ namespace DESS.Migrations
 
             modelBuilder.Entity("Dess.Api.Entities.Output", b =>
                 {
-                    b.HasOne("Dess.Api.Entities.ElectroFence", "Module")
+                    b.HasOne("Dess.Api.Entities.Site", "Module")
                         .WithMany("Outputs")
                         .HasForeignKey("ModuleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Dess.Api.Entities.SiteFault", b =>
+                {
+                    b.HasOne("Dess.Api.Entities.Site", null)
+                        .WithMany("Log")
+                        .HasForeignKey("SiteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Dess.Api.Entities.SiteStatus", b =>
+                {
+                    b.HasOne("Dess.Api.Entities.Site", null)
+                        .WithOne("Status")
+                        .HasForeignKey("Dess.Api.Entities.SiteStatus", "SiteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -572,7 +655,7 @@ namespace DESS.Migrations
 
             modelBuilder.Entity("Dess.Api.Entities.UserLog", b =>
                 {
-                    b.HasOne("Dess.Api.Entities.ElectroFenceFault", "Log")
+                    b.HasOne("Dess.Api.Entities.SiteFault", "Log")
                         .WithMany()
                         .HasForeignKey("LogId")
                         .OnDelete(DeleteBehavior.Cascade)

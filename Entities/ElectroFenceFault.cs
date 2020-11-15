@@ -6,7 +6,7 @@ using Dess.Api.Types;
 
 namespace Dess.Api.Entities
 {
-	public class ElectroFenceFault : EntityBase
+	public class SiteFault : EntityBase
 	{
 		public FaultType Type { get; set; }
 		public DateTime OccuredOn { get; set; }
@@ -16,7 +16,7 @@ namespace Dess.Api.Entities
 		public int ResetedBy { get; set; }
 
 		[Required]
-		public int ElectroFenceId { get; set; }
+		public int SiteId { get; set; }
 
 		public ICollection<int> SeenBy { get; set; } = new List<int>();
 	}

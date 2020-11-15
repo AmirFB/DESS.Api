@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 
-namespace Dess.Api.Models.ElectroFence
+namespace Dess.Api.Models.Site
 {
-    public abstract class ElectroFenceStatisticsDto
+    public abstract class SiteStatisticsDto
     {
         public string Hash { get; set; }
 

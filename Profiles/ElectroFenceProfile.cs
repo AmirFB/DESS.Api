@@ -3,18 +3,18 @@
 using AutoMapper;
 
 using Dess.Api.Entities;
-using Dess.Api.Models.ElectroFence;
+using Dess.Api.Models.Site;
 
 namespace Dess.Api.Profiles
 {
-  public class ElectroFenceProfile : Profile
+  public class SiteProfile : Profile
   {
-    public ElectroFenceProfile()
+    public SiteProfile()
     {
-      CreateMap<ElectroFence, ElectroFenceForHwDto>();
-      CreateMap<ElectroFence, ElectroFenceDto>()
+      CreateMap<Site, SiteForHwDto>();
+      CreateMap<Site, SiteDto>()
         .ForMember(d => d.Faults, o => o.MapFrom(e => e.NotResetedFaults));
-      CreateMap<ElectroFenceDto, ElectroFence>()
+      CreateMap<SiteDto, Site>()
         .ForMember(d => d.Status, o => o.Ignore());
     }
   }

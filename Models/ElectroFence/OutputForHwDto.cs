@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 using Dess.Api.Types;
 
-namespace Dess.Api.Models.ElectroFence
+namespace Dess.Api.Models.Site
 {
     public class OutputForHwDto
     {

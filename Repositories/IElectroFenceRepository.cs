@@ -5,16 +5,16 @@ using Dess.Api.Entities;
 
 namespace Dess.Api.Repositories
 {
-  public interface IElectroFenceRepository : IRepositoryBase<ElectroFence>
-    {
-      Task<ElectroFence> GetAsync(string siteId);
-      Task<string> GetSiteIdAsync(string serial);
-      Task<ElectroFence> GetWithLogAsync(int id);
-      Task<ElectroFence> GetWithIoAsync(int id);
-      Task<IEnumerable<ElectroFence>> GetAllWithEverythingAsync();
-      Task<IEnumerable<ElectroFenceFault>> GetAllLogAsync();
-      Task<IEnumerable<ElectroFenceFault>> GetLogAsync(int id);
-      void AddLog(ElectroFenceFault log);
-      void UpdateLog(ElectroFenceFault log);
-    }
+  public interface ISiteRepository : IRepositoryBase<Site>
+  {
+    Task<Site> GetAsync(string siteId);
+    Task<string> GetSiteIdAsync(string serial);
+    Task<Site> GetWithLogAsync(int id);
+    Task<Site> GetWithIoAsync(int id);
+    Task<IEnumerable<Site>> GetAllWithEverythingAsync();
+    Task<IEnumerable<SiteFault>> GetAllLogAsync();
+    Task<IEnumerable<SiteFault>> GetLogAsync(int id);
+    void AddLog(SiteFault log);
+    void UpdateLog(SiteFault log);
+  }
 }

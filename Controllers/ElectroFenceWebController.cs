@@ -10,73 +10,73 @@ using AutoMapper;
 
 using Dess.Api.Entities;
 using Dess.Api.Models;
-using Dess.Api.Models.ElectroFence;
+using Dess.Api.Models.Site;
 using Dess.Api.Repositories;
 
 namespace Dess.Api.Controllers
 {
   [ApiController]
-  [Route("api/web/efs")]
-  public class ElectroFenceWebController : ControllerBase
+  [Route("api/web/sites")]
+  public class SiteWebController : ControllerBase
   {
-    private readonly IElectroFenceRepository _repository;
+    private readonly ISiteRepository _repository;
     private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
 
-    public ElectroFenceWebController(IElectroFenceRepository electroFenceRepository, IUserRepository userRepository, IMapper mapper)
+    public SiteWebController(ISiteRepository siteRepository, IUserRepository userRepository, IMapper mapper)
     {
-      _repository = electroFenceRepository ??
-        throw new ArgumentNullException(nameof(electroFenceRepository));
+      _repository = siteRepository ??
+        throw new ArgumentNullException(nameof(siteRepository));
 
       _userRepository = userRepository ??
-        throw new ArgumentNullException(nameof(electroFenceRepository));
+        throw new ArgumentNullException(nameof(siteRepository));
 
       _mapper = mapper ??
         throw new ArgumentNullException(nameof(mapper));
     }
 
     [HttpGet("{id}", Name = "GetAsync")]
-    public async Task<ActionResult<ElectroFenceDto>> GetAsync([FromRoute] int id)
+    public async Task<ActionResult<SiteDto>> GetAsync([FromRoute] int id)
     {
       if (!await _repository.ExistsAsync(id))
         return NotFound();
 
-      var ef = await _repository.GetAsync(id);
-      return Ok(_mapper.Map<ElectroFenceDto>(ef));
+      var site = await _repository.GetAsync(id);
+      return Ok(_mapper.Map<SiteDto>(site));
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ElectroFenceDto>>> GetAllAsync()
+    public async Task<ActionResult<IEnumerable<SiteDto>>> GetAllAsync()
     {
-      var efs = await _repository.GetAllWithEverythingAsync();
-      var dtos = _mapper.Map<IEnumerable<ElectroFenceDto>>(efs);
+      var sites = await _repository.GetAllWithEverythingAsync();
+      var dtos = _mapper.Map<IEnumerable<SiteDto>>(sites);
 
       return Ok(dtos);
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddAsync([FromBody] ElectroFenceDto ef)
+    public async Task<IActionResult> AddAsync([FromBody] SiteDto site)
     {
-      var efRepo = _mapper.Map<ElectroFence>(ef);
-      _repository.Add(efRepo);
-      efRepo.Hash = (efRepo as IHashable).GetHash();
-      efRepo.Status = new ElectroFenceStatus();
+      var siteRepo = _mapper.Map<Site>(site);
+      _repository.Add(siteRepo);
+      siteRepo.Hash = (siteRepo as IHashable).GetHash();
+      siteRepo.Status = new SiteStatus();
       await _repository.SaveAsync();
 
-      var electroFenceToReturn = _mapper.Map<ElectroFenceDto>(efRepo);
+      var siteToReturn = _mapper.Map<SiteDto>(siteRepo);
 
       return CreatedAtRoute("GetAsync",
-        new { id = electroFenceToReturn.Id },
-        electroFenceToReturn);
+        new { id = siteToReturn.Id },
+        siteToReturn);
     }
 
     [Authorize(Policy = "CanEditSites")]
     [HttpPut]
-    public async Task<IActionResult> UpdateAsync([FromBody] ElectroFenceDto ef)
+    public async Task<IActionResult> UpdateAsync([FromBody] SiteDto site)
     {
-      var efFromRepo = await _repository.GetWithIoAsync(ef.Id);
-      _mapper.Map(ef, efFromRepo);
-      efFromRepo.Hash = (efFromRepo as IHashable).GetHash();
+      var siteFromRepo = await _repository.GetWithIoAsync(site.Id);
+      _mapper.Map(site, siteFromRepo);
+      siteFromRepo.Hash = (siteFromRepo as IHashable).GetHash();
       await _repository.SaveAsync();
 
       return Ok();
@@ -86,24 +86,24 @@ namespace Dess.Api.Controllers
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAsync(int id)
     {
-      var electroFenceForomRepo = await _repository.GetAsync(id);
+      var siteForomRepo = await _repository.GetAsync(id);
 
-      if (electroFenceForomRepo == null)
+      if (siteForomRepo == null)
       {
         return NotFound();
       }
 
-      _repository.Remove(electroFenceForomRepo);
+      _repository.Remove(siteForomRepo);
       await _repository.SaveAsync();
 
       return NoContent();
     }
 
     [HttpGet("log")]
-    public async Task<ActionResult<IEnumerable<ElectroFenceFaultDto>>> GetAllLogAsync()
+    public async Task<ActionResult<IEnumerable<SiteFaultDto>>> GetAllLogAsync()
     {
       var logs = (await _repository.GetAllLogAsync()).ToList();
-      var dtos = _mapper.Map<IList<ElectroFenceFaultDto>>(logs);
+      var dtos = _mapper.Map<IList<SiteFaultDto>>(logs);
       var users = await _userRepository.GetAllAsync();
 
       for (int i = 0; i < dtos.Count(); i++)
@@ -125,10 +125,10 @@ namespace Dess.Api.Controllers
     }
 
     [HttpGet(" { id } / log ")]
-    public async Task<ActionResult<IEnumerable<ElectroFenceStatusDto>>> GetModuleLogAsync([FromRoute] int id)
+    public async Task<ActionResult<IEnumerable<SiteStatusDto>>> GetModuleLogAsync([FromRoute] int id)
     {
       var logs = await _repository.GetLogAsync(id);
-      var dtos = _mapper.Map<IEnumerable<ElectroFenceStatusDto>>(logs);
+      var dtos = _mapper.Map<IEnumerable<SiteStatusDto>>(logs);
 
       return Ok(dtos);
     }
@@ -136,14 +136,14 @@ namespace Dess.Api.Controllers
     [Authorize(Policy = "CanResetFaults")]
     [HttpPut("reset/{moduleId}/")]
     [HttpPut("reset/{moduleId}/{faultId}")]
-    public async Task<ActionResult<IEnumerable<ElectroFenceFault>>> ResetFaultAsync([FromRoute] int moduleId, [FromRoute] int? faultId)
+    public async Task<ActionResult<IEnumerable<SiteFault>>> ResetFaultAsync([FromRoute] int moduleId, [FromRoute] int? faultId)
     {
-      var ef = await _repository.GetWithLogAsync(moduleId);
+      var site = await _repository.GetWithLogAsync(moduleId);
 
-      if (ef == null)
+      if (site == null)
         return NotFound();
 
-      var faults = ef.ObviatedFaults;
+      var faults = site.ObviatedFaults;
 
       if (faultId.HasValue)
       {
@@ -166,7 +166,7 @@ namespace Dess.Api.Controllers
       }
 
       await _repository.SaveAsync();
-      return Ok(ef.NotResetedFaults);
+      return Ok(site.NotResetedFaults);
     }
   }
 }

@@ -10,11 +10,11 @@ using Dess.Api.Repositories;
 namespace Dess.Api.Hubs
 {
   [Authorize]
-  public class ElectroFenceHub : Hub
+  public class SiteHub : Hub
   {
     public static List<int> UserIds { get; } = new List<int>();
     private readonly IUserRepository _userRepository;
-    public ElectroFenceHub(IUserRepository userRepository) =>
+    public SiteHub(IUserRepository userRepository) =>
       _userRepository = userRepository;
 
     public override async Task OnConnectedAsync()

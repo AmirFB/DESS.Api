@@ -7,7 +7,7 @@ using Dess.Api.Types;
 
 namespace Dess.Api.Entities
 {
-  public class ElectroFenceStatus : EntityBase, IHashable
+  public class SiteStatus : EntityBase, IHashable
   {
     public DateTime Date { get; set; }
     public string IpAddress { get; set; }
@@ -34,7 +34,7 @@ namespace Dess.Api.Entities
     public byte SignalStrength { get; set; }
 
     [Required]
-    public int ElectroFenceId { get; set; }
+    public int SiteId { get; set; }
 
     public IList<bool> Inputs { get; set; }
     public IList<bool> Outputs { get; set; }

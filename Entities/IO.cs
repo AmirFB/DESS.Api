@@ -16,7 +16,7 @@ namespace Dess.Api.Entities
 
 		[Required]
 		public int ModuleId { get; set; }
-		public ElectroFence Module { get; set; }
+		public Site Module { get; set; }
 
 		public abstract string GetHashBase();
 	}

@@ -2,9 +2,9 @@ using System.Collections.Generic;
 
 using Dess.Api.Types;
 
-namespace Dess.Api.Models.ElectroFence
+namespace Dess.Api.Models.Site
 {
-  public class ElectroFenceStatusDto : ElectroFenceStatisticsDto
+  public class SiteStatusDto : SiteStatisticsDto
   {
     public long Date { get; set; }
     public string IpAddress { get; set; }

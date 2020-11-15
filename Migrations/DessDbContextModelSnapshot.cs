@@ -14,249 +14,8 @@ namespace DESS.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.8")
+                .HasAnnotation("ProductVersion", "3.1.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
-
-            modelBuilder.Entity("Dess.Api.Entities.ElectroFence", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Applied")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("AutoLocation")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<byte>("BatteryMin")
-                        .HasColumnType("tinyint unsigned");
-
-                    b.Property<bool>("BatteryWarning")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("Hash")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<bool>("HvEnabled")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<byte>("HvPower")
-                        .HasColumnType("tinyint unsigned");
-
-                    b.Property<byte>("HvRepeat")
-                        .HasColumnType("tinyint unsigned");
-
-                    b.Property<short>("HvThreshold")
-                        .HasColumnType("smallint");
-
-                    b.Property<byte>("Interval")
-                        .HasColumnType("tinyint unsigned");
-
-                    b.Property<string>("Latitude")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<string>("Longitude")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<bool>("LvEnabled")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<string>("SerialNo")
-                        .IsRequired()
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<string>("SiteId")
-                        .IsRequired()
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<bool>("TamperEnabled")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<sbyte>("TemperatureMax")
-                        .HasColumnType("tinyint");
-
-                    b.Property<sbyte>("TemperatureMin")
-                        .HasColumnType("tinyint");
-
-                    b.Property<bool>("TemperatureWarning")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<byte>("Timeout")
-                        .HasColumnType("tinyint unsigned");
-
-                    b.Property<bool>("UseGlobalInterval")
-                        .HasColumnType("tinyint(1)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ElectroFences");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Applied = false,
-                            AutoLocation = false,
-                            BatteryMin = (byte)0,
-                            BatteryWarning = false,
-                            HvEnabled = true,
-                            HvPower = (byte)70,
-                            HvRepeat = (byte)2,
-                            HvThreshold = (short)3000,
-                            Interval = (byte)10,
-                            Latitude = "38.0962",
-                            Longitude = "46.2738",
-                            LvEnabled = true,
-                            Name = "Ef1",
-                            SerialNo = "SC20N3001N",
-                            SiteId = "T5011",
-                            TamperEnabled = false,
-                            TemperatureMax = (sbyte)0,
-                            TemperatureMin = (sbyte)0,
-                            TemperatureWarning = false,
-                            Timeout = (byte)0,
-                            UseGlobalInterval = false
-                        });
-                });
-
-            modelBuilder.Entity("Dess.Api.Entities.ElectroFenceFault", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("ElectroFenceId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("ObviatedOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("OccuredOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int>("ResetedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("ResetedOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("SeenBy")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ElectroFenceId");
-
-                    b.ToTable("Logs");
-                });
-
-            modelBuilder.Entity("Dess.Api.Entities.ElectroFenceStatus", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<byte>("BatteryLevel")
-                        .HasColumnType("tinyint unsigned");
-
-                    b.Property<int>("BatteryStatus")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int>("ElectroFenceId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Hash")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<bool>("HvAlarm")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("HvChargeFault")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("HvDischargeFault")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("HvPowerFault")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<short>("HvVoltage")
-                        .HasColumnType("smallint");
-
-                    b.Property<string>("Inputs")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<string>("IpAddress")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<string>("Latitude")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<string>("Longitude")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<bool>("LvAlarm")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("MainPowerFault")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("Outputs")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<string>("SerialNo")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<byte>("SignalStrength")
-                        .HasColumnType("tinyint unsigned");
-
-                    b.Property<bool>("TamperAlarm")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<short>("Temperature")
-                        .HasColumnType("smallint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ElectroFenceId")
-                        .IsUnique();
-
-                    b.ToTable("Statuses");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            BatteryLevel = (byte)0,
-                            BatteryStatus = 0,
-                            Date = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ElectroFenceId = 1,
-                            HvAlarm = false,
-                            HvChargeFault = false,
-                            HvDischargeFault = false,
-                            HvPowerFault = false,
-                            HvVoltage = (short)0,
-                            LvAlarm = false,
-                            MainPowerFault = false,
-                            SignalStrength = (byte)0,
-                            TamperAlarm = false,
-                            Temperature = (short)0
-                        });
-                });
 
             modelBuilder.Entity("Dess.Api.Entities.Input", b =>
                 {
@@ -355,6 +114,242 @@ namespace DESS.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Dess.Api.Entities.Site", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Applied")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("AutoLocation")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<byte>("BatteryMin")
+                        .HasColumnType("tinyint unsigned");
+
+                    b.Property<bool>("BatteryWarning")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Hash")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<bool>("HvEnabled")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<byte>("HvPower")
+                        .HasColumnType("tinyint unsigned");
+
+                    b.Property<byte>("HvRepeat")
+                        .HasColumnType("tinyint unsigned");
+
+                    b.Property<short>("HvThreshold")
+                        .HasColumnType("smallint");
+
+                    b.Property<byte>("Interval")
+                        .HasColumnType("tinyint unsigned");
+
+                    b.Property<string>("Latitude")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<string>("Longitude")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<bool>("LvEnabled")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<string>("SerialNo")
+                        .IsRequired()
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<bool>("TamperEnabled")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<sbyte>("TemperatureMax")
+                        .HasColumnType("tinyint");
+
+                    b.Property<sbyte>("TemperatureMin")
+                        .HasColumnType("tinyint");
+
+                    b.Property<bool>("TemperatureWarning")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<byte>("Timeout")
+                        .HasColumnType("tinyint unsigned");
+
+                    b.Property<bool>("UseGlobalInterval")
+                        .HasColumnType("tinyint(1)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Sites");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Applied = false,
+                            AutoLocation = false,
+                            BatteryMin = (byte)0,
+                            BatteryWarning = false,
+                            HvEnabled = true,
+                            HvPower = (byte)70,
+                            HvRepeat = (byte)2,
+                            HvThreshold = (short)3000,
+                            Interval = (byte)10,
+                            Latitude = "38.0962",
+                            Longitude = "46.2738",
+                            LvEnabled = true,
+                            Name = "T5011",
+                            SerialNo = "SC20D3001N",
+                            TamperEnabled = false,
+                            TemperatureMax = (sbyte)0,
+                            TemperatureMin = (sbyte)0,
+                            TemperatureWarning = false,
+                            Timeout = (byte)0,
+                            UseGlobalInterval = false
+                        });
+                });
+
+            modelBuilder.Entity("Dess.Api.Entities.SiteFault", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ObviatedOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("OccuredOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("ResetedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ResetedOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("SeenBy")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<int>("SiteId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SiteId");
+
+                    b.ToTable("Logs");
+                });
+
+            modelBuilder.Entity("Dess.Api.Entities.SiteStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<byte>("BatteryLevel")
+                        .HasColumnType("tinyint unsigned");
+
+                    b.Property<int>("BatteryStatus")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Hash")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<bool>("HvAlarm")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("HvChargeFault")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("HvDischargeFault")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("HvPowerFault")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<short>("HvVoltage")
+                        .HasColumnType("smallint");
+
+                    b.Property<string>("Inputs")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<string>("IpAddress")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<string>("Latitude")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<string>("Longitude")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<bool>("LvAlarm")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("MainPowerFault")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Outputs")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<string>("SerialNo")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<byte>("SignalStrength")
+                        .HasColumnType("tinyint unsigned");
+
+                    b.Property<int>("SiteId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("TamperAlarm")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<short>("Temperature")
+                        .HasColumnType("smallint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SiteId")
+                        .IsUnique();
+
+                    b.ToTable("Statuses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            BatteryLevel = (byte)0,
+                            BatteryStatus = 0,
+                            Date = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            HvAlarm = false,
+                            HvChargeFault = false,
+                            HvDischargeFault = false,
+                            HvPowerFault = false,
+                            HvVoltage = (short)0,
+                            LvAlarm = false,
+                            MainPowerFault = false,
+                            SignalStrength = (byte)0,
+                            SiteId = 1,
+                            TamperAlarm = false,
+                            Temperature = (short)0
+                        });
+                });
+
             modelBuilder.Entity("Dess.Api.Entities.User", b =>
                 {
                     b.Property<int>("Id")
@@ -393,7 +388,7 @@ namespace DESS.Migrations
                             FirstName = "Amir",
                             GroupId = 1,
                             LastName = "Fakhim-Babaei",
-                            Password = "$2a$11$/gTIntmQnwHndc5MN2tleexdSo13ylL5gszQm.LyNnjJalcXuNo2y",
+                            Password = "$2a$11$FtBN2MxIs12/MOj9fjcAm.nslgRY8fPMGe7jFD8O81.WzUSIzPWiS",
                             Username = "expert"
                         },
                         new
@@ -402,7 +397,7 @@ namespace DESS.Migrations
                             FirstName = "Amir",
                             GroupId = 2,
                             LastName = "Fakhim-Babaei",
-                            Password = "$2a$11$kAoAF9d9rOfSI1UapExp5eEAL36/40LShiEutCpRqJnMDJ15ODe/2",
+                            Password = "$2a$11$oVqN7mxLE15uCbM5kBOvteGYab3/Yic6Ibrzcj28Nf6BeqHD.h1VK",
                             Username = "admin"
                         },
                         new
@@ -411,7 +406,7 @@ namespace DESS.Migrations
                             FirstName = "Amir",
                             GroupId = 3,
                             LastName = "Fakhim-Babaei",
-                            Password = "$2a$11$cdOHb4himUKHYd20W0GDj.MWGVm9t3NIl68iDDWp8TAUGbyaZBZhm",
+                            Password = "$2a$11$a.P3ToHmDquwTSpzNELkx.Us2vShCcEh3Uz0pGZCWs53AZwJLi55S",
                             Username = "operator"
                         });
                 });
@@ -596,27 +591,9 @@ namespace DESS.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Dess.Api.Entities.ElectroFenceFault", b =>
-                {
-                    b.HasOne("Dess.Api.Entities.ElectroFence", null)
-                        .WithMany("Log")
-                        .HasForeignKey("ElectroFenceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Dess.Api.Entities.ElectroFenceStatus", b =>
-                {
-                    b.HasOne("Dess.Api.Entities.ElectroFence", null)
-                        .WithOne("Status")
-                        .HasForeignKey("Dess.Api.Entities.ElectroFenceStatus", "ElectroFenceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Dess.Api.Entities.Input", b =>
                 {
-                    b.HasOne("Dess.Api.Entities.ElectroFence", "Module")
+                    b.HasOne("Dess.Api.Entities.Site", "Module")
                         .WithMany("Inputs")
                         .HasForeignKey("ModuleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -625,9 +602,27 @@ namespace DESS.Migrations
 
             modelBuilder.Entity("Dess.Api.Entities.Output", b =>
                 {
-                    b.HasOne("Dess.Api.Entities.ElectroFence", "Module")
+                    b.HasOne("Dess.Api.Entities.Site", "Module")
                         .WithMany("Outputs")
                         .HasForeignKey("ModuleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Dess.Api.Entities.SiteFault", b =>
+                {
+                    b.HasOne("Dess.Api.Entities.Site", null)
+                        .WithMany("Log")
+                        .HasForeignKey("SiteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Dess.Api.Entities.SiteStatus", b =>
+                {
+                    b.HasOne("Dess.Api.Entities.Site", null)
+                        .WithOne("Status")
+                        .HasForeignKey("Dess.Api.Entities.SiteStatus", "SiteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -658,7 +653,7 @@ namespace DESS.Migrations
 
             modelBuilder.Entity("Dess.Api.Entities.UserLog", b =>
                 {
-                    b.HasOne("Dess.Api.Entities.ElectroFenceFault", "Log")
+                    b.HasOne("Dess.Api.Entities.SiteFault", "Log")
                         .WithMany()
                         .HasForeignKey("LogId")
                         .OnDelete(DeleteBehavior.Cascade)
