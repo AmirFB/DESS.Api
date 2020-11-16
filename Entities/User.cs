@@ -7,10 +7,16 @@ namespace Dess.Api.Entities
   {
     [Required]
     public string FirstName { get; set; }
+
     [Required]
     public string LastName { get; set; }
+
+    [DataType(DataType.PhoneNumber)]
+    public string PhoneNumber { get; set; }
+
     [Required]
     public string Username { get; set; }
+
     [Required]
     public string Password { get; set; }
 
