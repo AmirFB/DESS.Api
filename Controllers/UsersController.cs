@@ -130,7 +130,7 @@ namespace Dess.Api.Controllers
       var token = tokenHandler.CreateToken(tokenDescriptor);
       var tokenString = tokenHandler.WriteToken(token);
       var result = new { Token = tokenString, permissions = new List<string>(), Id = userFromRepo.Id, FirstName = userFromRepo.FirstName, LastName = userFromRepo.LastName };
-      foreach (var permission in permissions) result.permissions.Add(permission.Title);
+      foreach (var permission in permissions)result.permissions.Add(permission.Title);
 
       return Ok(result);
     }
@@ -155,7 +155,7 @@ namespace Dess.Api.Controllers
     {
       var permissions = await _repository.GetPermissionsWithoutAlmightyAsync();
 
-      var dtos = _mapper.Map<IEnumerable<UserPermissionDto>>(permissions);
+      var dtos = _mapper.Map<IEnumerable<PermissionDto>>(permissions);
       return Ok(dtos);
     }
   }

@@ -6,7 +6,7 @@ namespace Dess.Api.Entities
   {
     public string Title { get; set; }
 
-    public ICollection<UserGroupPermission> UserGroupPermissions { get; set; }
+    public ICollection<int> PermissionIds { get; set; }
     public ICollection<User> Users { get; set; }
   }
 }

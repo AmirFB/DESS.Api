@@ -1,4 +1,5 @@
 using AutoMapper;
+
 using Dess.Api.Entities;
 using Dess.Api.Models.User;
 
@@ -10,21 +11,15 @@ namespace Dess.Api.Profiles
     {
       CreateMap<UserRegisterDto, User>();
       CreateMap<UserUpdateDto, User>();
-      CreateMap<UserPermission, UserPermissionDto>();
-
-      CreateMap<UserGroupPermission, int>().ConvertUsing(gp => gp.PermissionId);
+      CreateMap<Permission, PermissionDto>();
 
       CreateMap<User, UserDto>()
-        .ForMember(d => d.PermissionIds, m => m.MapFrom(e => e.Group.UserGroupPermissions))
         .ForAllMembers(options => options
-        .Condition((src, dest, srcMember) => srcMember != null));
+          .Condition((src, dest, srcMember) => srcMember != null));
 
       CreateMap<UserGroup, UserGroupDto>()
-        .ForMember(
-          d => d.PermissionIds,
-          m => m.MapFrom(e => e.UserGroupPermissions))
-        .ForAllMembers(options => options
-        .Condition((src, dest, srcMember) => srcMember != null));
+        .ForAllMembers(o => o
+          .Condition((src, dest, srcMember) => srcMember != null));
     }
   }
 }

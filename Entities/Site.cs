@@ -52,6 +52,10 @@ namespace Dess.Api.Entities
     public bool BatteryWarning { get; set; }
     public byte BatteryMin { get; set; }
 
+    [Required]
+    public int GroupId { get; set; }
+    public SiteGroup Group { get; set; }
+
     public SiteStatus Status { get; set; }
 
     public IList<Input> Inputs { get; set; }

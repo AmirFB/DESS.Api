@@ -31,33 +31,35 @@ namespace Dess.Api.Repositories
 
     public async Task<IEnumerable<UserGroup>> GetGroupsAsync() =>
       await Context.UserGroups
-      .Include(g => g.UserGroupPermissions)
+      .Include(g => g.PermissionIds)
       .ToListAsync();
 
     public async Task<IEnumerable<UserGroup>> GetGroupsWithoutAlmightyAsync() =>
       await Context.UserGroups
       .Where(g => g.Id != 1)
-      .Include(g => g.UserGroupPermissions)
+      .Include(g => g.PermissionIds)
       .ToListAsync();
 
     public async Task<IEnumerable<UserGroup>> GetGroupsWithUsersAsync() =>
       await Context.UserGroups
       .Where(g => g.Id != 1)
-      .Include(g => g.UserGroupPermissions)
+      .Include(g => g.PermissionIds)
       .Include(g => g.Users)
       .ToListAsync();
 
-    public async Task<IEnumerable<UserPermission>> GetPermissionsAsync() =>
-      await Context.UserPermissions.ToListAsync();
+    public async Task<IEnumerable<Permission>> GetPermissionsAsync() =>
+      await Context.Permissions.ToListAsync();
 
-    public async Task<IEnumerable<UserPermission>> GetPermissionsWithoutAlmightyAsync() =>
-      await Context.UserPermissions.Where(p => p.Id != 1).ToListAsync();
+    public async Task<IEnumerable<Permission>> GetPermissionsWithoutAlmightyAsync() =>
+      await Context.Permissions.Where(p => p.Id != 1).ToListAsync();
 
-    public async Task<IEnumerable<UserPermission>> GetPermissionsAsync(int groupId) =>
-      await Context.UserGroupPermissions
-      .Include(e => e.Permission)
-      .Where(e => e.GroupId == groupId)
-      .Select(e => e.Permission)
-      .ToListAsync();
+    public async Task<IEnumerable<Permission>> GetPermissionsAsync(int groupId)
+    {
+      var group = await Context.UserGroups.FindAsync(groupId);
+
+      return await Context.Permissions
+        .Where(p => group.PermissionIds.Contains(p.Id))
+        .ToListAsync();
+    }
   }
 }

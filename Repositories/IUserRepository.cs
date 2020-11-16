@@ -6,15 +6,15 @@ using Dess.Api.Entities;
 namespace Dess.Api.Repositories
 {
   public interface IUserRepository : IRepositoryBase<User>
-    {
-      Task<User> GetAsync(string username);
-      Task<IEnumerable<User>> GetAllWithoutAllmightyAsync();
-      Task<bool> ExistsAsync(string username);
-      Task<IEnumerable<UserGroup>> GetGroupsAsync();
-      Task<IEnumerable<UserGroup>> GetGroupsWithoutAlmightyAsync();
-      Task<IEnumerable<UserGroup>> GetGroupsWithUsersAsync();
-      Task<IEnumerable<UserPermission>> GetPermissionsAsync();
-      Task<IEnumerable<UserPermission>> GetPermissionsWithoutAlmightyAsync();
-      Task<IEnumerable<UserPermission>> GetPermissionsAsync(int groupId);
-    }
+  {
+    Task<User> GetAsync(string username);
+    Task<IEnumerable<User>> GetAllWithoutAllmightyAsync();
+    Task<bool> ExistsAsync(string username);
+    Task<IEnumerable<UserGroup>> GetGroupsAsync();
+    Task<IEnumerable<UserGroup>> GetGroupsWithoutAlmightyAsync();
+    Task<IEnumerable<UserGroup>> GetGroupsWithUsersAsync();
+    Task<IEnumerable<Permission>> GetPermissionsAsync();
+    Task<IEnumerable<Permission>> GetPermissionsWithoutAlmightyAsync();
+    Task<IEnumerable<Permission>> GetPermissionsAsync(int groupId);
+  }
 }

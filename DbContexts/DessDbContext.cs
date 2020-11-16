@@ -20,6 +20,7 @@ namespace Dess.Api.DbContexts
     public DessDbContext(DbContextOptions<DessDbContext> options, IMapper mapper) : base(options) =>
       _mapper = mapper;
 
+    public DbSet<SiteGroup> SiteGroups { get; set; }
     public DbSet<Site> Sites { get; set; }
     public DbSet<SiteStatus> Statuses { get; set; }
     public DbSet<SiteFault> Logs { get; set; }
@@ -28,8 +29,7 @@ namespace Dess.Api.DbContexts
     public DbSet<User> Users { get; set; }
     public DbSet<UserLog> UserLogs { get; set; }
     public DbSet<UserGroup> UserGroups { get; set; }
-    public DbSet<UserPermission> UserPermissions { get; set; }
-    public DbSet<UserGroupPermission> UserGroupPermissions { get; set; }
+    public DbSet<Permission> Permissions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -58,13 +58,17 @@ namespace Dess.Api.DbContexts
         .Property(e => e.Triggers)
         .HasConversion(converterTrigger);
 
-      var converterFault = new ValueConverter<ICollection<int>, string>(
+      var converterIntCollection = new ValueConverter<ICollection<int>, string>(
           u => string.Join(";", u.ToList().ConvertAll(u => u)),
           u => u.Split(";", StringSplitOptions.RemoveEmptyEntries).Select(val => int.Parse(val)).ToList());
 
       modelBuilder.Entity<SiteFault>()
         .Property(e => e.SeenBy)
-        .HasConversion(converterFault);
+        .HasConversion(converterIntCollection);
+
+      modelBuilder.Entity<UserGroup>()
+        .Property(ug => ug.PermissionIds)
+        .HasConversion(converterIntCollection);
 
       var converterIo = new ValueConverter<IList<bool>, string>(
           u => string.Join(";", u.ToList().ConvertAll(u => u)),
@@ -83,98 +87,57 @@ namespace Dess.Api.DbContexts
         .WithMany(u => u.UserLogs)
         .HasForeignKey(u => u.UserId);
 
-      // modelBuilder.Entity<UserLog>()
-      //   .HasOne(u => u.Log)
-      //   .WithMany(l => l.UserLogs)
-      //   .HasForeignKey(u => u.LogId);
-
       modelBuilder.Entity<User>()
         .HasOne(u => u.Group)
         .WithMany(g => g.Users)
         .HasForeignKey(u => u.GroupId);
 
-      modelBuilder.Entity<UserGroupPermission>()
-        .HasKey(gp => new { gp.GroupId, gp.PermissionId });
+      var isAlmighty = new Permission { Id = 1, Title = "IsAlmighty" };
+      var canSecure = new Permission { Id = 2, Title = "CanSecure" };
+      var canEditSites = new Permission { Id = 3, Title = "CanEditSites" };
+      var canAddRemoveSites = new Permission { Id = 4, Title = "CanAddRemoveSites" };
+      var canHandleSiteGroups = new Permission { Id = 5, Title = "CanHandleSiteGroups" };
+      var canHandleUsers = new Permission { Id = 6, Title = "CanEditUsers" };
+      var canHandleUserGroup = new Permission { Id = 7, Title = "CanHandleUserGroup" };
 
-      modelBuilder.Entity<UserGroupPermission>()
-        .HasOne(gp => gp.Group)
-        .WithMany(g => g.UserGroupPermissions)
-        .HasForeignKey(gp => gp.GroupId);
+      var permissions = new Permission[] { isAlmighty, canSecure, canEditSites, canAddRemoveSites, canHandleSiteGroups, canHandleUsers, canHandleUserGroup };
+      modelBuilder.Entity<Permission>().HasData(permissions);
 
-      modelBuilder.Entity<UserGroupPermission>()
-        .HasOne(gp => gp.Permission)
-        .WithMany(p => p.UserGroupPermissions)
-        .HasForeignKey(gp => gp.PermissionId);
-
-      var allMighty = new UserGroup { Id = 1, Title = "Almighty" };
-      var expert = new UserGroup { Id = 2, Title = "Expert" };
-      var admin = new UserGroup { Id = 3, Title = "Admin" };
+      var almighty = new UserGroup { Id = 1, Title = "Almighty", PermissionIds = new List<int>(permissions.Select(p => p.Id)) };
+      var manager = new UserGroup { Id = 2, Title = "Manager", PermissionIds = new List<int>(permissions.Where(p => p.Id != isAlmighty.Id).Select(p => p.Id)) };
+      var admin = new UserGroup { Id = 3, Title = "Admin", PermissionIds = new List<int> { canSecure.Id, canEditSites.Id, canHandleUsers.Id } };
       var operate = new UserGroup { Id = 4, Title = "Operator" };
 
-      var groups = new UserGroup[] { allMighty, expert, admin, operate };
+      var groups = new UserGroup[] { almighty, manager, admin, operate };
       modelBuilder.Entity<UserGroup>().HasData(groups);
-
-      var isAlmighty = new UserPermission { Id = 1, Title = "IsAlmighty" };
-      var canSecureSites = new UserPermission { Id = 2, Title = "CanResetFaults" };
-      var canEditSites = new UserPermission { Id = 3, Title = "CanEditSites" };
-      var canEditUserGroup = new UserPermission { Id = 4, Title = "CanEditUserGroups" };
-      var canEditUsers = new UserPermission { Id = 5, Title = "CanEditUsers" };
-
-      var permissions = new UserPermission[] { isAlmighty, canSecureSites, canEditSites, canEditUserGroup, canEditUsers };
-      modelBuilder.Entity<UserPermission>().HasData(permissions);
-
-      var groupPermissions = new UserGroupPermission[]
-      {
-        new UserGroupPermission { GroupId = allMighty.Id, PermissionId = isAlmighty.Id },
-        new UserGroupPermission { GroupId = allMighty.Id, PermissionId = canSecureSites.Id },
-        new UserGroupPermission { GroupId = allMighty.Id, PermissionId = canEditSites.Id },
-        new UserGroupPermission { GroupId = allMighty.Id, PermissionId = canEditUserGroup.Id },
-        new UserGroupPermission { GroupId = allMighty.Id, PermissionId = canEditUsers.Id },
-
-        new UserGroupPermission { GroupId = expert.Id, PermissionId = canSecureSites.Id },
-        new UserGroupPermission { GroupId = expert.Id, PermissionId = canEditSites.Id },
-        new UserGroupPermission { GroupId = expert.Id, PermissionId = canEditUserGroup.Id },
-        new UserGroupPermission { GroupId = expert.Id, PermissionId = canEditUsers.Id },
-
-        new UserGroupPermission { GroupId = admin.Id, PermissionId = canSecureSites.Id },
-        new UserGroupPermission { GroupId = admin.Id, PermissionId = canEditSites.Id },
-        new UserGroupPermission { GroupId = admin.Id, PermissionId = canEditUsers.Id },
-
-        new UserGroupPermission { GroupId = operate.Id, PermissionId = canSecureSites.Id }
-      };
-      modelBuilder.Entity<UserGroupPermission>().HasData(groupPermissions);
 
       var users = new User[]
       {
-        new User { Id = 1, Username = "expert", Password = Cryptography.GeneratePasswordHash(Cryptography.GenerateHashSHA256String("expert")), FirstName = "Amir", LastName = "Fakhim-Babaei", GroupId = 1 },
-        new User { Id = 2, Username = "admin", Password = Cryptography.GeneratePasswordHash(Cryptography.GenerateHashSHA256String("admin")), FirstName = "Amir", LastName = "Fakhim-Babaei", GroupId = 2 },
-        new User { Id = 3, Username = "operator", Password = Cryptography.GeneratePasswordHash(Cryptography.GenerateHashSHA256String("operator")), FirstName = "Amir", LastName = "Fakhim-Babaei", GroupId = 3 }
+        new User { Id = 1, Username = "almighty", Password = Cryptography.GeneratePasswordHash(Cryptography.GenerateHashSHA256String("almighty")), FirstName = "Amir", LastName = "Fakhim-Babaei", GroupId = almighty.Id },
+        new User { Id = 2, Username = "manager", Password = Cryptography.GeneratePasswordHash(Cryptography.GenerateHashSHA256String("manager")), FirstName = "Amir", LastName = "Chegini", GroupId = manager.Id },
+        new User { Id = 3, Username = "admin", Password = Cryptography.GeneratePasswordHash(Cryptography.GenerateHashSHA256String("admin")), FirstName = "No", LastName = "One", GroupId = admin.Id },
+        new User { Id = 4, Username = "operator", Password = Cryptography.GeneratePasswordHash(Cryptography.GenerateHashSHA256String("operator")), FirstName = "Not", LastName = "Yet", GroupId = operate.Id }
       };
       modelBuilder.Entity<User>().HasData(users);
 
-      var site1 = new Site { Id = 1, Name = "T5011", SerialNo = "SC20D3001N", Interval = 10, HvEnabled = true, LvEnabled = true, HvPower = 70, HvRepeat = 2, HvThreshold = 3000, Latitude = "38.0962", Longitude = "46.2738" };
-      // var site2 = new Site { Id = 2, Name = "Ef2", SiteId = "ehp-ie-thr", SerialNo = "002", Interval = 15, HvEnabled = true, LvEnabled = false, HvPower = 70, HvRepeat = 3, HvThreshold = 4000, Latitude = "35.6892", Longitude = "51.3890" };
-      // var site3 = new Site { Id = 3, Name = "Ef3", SiteId = "ehp-ie-isf", SerialNo = "003", Interval = 20, HvEnabled = true, LvEnabled = false, HvPower = 80, HvRepeat = 2, HvThreshold = 5000, Latitude = "32.6539", Longitude = "51.6660" };
+      // var site1 = new Site { Id = 1, Name = "T5011", SerialNo = "SC20D3001N", Interval = 10, HvEnabled = true, LvEnabled = true, HvPower = 70, HvRepeat = 2, HvThreshold = 3000, Latitude = "38.0962", Longitude = "46.2738" };
+      // var status1 = new SiteStatus { Id = 1, SiteId = 1 };
 
-      var status1 = new SiteStatus { Id = 1, SiteId = 1 };
-      // var status2 = new SiteStatus { Id = 2, SiteId = 2 };
-      // var status3 = new SiteStatus { Id = 3, SiteId = 3 };
+      // modelBuilder.Entity<Site>().HasData(site1);
+      // modelBuilder.Entity<SiteStatus>().HasData(status1);
 
-      modelBuilder.Entity<Site>().HasData(site1); //,site2,site3);
-      modelBuilder.Entity<SiteStatus>().HasData(status1); //, status2, status3);
+      // for (int i = 0; i < 2; i++)
+      // {
+      //   var i1 = new Input { Id = i * 3 + 1, Enabled = i < 2, Type = i % 2 == 0 ? IOType.NO : IOType.NC, ModuleId = site1.Id };
+      //   // var i2 = new Input { Id = i * 3 + 2, Enabled = i < 3, Type = i % 2 == 1 ? IOType.NO : IOType.NC, ModuleId =site2.Id };
+      //   // var i3 = new Input { Id = i * 3 + 3, Enabled = i < 1, Type = i % 2 == 0 ? IOType.NO : IOType.NC, ModuleId =site3.Id };
+      //   var o1 = new Output { Id = i * 3 + 1, Enabled = i < 2, Type = i % 2 == 0 ? IOType.NO : IOType.NC, Triggers = new List<TriggerType> { TriggerType.Faults }, ModuleId = site1.Id };
+      //   // var o2 = new Output { Id = i * 3 + 2, Enabled = i < 3, Type = i % 2 == 1 ? IOType.NO : IOType.NC, Triggers = new List<TriggerType> { TriggerType.Input1, TriggerType.Power }, ModuleId =site2.Id };
+      //   // var o3 = new Output { Id = i * 3 + 3, Enabled = i < 1, Type = i % 2 == 0 ? IOType.NO : IOType.NC, Triggers = new List<TriggerType> { TriggerType.Input2, TriggerType.Power }, ModuleId =site3.Id };
 
-      for (int i = 0; i < 2; i++)
-      {
-        var i1 = new Input { Id = i * 3 + 1, Enabled = i < 2, Type = i % 2 == 0 ? IOType.NO : IOType.NC, ModuleId = site1.Id };
-        // var i2 = new Input { Id = i * 3 + 2, Enabled = i < 3, Type = i % 2 == 1 ? IOType.NO : IOType.NC, ModuleId =site2.Id };
-        // var i3 = new Input { Id = i * 3 + 3, Enabled = i < 1, Type = i % 2 == 0 ? IOType.NO : IOType.NC, ModuleId =site3.Id };
-        var o1 = new Output { Id = i * 3 + 1, Enabled = i < 2, Type = i % 2 == 0 ? IOType.NO : IOType.NC, Triggers = new List<TriggerType> { TriggerType.Faults }, ModuleId = site1.Id };
-        // var o2 = new Output { Id = i * 3 + 2, Enabled = i < 3, Type = i % 2 == 1 ? IOType.NO : IOType.NC, Triggers = new List<TriggerType> { TriggerType.Input1, TriggerType.Power }, ModuleId =site2.Id };
-        // var o3 = new Output { Id = i * 3 + 3, Enabled = i < 1, Type = i % 2 == 0 ? IOType.NO : IOType.NC, Triggers = new List<TriggerType> { TriggerType.Input2, TriggerType.Power }, ModuleId =site3.Id };
-
-        modelBuilder.Entity<Input>().HasData(i1); //, i2, i3);
-        modelBuilder.Entity<Output>().HasData(o1); //, o2, o3);
-      }
+      //   modelBuilder.Entity<Input>().HasData(i1); //, i2, i3);
+      //   modelBuilder.Entity<Output>().HasData(o1); //, o2, o3);
+      // }
     }
   }
 }
