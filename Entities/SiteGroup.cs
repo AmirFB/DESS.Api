@@ -9,5 +9,6 @@ namespace Dess.Api.Entities
 
 		public ICollection<User> ReportTo { get; set; }
 		public ICollection<Site> Sites { get; set; }
+		public ICollection<SiteGroupUser> Users { get; set; }
 	}
 }

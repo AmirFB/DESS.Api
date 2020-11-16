@@ -34,6 +34,8 @@ namespace Dess.Api.Models.Site
     public bool BatteryWarning { get; set; }
     public byte BatteryMin { get; set; }
 
+    public int GroupId { get; set; }
+
     public SiteStatusDto Status { get; set; } = new SiteStatusDto();
 
     public ICollection<InputDto> Inputs { get; set; }

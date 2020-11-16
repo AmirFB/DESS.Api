@@ -24,6 +24,7 @@ namespace Dess.Api.Entities
     public int GroupId { get; set; }
     public UserGroup Group { get; set; }
 
+    public ICollection<SiteGroupUser> SiteGroups { get; set; }
     public ICollection<UserLog> UserLogs { get; set; }
   }
 }
