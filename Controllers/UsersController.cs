@@ -5,8 +5,18 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
+<<
+<<<<< HEAD
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+
+==
+== == = >>
+>>>>> 61e1 ea6d665e143ca0f9dcea744413f00b192333
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;

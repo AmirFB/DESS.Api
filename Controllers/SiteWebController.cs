@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-
 using AutoMapper;
 
 using Dess.Api.Entities;
 using Dess.Api.Models;
 using Dess.Api.Models.Site;
 using Dess.Api.Repositories;
+
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Dess.Api.Controllers
 {
@@ -25,13 +25,16 @@ namespace Dess.Api.Controllers
 
     public SiteWebController(ISiteRepository siteRepository, IUserRepository userRepository, IMapper mapper)
     {
-      _repository = siteRepository ??
+      _repository = siteRepository
+        ??
         throw new ArgumentNullException(nameof(siteRepository));
 
-      _userRepository = userRepository ??
+      _userRepository = userRepository
+        ??
         throw new ArgumentNullException(nameof(siteRepository));
 
-      _mapper = mapper ??
+      _mapper = mapper
+        ??
         throw new ArgumentNullException(nameof(mapper));
     }
 
@@ -50,6 +53,15 @@ namespace Dess.Api.Controllers
     {
       var sites = await _repository.GetAllWithEverythingAsync();
       var dtos = _mapper.Map<IEnumerable<SiteDto>>(sites);
+
+      return Ok(dtos);
+    }
+
+    [HttpGet("groups")]
+    public async Task<ActionResult<IEnumerable<SiteGroupDto>>> GetGroupsAsync()
+    {
+      var groups = await _repository.GetGroupsAsync();
+      var dtos = _mapper.Map<IEnumerable<SiteGroupDto>>(groups);
 
       return Ok(dtos);
     }
@@ -153,7 +165,7 @@ namespace Dess.Api.Controllers
           return NotFound();
 
         fault.ResetedOn = DateTime.UtcNow;
-        fault.ResetedBy = int.Parse(HttpContext.User.Identities.ToList()[0].Claims.ToList()[0].Value);
+        fault.ResetedBy = int.Parse(HttpContext.User.Identities.ToList() [0].Claims.ToList() [0].Value);
       }
 
       else
@@ -161,7 +173,7 @@ namespace Dess.Api.Controllers
         foreach (var fault in faults)
         {
           fault.ResetedOn = DateTime.UtcNow;
-          fault.ResetedBy = int.Parse(HttpContext.User.Identities.ToList()[0].Claims.ToList()[0].Value);
+          fault.ResetedBy = int.Parse(HttpContext.User.Identities.ToList() [0].Claims.ToList() [0].Value);
         }
       }
 
