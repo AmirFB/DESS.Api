@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -129,9 +130,12 @@ namespace Dess.Api.Controllers
 
       var token = tokenHandler.CreateToken(tokenDescriptor);
       var tokenString = tokenHandler.WriteToken(token);
-      var result = new { Token = tokenString, permissions = new List<string>(), Id = userFromRepo.Id, FirstName = userFromRepo.FirstName, LastName = userFromRepo.LastName };
-      foreach (var permission in permissions)result.permissions.Add(permission.Title);
+      var result = new { /*Token = tokenString,*/ permissions = new List<string>(), Id = userFromRepo.Id, FirstName = userFromRepo.FirstName, LastName = userFromRepo.LastName };
 
+      foreach (var permission in permissions)
+        result.permissions.Add(permission.Title);
+
+      Response.Cookies.Append("AccessToken", tokenString, new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict });
       return Ok(result);
     }
 
