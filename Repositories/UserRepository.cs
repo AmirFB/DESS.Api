@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-using Microsoft.EntityFrameworkCore;
-
 using Dess.Api.DbContexts;
 using Dess.Api.Entities;
+
+using Microsoft.EntityFrameworkCore;
 
 namespace Dess.Api.Repositories
 {
@@ -31,13 +31,11 @@ namespace Dess.Api.Repositories
 
     public async Task<IEnumerable<UserGroup>> GetGroupsAsync() =>
       await Context.UserGroups
-      .Include(g => g.PermissionIds)
       .ToListAsync();
 
     public async Task<IEnumerable<UserGroup>> GetGroupsWithoutAlmightyAsync() =>
       await Context.UserGroups
       .Where(g => g.Id != 1)
-      .Include(g => g.PermissionIds)
       .ToListAsync();
 
     public async Task<IEnumerable<UserGroup>> GetGroupsWithUsersAsync() =>
