@@ -4,10 +4,10 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-using Microsoft.EntityFrameworkCore;
-
 using Dess.Api.DbContexts;
 using Dess.Api.Entities;
+
+using Microsoft.EntityFrameworkCore;
 
 namespace Dess.Api.Repositories
 {
@@ -19,6 +19,9 @@ namespace Dess.Api.Repositories
     public SiteRepository(DessDbContext context,
         IHttpClientFactory httpClientFactory) : base(context) =>
       _httpClientFactory = httpClientFactory;
+
+    public async Task<IEnumerable<SiteGroup>> GetGroupsAsync() =>
+      await Context.SiteGroups.ToListAsync();
 
     public async Task<Site> GetAsync(string name) =>
       await Entities
