@@ -112,8 +112,9 @@ namespace Dess.Api.DbContexts
       var canHandleSiteGroups = new Permission { Id = 5, Title = "CanHandleSiteGroups" };
       var canHandleUsers = new Permission { Id = 6, Title = "CanEditUsers" };
       var canHandleUserGroup = new Permission { Id = 7, Title = "CanHandleUserGroup" };
+      var canAssignAdmin = new Permission { Id = 8, Title = "CanAssignAdmin" };
 
-      var permissions = new Permission[] { isAlmighty, canSecure, canEditSites, canAddRemoveSites, canHandleSiteGroups, canHandleUsers, canHandleUserGroup };
+      var permissions = new Permission[] { isAlmighty, canSecure, canEditSites, canAddRemoveSites, canHandleSiteGroups, canHandleUsers, canHandleUserGroup, canAssignAdmin };
       modelBuilder.Entity<Permission>().HasData(permissions);
 
       var almighty = new UserGroup { Id = 1, Title = "Almighty", PermissionIds = new List<int>(permissions.Select(p => p.Id)) };
