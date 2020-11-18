@@ -16,6 +16,7 @@ namespace Dess.Api.Profiles
         .ForMember(d => d.Faults, o => o.MapFrom(e => e.NotResetedFaults));
       CreateMap<SiteDto, Site>()
         .ForMember(d => d.Status, o => o.Ignore());
+      CreateMap<SiteGroup, SiteGroupDto>();
     }
   }
 }
