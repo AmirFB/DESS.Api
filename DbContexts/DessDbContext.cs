@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-
 using AutoMapper;
 
 using Dess.Api.Entities;
 using Dess.Api.Helpers;
 using Dess.Api.Types;
+
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Dess.Api.DbContexts
 {
@@ -64,8 +64,8 @@ namespace Dess.Api.DbContexts
         .HasForeignKey(sgu => sgu.UserId);
 
       var converterTrigger = new ValueConverter<ICollection<TriggerType>, string>(
-          t => string.Join(";", t.ToList().ConvertAll(t => (int)t)),
-          t => t.Split(";", StringSplitOptions.RemoveEmptyEntries).Select(val => (TriggerType)int.Parse(val)).ToList());
+          t => string.Join(";", t.ToList().ConvertAll(t => (int) t)),
+          t => t.Split(";", StringSplitOptions.RemoveEmptyEntries).Select(val => (TriggerType) int.Parse(val)).ToList());
 
       modelBuilder.Entity<Output>()
         .Property(e => e.Triggers)
@@ -124,6 +124,11 @@ namespace Dess.Api.DbContexts
 
       var groups = new UserGroup[] { almighty, manager, admin, operate };
       modelBuilder.Entity<UserGroup>().HasData(groups);
+
+      var azerbayjan = new SiteGroup { Id = 1, Name = "Azerbayjan", Province = "Ardabil, EA, WA, Zanjan" };
+
+      var siteGroups = new SiteGroup[] { azerbayjan };
+      modelBuilder.Entity<SiteGroup>().HasData(siteGroups);
 
       var users = new User[]
       {
