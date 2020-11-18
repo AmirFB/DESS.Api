@@ -26,6 +26,7 @@ namespace Dess.Api
 	public class Startup
 	{
 		private IConfiguration _configuration;
+		private string _myAllowSpecificOrigins = "MyAllowSpecificOrigins";
 
 		public Startup(IConfiguration configuration) =>
 			_configuration = configuration;
@@ -146,12 +147,18 @@ namespace Dess.Api
 			app.UseStaticFiles();
 
 			app.UseRouting();
+			app.UseCors(builder => builder
+				.AllowAnyHeader()
+				.AllowAnyMethod()
+				.SetIsOriginAllowed((host) => true)
+				.AllowCredentials());
 
 			app.UseCors(x => x
 				.AllowAnyOrigin()
 				.AllowAnyMethod()
 				.AllowAnyHeader());
 
+			app.UseCookiePolicy();
 			app.UseAuthentication();
 			app.UseAuthorization();
 

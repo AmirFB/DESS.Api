@@ -130,12 +130,12 @@ namespace Dess.Api.Controllers
 
       var token = tokenHandler.CreateToken(tokenDescriptor);
       var tokenString = tokenHandler.WriteToken(token);
-      var result = new { /*Token = tokenString,*/ permissions = new List<string>(), Id = userFromRepo.Id, FirstName = userFromRepo.FirstName, LastName = userFromRepo.LastName };
+      var result = new { permissions = new List<string>(), Id = userFromRepo.Id, FirstName = userFromRepo.FirstName, LastName = userFromRepo.LastName };
 
       foreach (var permission in permissions)
         result.permissions.Add(permission.Title);
 
-      Response.Cookies.Append("AccessToken", tokenString, new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict });
+      Response.Cookies.Append("AccessToken", tokenString, new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict, Domain = null, IsEssential = true });
       return Ok(result);
     }
 
