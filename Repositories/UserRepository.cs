@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using Microsoft.EntityFrameworkCore;
+
 using Dess.Api.DbContexts;
 using Dess.Api.Entities;
-
-using Microsoft.EntityFrameworkCore;
 
 namespace Dess.Api.Repositories
 {
@@ -19,6 +19,10 @@ namespace Dess.Api.Repositories
     public async Task<User> GetAsync(string username) =>
       await Entities
       .FirstOrDefaultAsync(u => u.Username == username);
+
+    public async Task<User> GetWithTokensAsync(int id) =>
+      await Entities
+      .FirstOrDefaultAsync(u => u.Id == id);
 
     public async Task<IEnumerable<User>> GetAllWithoutAllmightyAsync() =>
       await Entities
@@ -59,5 +63,8 @@ namespace Dess.Api.Repositories
         .Where(p => group.PermissionIds.Contains(p.Id))
         .ToListAsync();
     }
+
+    public async Task<RefreshToken> GetTokenAsync(string refreshToken) =>
+      await Context.RefreshToekns.SingleOrDefaultAsync(t => t.Token == refreshToken);
   }
 }

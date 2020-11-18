@@ -107,36 +107,91 @@ namespace Dess.Api.Controllers
       if (userFromRepo == null)
         return BadRequest();
 
+      var permissions = await _repository.GetPermissionsAsync(userFromRepo.GroupId);
+      var result = new { Permissions = permissions, Id = userFromRepo.Id, FirstName = userFromRepo.FirstName, LastName = userFromRepo.LastName };
+
+      var refreshToken = GenerateRefreshToken(HttpContext.Connection.RemoteIpAddress.ToString());
+      userFromRepo.RefreshTokens.Add(refreshToken);
+      await _repository.SaveAsync();
+
+      var accessToken = GenerateAccessToken(userFromRepo, permissions);
+      SetTokenCookies(accessToken, refreshToken.Token);
+
+      return Ok(result);
+    }
+
+    [NonAction]
+    public string GenerateAccessToken(User user, IEnumerable<Permission> permissions)
+    {
       var tokenHandler = new JwtSecurityTokenHandler();
       var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
 
-      var permissions = await _repository.GetPermissionsAsync(userFromRepo.GroupId);
       var claims = new List<Claim>
       {
-        new Claim(ClaimTypes.NameIdentifier, userFromRepo.Id.ToString()),
-        new Claim(ClaimTypes.Name, userFromRepo.Username)
+        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+        new Claim(ClaimTypes.Name, user.Username)
       };
 
       foreach (var permission in permissions)
         claims.Add(new Claim("Permission", permission.Title));
 
-      var validTime = user.ValidTime.HasValue ? user.ValidTime.Value : new TimeSpan(days: 1, 0, 0, 0);
       var tokenDescriptor = new SecurityTokenDescriptor
       {
         Subject = new ClaimsIdentity(claims),
-        Expires = DateTime.UtcNow.Add(validTime),
+        Expires = DateTime.UtcNow.AddMinutes(15),
         SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
       };
 
       var token = tokenHandler.CreateToken(tokenDescriptor);
-      var tokenString = tokenHandler.WriteToken(token);
-      var result = new { permissions = new List<string>(), Id = userFromRepo.Id, FirstName = userFromRepo.FirstName, LastName = userFromRepo.LastName };
+      return tokenHandler.WriteToken(token);
+    }
 
-      foreach (var permission in permissions)
-        result.permissions.Add(permission.Title);
+    [NonAction]
+    public RefreshToken GenerateRefreshToken(string ip)
+    {
+      var token = new RefreshToken
+      {
+        Created = DateTime.UtcNow,
+        CreatedBy = ip,
+        Expires = DateTime.UtcNow.AddMinutes(10)
+      };
 
-      Response.Cookies.Append("AccessToken", tokenString, new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict, Domain = null, IsEssential = true });
-      return Ok(result);
+      token.Token = Guid.NewGuid().ToString();
+      return token;
+    }
+
+    [NonAction]
+    public void SetTokenCookies(string accessToken, string refreshToken)
+    {
+      Response.Cookies.Append("AccessToken", accessToken, new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict, Domain = null, IsEssential = true });
+      Response.Cookies.Append("RefreshToken", refreshToken, new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict, Domain = null, IsEssential = true });
+    }
+
+    [HttpPost("refresh")]
+    public async Task<IActionResult> RefreshTokenAsync()
+    {
+      var token = Request.Cookies["RefreshToken"];
+      var refreshToken = await _repository.GetTokenAsync(token);
+      if (refreshToken == null)return BadRequest();
+
+      var user = await _repository.GetWithTokensAsync(refreshToken.UserId);
+      if (user == null)return BadRequest();
+
+      var ip = HttpContext.Connection.RemoteIpAddress.ToString();
+      var newRefreshToken = GenerateRefreshToken(ip);
+
+      refreshToken.Revoked = DateTime.UtcNow;
+      refreshToken.RevokedBy = ip;
+      refreshToken.ReplacedByToken = newRefreshToken.Token;
+
+      user.RefreshTokens.Add(newRefreshToken);
+
+      var permissions = await _repository.GetPermissionsAsync(user.GroupId);
+      var accessToken = GenerateAccessToken(user, permissions);
+
+      SetTokenCookies(accessToken, refreshToken.Token);
+
+      return Ok();
     }
 
     [HttpGet("groups")]

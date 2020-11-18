@@ -3,14 +3,16 @@ using System;
 using Dess.Api.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DESS.Migrations
 {
     [DbContext(typeof(DessDbContext))]
-    partial class DessDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201118111624_RefreshTokenAdded")]
+    partial class RefreshTokenAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -413,7 +415,7 @@ namespace DESS.Migrations
                             FirstName = "Amir",
                             GroupId = 1,
                             LastName = "Fakhim-Babaei",
-                            Password = "$2a$11$NRY7o7mNEMfmn3553aoe8uPDOm15kiDpLHp9PdvE.S49W1e802nqu",
+                            Password = "$2a$11$A8qfoNf0fsUADFTbG3CuaucZMI/ihEUXsUP5gg2UMtf.nxsGgYtV6",
                             Username = "almighty"
                         },
                         new
@@ -422,7 +424,7 @@ namespace DESS.Migrations
                             FirstName = "Amir",
                             GroupId = 2,
                             LastName = "Chegini",
-                            Password = "$2a$11$92BSHS8Jvzkqm8uVDs/Ev.azpcHQodJZfz3dnzR91aohIoosLrQBC",
+                            Password = "$2a$11$V0/06CIYt9wuw4n/vUr57OMC2pA4qbEQIgV7mtQmfVD0fVcOljN0C",
                             Username = "manager"
                         },
                         new
@@ -431,7 +433,7 @@ namespace DESS.Migrations
                             FirstName = "No",
                             GroupId = 3,
                             LastName = "One",
-                            Password = "$2a$11$jixghe27fNyDA8SecDuOGOo/wji1l6P45lXB51ZL6f/xRq9otV5a2",
+                            Password = "$2a$11$FyvWKeU8nJSCWvUVXvOXleBmBrDHTzepKQEAq8p6EcFRhF03UAVpi",
                             Username = "admin"
                         },
                         new
@@ -440,7 +442,7 @@ namespace DESS.Migrations
                             FirstName = "Not",
                             GroupId = 4,
                             LastName = "Yet",
-                            Password = "$2a$11$aBem3m4GYHi4uS4Glcg3sev48xWZ.APoT.blthPydUdHTCaKJMGM6",
+                            Password = "$2a$11$9rqhERRpm1a7B1QRxCzvNOONp8bF4aokgtHaNYnMXtQm3BMbOVpTC",
                             Username = "operator"
                         });
                 });
@@ -582,6 +584,9 @@ namespace DESS.Migrations
 
                     b.OwnsMany("Dess.Api.Entities.RefreshToken", "RefreshTokens", b1 =>
                         {
+                            b1.Property<int>("UserId")
+                                .HasColumnType("int");
+
                             b1.Property<int>("Id")
                                 .ValueGeneratedOnAdd()
                                 .HasColumnType("int");
@@ -607,14 +612,9 @@ namespace DESS.Migrations
                             b1.Property<string>("Token")
                                 .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                            b1.Property<int>("UserId")
-                                .HasColumnType("int");
+                            b1.HasKey("UserId", "Id");
 
-                            b1.HasKey("Id");
-
-                            b1.HasIndex("UserId");
-
-                            b1.ToTable("RefreshToekns");
+                            b1.ToTable("RefreshToken");
 
                             b1.WithOwner()
                                 .HasForeignKey("UserId");
