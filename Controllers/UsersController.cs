@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -111,6 +112,10 @@ namespace Dess.Api.Controllers
       var result = new { Permissions = permissions, Id = userFromRepo.Id, FirstName = userFromRepo.FirstName, LastName = userFromRepo.LastName };
 
       var refreshToken = GenerateRefreshToken(HttpContext.Connection.RemoteIpAddress.ToString());
+
+      foreach (var token in userFromRepo.RefreshTokens.Where(t => t.IsExpired))
+        userFromRepo.RefreshTokens.Remove(token);
+
       userFromRepo.RefreshTokens.Add(refreshToken);
       await _repository.SaveAsync();
 
@@ -127,10 +132,10 @@ namespace Dess.Api.Controllers
       var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
 
       var claims = new List<Claim>
-      {
-        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-        new Claim(ClaimTypes.Name, user.Username)
-      };
+        {
+          new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+          new Claim(ClaimTypes.Name, user.Username)
+        };
 
       foreach (var permission in permissions)
         claims.Add(new Claim("Permission", permission.Title));
@@ -138,7 +143,7 @@ namespace Dess.Api.Controllers
       var tokenDescriptor = new SecurityTokenDescriptor
       {
         Subject = new ClaimsIdentity(claims),
-        Expires = DateTime.UtcNow.AddMinutes(15),
+        Expires = DateTime.UtcNow.AddMinutes(5),
         SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
       };
 
@@ -172,18 +177,15 @@ namespace Dess.Api.Controllers
     {
       var token = Request.Cookies["RefreshToken"];
       var refreshToken = await _repository.GetTokenAsync(token);
-      if (refreshToken == null)return BadRequest();
+      if (refreshToken == null) return BadRequest();
 
-      var user = await _repository.GetWithTokensAsync(refreshToken.UserId);
-      if (user == null)return BadRequest();
+      var user = await _repository.GetAsync(refreshToken.UserId);
+      if (user == null) return BadRequest();
 
       var ip = HttpContext.Connection.RemoteIpAddress.ToString();
       var newRefreshToken = GenerateRefreshToken(ip);
 
-      refreshToken.Revoked = DateTime.UtcNow;
-      refreshToken.RevokedBy = ip;
-      refreshToken.ReplacedByToken = newRefreshToken.Token;
-
+      user.RefreshTokens.Remove(refreshToken);
       user.RefreshTokens.Add(newRefreshToken);
 
       var permissions = await _repository.GetPermissionsAsync(user.GroupId);
