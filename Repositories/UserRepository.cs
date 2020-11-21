@@ -20,10 +20,6 @@ namespace Dess.Api.Repositories
       await Entities
       .FirstOrDefaultAsync(u => u.Username == username);
 
-    public async Task<User> GetWithTokensAsync(int id) =>
-      await Entities
-      .FirstOrDefaultAsync(u => u.Id == id);
-
     public async Task<IEnumerable<User>> GetAllWithoutAllmightyAsync() =>
       await Entities
       .Where(u => u.GroupId != 1).ToListAsync();
