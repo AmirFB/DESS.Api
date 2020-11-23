@@ -16,5 +16,6 @@ namespace Dess.Api.Repositories
 			Task<IEnumerable<Permission>> GetPermissionsWithoutAlmightyAsync();
 			Task<IEnumerable<Permission>> GetPermissionsAsync(int groupId);
 			Task<RefreshToken> GetTokenAsync(string refreshToken);
+			Task<User> GetWithTokensAsync(string username);
 		}
 }

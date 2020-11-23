@@ -18,7 +18,7 @@ namespace Dess.Api.Services
       if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
         return null;
 
-      var user = await _repository.GetAsync(username);
+      var user = await _repository.GetWithTokensAsync(username);
 
       if (user == null)
         return null;

@@ -62,5 +62,10 @@ namespace Dess.Api.Repositories
 
     public async Task<RefreshToken> GetTokenAsync(string refreshToken) =>
       await Context.RefreshToekns.SingleOrDefaultAsync(t => t.Token == refreshToken);
+
+    public async Task<User> GetWithTokensAsync(string username) =>
+      await Entities
+      .Include(u => u.RefreshTokens)
+      .SingleOrDefaultAsync(u => u.Username == username);
   }
 }

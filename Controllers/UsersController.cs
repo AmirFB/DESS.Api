@@ -30,6 +30,8 @@ namespace Dess.Api.Controllers
     private IUserService _service;
     private IMapper _mapper;
     private readonly AppSettings _appSettings;
+    private static int _expireTime = 300;
+    private static int _refreshTime = 600;
 
     public UsersController(IUserRepository repository, IUserService service, IMapper mapper, IOptions<AppSettings> appSettings)
     {
@@ -109,18 +111,27 @@ namespace Dess.Api.Controllers
         return BadRequest();
 
       var permissions = await _repository.GetPermissionsAsync(userFromRepo.GroupId);
-      var result = new { Permissions = permissions, Id = userFromRepo.Id, FirstName = userFromRepo.FirstName, LastName = userFromRepo.LastName };
+      var result = new
+      {
+        Permissions = permissions.Select(p => p.Title),
+        Id = userFromRepo.Id,
+        FirstName = userFromRepo.FirstName,
+        LastName = userFromRepo.LastName,
+        ExpireTime = _expireTime
+      };
 
       var refreshToken = GenerateRefreshToken(HttpContext.Connection.RemoteIpAddress.ToString());
 
-      foreach (var token in userFromRepo.RefreshTokens.Where(t => t.IsExpired))
-        userFromRepo.RefreshTokens.Remove(token);
+      var oldIds = userFromRepo.RefreshTokens.Where(t => t.IsExpired).Select(t => t.Id).ToList();
+
+      foreach (var id in oldIds)
+        userFromRepo.RefreshTokens.Remove(userFromRepo.RefreshTokens.Single(t => t.Id == id));
 
       userFromRepo.RefreshTokens.Add(refreshToken);
       await _repository.SaveAsync();
 
       var accessToken = GenerateAccessToken(userFromRepo, permissions);
-      SetTokenCookies(accessToken, refreshToken.Token);
+      SetTokenCookies(accessToken, refreshToken.Token, true);
 
       return Ok(result);
     }
@@ -143,7 +154,7 @@ namespace Dess.Api.Controllers
       var tokenDescriptor = new SecurityTokenDescriptor
       {
         Subject = new ClaimsIdentity(claims),
-        Expires = DateTime.UtcNow.AddMinutes(5),
+        Expires = DateTime.UtcNow.AddSeconds(_expireTime),
         SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
       };
 
@@ -158,7 +169,7 @@ namespace Dess.Api.Controllers
       {
         Created = DateTime.UtcNow,
         CreatedBy = ip,
-        Expires = DateTime.UtcNow.AddMinutes(10)
+        Expires = DateTime.UtcNow.AddSeconds(_refreshTime)
       };
 
       token.Token = Guid.NewGuid().ToString();
@@ -166,10 +177,11 @@ namespace Dess.Api.Controllers
     }
 
     [NonAction]
-    public void SetTokenCookies(string accessToken, string refreshToken)
+    public void SetTokenCookies(string accessToken, string refreshToken, bool loggedIn)
     {
       Response.Cookies.Append("AccessToken", accessToken, new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict, Domain = null, IsEssential = true });
       Response.Cookies.Append("RefreshToken", refreshToken, new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict, Domain = null, IsEssential = true });
+      Response.Cookies.Append("LogedIn", loggedIn.ToString(), new CookieOptions() { HttpOnly = false, SameSite = SameSiteMode.Strict, Domain = null, IsEssential = true, Path = "/" });
     }
 
     [HttpPost("refresh")]
@@ -191,9 +203,9 @@ namespace Dess.Api.Controllers
       var permissions = await _repository.GetPermissionsAsync(user.GroupId);
       var accessToken = GenerateAccessToken(user, permissions);
 
-      SetTokenCookies(accessToken, refreshToken.Token);
+      SetTokenCookies(accessToken, refreshToken.Token, true);
 
-      return Ok();
+      return Ok(new { ExpireTime = _expireTime });
     }
 
     [HttpGet("groups")]
