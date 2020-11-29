@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
 using AutoMapper;
 
 using Dess.Api.Entities;
 using Dess.Api.Models;
+using Dess.Api.Models.Filters;
 using Dess.Api.Models.Site;
 using Dess.Api.Repositories;
-
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Dess.Api.Controllers
 {
@@ -21,20 +22,25 @@ namespace Dess.Api.Controllers
   {
     private readonly ISiteRepository _repository;
     private readonly IUserRepository _userRepository;
+    private readonly ILogRepository _logRepository;
     private readonly IMapper _mapper;
 
-    public SiteWebController(ISiteRepository siteRepository, IUserRepository userRepository, IMapper mapper)
+    public SiteWebController(
+      ISiteRepository siteRepository,
+      IUserRepository userRepository,
+      ILogRepository logRepository,
+      IMapper mapper)
     {
-      _repository = siteRepository
-        ??
+      _repository = siteRepository ??
         throw new ArgumentNullException(nameof(siteRepository));
 
-      _userRepository = userRepository
-        ??
+      _userRepository = userRepository ??
         throw new ArgumentNullException(nameof(siteRepository));
 
-      _mapper = mapper
-        ??
+      _logRepository = logRepository ??
+        throw new ArgumentNullException(nameof(logRepository));
+
+      _mapper = mapper ??
         throw new ArgumentNullException(nameof(mapper));
     }
 
@@ -111,7 +117,7 @@ namespace Dess.Api.Controllers
       return NoContent();
     }
 
-    [HttpGet("log")]
+    [HttpGet("log_old")]
     public async Task<ActionResult<IEnumerable<SiteFaultDto>>> GetAllLogAsync()
     {
       var logs = (await _repository.GetAllLogAsync()).ToList();
@@ -136,7 +142,32 @@ namespace Dess.Api.Controllers
       return Ok(dtos);
     }
 
-    [HttpGet(" { id } / log ")]
+    [HttpGet("log")]
+    public async Task<ActionResult<IEnumerable<SiteFaultDto>>> GetLogAsync([FromBody] ReportFilterDto filter)
+    {
+      var logs = (await _logRepository.GetAsync(filter)).ToList();;
+      var dtos = _mapper.Map<IList<SiteFaultDto>>(logs);
+      var users = await _userRepository.GetAllAsync();
+
+      for (int i = 0; i < dtos.Count(); i++)
+      {
+        if (logs[i].ResetedOn.Year > 1000)
+        {
+          var user = users.FirstOrDefault(u => u.Id == logs[i].ResetedBy);
+          dtos[i].ResetedBy = $"{user.FirstName} {user.LastName}";
+        }
+
+        foreach (var id in logs[i].SeenBy)
+        {
+          var user = users.FirstOrDefault(u => u.Id == id);
+          dtos[i].SeenBy.Add($"{user.FirstName} {user.LastName}");
+        }
+      }
+
+      return Ok(dtos);
+    }
+
+    [HttpGet("{id}/log")]
     public async Task<ActionResult<IEnumerable<SiteStatusDto>>> GetModuleLogAsync([FromRoute] int id)
     {
       var logs = await _repository.GetLogAsync(id);
@@ -165,7 +196,7 @@ namespace Dess.Api.Controllers
           return NotFound();
 
         fault.ResetedOn = DateTime.UtcNow;
-        fault.ResetedBy = int.Parse(HttpContext.User.Identities.ToList() [0].Claims.ToList() [0].Value);
+        fault.ResetedBy = int.Parse(HttpContext.User.Identities.ToList()[0].Claims.ToList()[0].Value);
       }
 
       else
@@ -173,7 +204,7 @@ namespace Dess.Api.Controllers
         foreach (var fault in faults)
         {
           fault.ResetedOn = DateTime.UtcNow;
-          fault.ResetedBy = int.Parse(HttpContext.User.Identities.ToList() [0].Claims.ToList() [0].Value);
+          fault.ResetedBy = int.Parse(HttpContext.User.Identities.ToList()[0].Claims.ToList()[0].Value);
         }
       }
 
