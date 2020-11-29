@@ -17,8 +17,7 @@ namespace Dess.Api.Profiles
         .ForMember(d => d.ObviatedOn, o => o.MapFrom(e => e.ObviatedOn.JavascriptDate()))
         .ForMember(d => d.ResetedOn, o => o.MapFrom(e => e.ResetedOn.JavascriptDate()))
         .ForMember(d => d.ResetedBy, o => o.Ignore())
-        .ForMember(d => d.SeenBy, o => o.Ignore())
-        .ForMember(d => d.SiteId, o => o.MapFrom(e => e.SiteId));
+        .ForMember(d => d.SeenBy, o => o.Ignore());
       CreateMap<SiteStatus, SiteStatusDto>()
         .ForMember(d => d.SiteId, o => o.MapFrom(e => e.SiteId))
         .ForMember(d => d.Date, o => o.MapFrom(e => e.Date.JavascriptDate()));
