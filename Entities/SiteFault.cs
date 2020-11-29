@@ -17,6 +17,7 @@ namespace Dess.Api.Entities
 
 		[Required]
 		public int SiteId { get; set; }
+		public Site Site { get; set; }
 
 		public ICollection<int> SeenBy { get; set; } = new List<int>();
 	}

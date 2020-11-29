@@ -38,7 +38,7 @@ namespace Dess.Api.DbContexts
 
       modelBuilder.Entity<Site>()
         .HasMany(e => e.Log)
-        .WithOne()
+        .WithOne(l => l.Site)
         .HasForeignKey(l => l.SiteId);
 
       modelBuilder.Entity<Site>()
@@ -126,11 +126,6 @@ namespace Dess.Api.DbContexts
       var groups = new UserGroup[] { almighty, manager, admin, operate };
       modelBuilder.Entity<UserGroup>().HasData(groups);
 
-      var azerbayjan = new SiteGroup { Id = 1, Name = "Azerbayjan", Province = "Ardabil, EA, WA, Zanjan" };
-
-      var siteGroups = new SiteGroup[] { azerbayjan };
-      modelBuilder.Entity<SiteGroup>().HasData(siteGroups);
-
       var users = new User[]
       {
         new User { Id = 1, Username = "almighty", Password = Cryptography.GeneratePasswordHash(Cryptography.GenerateHashSHA256String("almighty")), FirstName = "Amir", LastName = "Fakhim-Babaei", GroupId = almighty.Id },
@@ -140,24 +135,26 @@ namespace Dess.Api.DbContexts
       };
       modelBuilder.Entity<User>().HasData(users);
 
-      // var site1 = new Site { Id = 1, Name = "T5011", SerialNo = "SC20D3001N", Interval = 10, HvEnabled = true, LvEnabled = true, HvPower = 70, HvRepeat = 2, HvThreshold = 3000, Latitude = "38.0962", Longitude = "46.2738" };
-      // var status1 = new SiteStatus { Id = 1, SiteId = 1 };
+      var siteGroup = new SiteGroup { Id = 1, Name = "R8" };
+      var site1 = new Site { Id = 1, GroupId = 1, Name = "T5011", SerialNo = "SC20D3001N", Interval = 10, HvEnabled = true, LvEnabled = true, HvPower = 70, HvRepeat = 2, HvThreshold = 3000, Latitude = "38.0962", Longitude = "46.2738" };
+      var status1 = new SiteStatus { Id = 1, SiteId = 1 };
 
-      // modelBuilder.Entity<Site>().HasData(site1);
-      // modelBuilder.Entity<SiteStatus>().HasData(status1);
+      modelBuilder.Entity<SiteGroup>().HasData(siteGroup);
+      modelBuilder.Entity<Site>().HasData(site1);
+      modelBuilder.Entity<SiteStatus>().HasData(status1);
 
-      // for (int i = 0; i < 2; i++)
-      // {
-      //   var i1 = new Input { Id = i * 3 + 1, Enabled = i < 2, Type = i % 2 == 0 ? IOType.NO : IOType.NC, ModuleId = site1.Id };
-      //   // var i2 = new Input { Id = i * 3 + 2, Enabled = i < 3, Type = i % 2 == 1 ? IOType.NO : IOType.NC, ModuleId =site2.Id };
-      //   // var i3 = new Input { Id = i * 3 + 3, Enabled = i < 1, Type = i % 2 == 0 ? IOType.NO : IOType.NC, ModuleId =site3.Id };
-      //   var o1 = new Output { Id = i * 3 + 1, Enabled = i < 2, Type = i % 2 == 0 ? IOType.NO : IOType.NC, Triggers = new List<TriggerType> { TriggerType.Faults }, ModuleId = site1.Id };
-      //   // var o2 = new Output { Id = i * 3 + 2, Enabled = i < 3, Type = i % 2 == 1 ? IOType.NO : IOType.NC, Triggers = new List<TriggerType> { TriggerType.Input1, TriggerType.Power }, ModuleId =site2.Id };
-      //   // var o3 = new Output { Id = i * 3 + 3, Enabled = i < 1, Type = i % 2 == 0 ? IOType.NO : IOType.NC, Triggers = new List<TriggerType> { TriggerType.Input2, TriggerType.Power }, ModuleId =site3.Id };
+      for (int i = 0; i < 2; i++)
+      {
+        var i1 = new Input { Id = i * 3 + 1, Enabled = i < 2, Type = i % 2 == 0 ? IOType.NO : IOType.NC, ModuleId = site1.Id };
+        // var i2 = new Input { Id = i * 3 + 2, Enabled = i < 3, Type = i % 2 == 1 ? IOType.NO : IOType.NC, ModuleId =site2.Id };
+        // var i3 = new Input { Id = i * 3 + 3, Enabled = i < 1, Type = i % 2 == 0 ? IOType.NO : IOType.NC, ModuleId =site3.Id };
+        var o1 = new Output { Id = i * 3 + 1, Enabled = i < 2, Type = i % 2 == 0 ? IOType.NO : IOType.NC, Triggers = new List<TriggerType> { TriggerType.Faults }, ModuleId = site1.Id };
+        // var o2 = new Output { Id = i * 3 + 2, Enabled = i < 3, Type = i % 2 == 1 ? IOType.NO : IOType.NC, Triggers = new List<TriggerType> { TriggerType.Input1, TriggerType.Power }, ModuleId =site2.Id };
+        // var o3 = new Output { Id = i * 3 + 3, Enabled = i < 1, Type = i % 2 == 0 ? IOType.NO : IOType.NC, Triggers = new List<TriggerType> { TriggerType.Input2, TriggerType.Power }, ModuleId =site3.Id };
 
-      //   modelBuilder.Entity<Input>().HasData(i1); //, i2, i3);
-      //   modelBuilder.Entity<Output>().HasData(o1); //, o2, o3);
-      // }
+        modelBuilder.Entity<Input>().HasData(i1); //, i2, i3);
+        modelBuilder.Entity<Output>().HasData(o1); //, o2, o3);
+      }
     }
   }
 }
