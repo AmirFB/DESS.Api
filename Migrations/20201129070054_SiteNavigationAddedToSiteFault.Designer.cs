@@ -3,14 +3,16 @@ using System;
 using Dess.Api.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DESS.Migrations
 {
     [DbContext(typeof(DessDbContext))]
-    partial class DessDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201129070054_SiteNavigationAddedToSiteFault")]
+    partial class SiteNavigationAddedToSiteFault
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,24 +45,6 @@ namespace DESS.Migrations
                     b.HasIndex("ModuleId");
 
                     b.ToTable("Inputs");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Enabled = true,
-                            ModuleId = 1,
-                            Timer = (byte)0,
-                            Type = 0
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Enabled = true,
-                            ModuleId = 1,
-                            Timer = (byte)0,
-                            Type = 1
-                        });
                 });
 
             modelBuilder.Entity("Dess.Api.Entities.Output", b =>
@@ -92,26 +76,6 @@ namespace DESS.Migrations
                     b.HasIndex("ModuleId");
 
                     b.ToTable("Outputs");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Enabled = true,
-                            ModuleId = 1,
-                            ResetTime = (short)0,
-                            Triggers = "0",
-                            Type = 0
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Enabled = true,
-                            ModuleId = 1,
-                            ResetTime = (short)0,
-                            Triggers = "0",
-                            Type = 1
-                        });
                 });
 
             modelBuilder.Entity("Dess.Api.Entities.Permission", b =>
@@ -280,33 +244,6 @@ namespace DESS.Migrations
                     b.HasIndex("GroupId");
 
                     b.ToTable("Sites");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Applied = false,
-                            AutoLocation = false,
-                            BatteryMin = (byte)0,
-                            BatteryWarning = false,
-                            GroupId = 1,
-                            HvEnabled = true,
-                            HvPower = (byte)70,
-                            HvRepeat = (byte)2,
-                            HvThreshold = (short)3000,
-                            Interval = (byte)10,
-                            Latitude = "38.0962",
-                            Longitude = "46.2738",
-                            LvEnabled = true,
-                            Name = "T5011",
-                            SerialNo = "SC20D3001N",
-                            TamperEnabled = false,
-                            TemperatureMax = (sbyte)0,
-                            TemperatureMin = (sbyte)0,
-                            TemperatureWarning = false,
-                            Timeout = (byte)0,
-                            UseGlobalInterval = false
-                        });
                 });
 
             modelBuilder.Entity("Dess.Api.Entities.SiteFault", b =>
@@ -333,12 +270,17 @@ namespace DESS.Migrations
                     b.Property<int>("SiteId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("SiteId1")
+                        .HasColumnType("int");
+
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("SiteId");
+
+                    b.HasIndex("SiteId1");
 
                     b.ToTable("Logs");
                 });
@@ -363,7 +305,8 @@ namespace DESS.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "R8"
+                            Name = "Azerbayjan",
+                            Province = "Ardabil, EA, WA, Zanjan"
                         });
                 });
 
@@ -457,26 +400,6 @@ namespace DESS.Migrations
                         .IsUnique();
 
                     b.ToTable("Statuses");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            BatteryLevel = (byte)0,
-                            BatteryStatus = 0,
-                            Date = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            HvAlarm = false,
-                            HvChargeFault = false,
-                            HvDischargeFault = false,
-                            HvPowerFault = false,
-                            HvVoltage = (short)0,
-                            LvAlarm = false,
-                            MainPowerFault = false,
-                            SignalStrength = (byte)0,
-                            SiteId = 1,
-                            TamperAlarm = false,
-                            Temperature = (short)0
-                        });
                 });
 
             modelBuilder.Entity("Dess.Api.Entities.User", b =>
@@ -525,7 +448,7 @@ namespace DESS.Migrations
                             FirstName = "Amir",
                             GroupId = 1,
                             LastName = "Fakhim-Babaei",
-                            Password = "$2a$11$3SD1ASw5uWqlIHmqbHhAyOYCvFskJvFEPzcl8Ft5.PsKlDgenmPZm",
+                            Password = "$2a$11$Aknm6XVVdKA3ynzzbmMAz.0cEZUADtT71OBmEF.s8MFi8awXt5r96",
                             Username = "almighty"
                         },
                         new
@@ -534,7 +457,7 @@ namespace DESS.Migrations
                             FirstName = "Amir",
                             GroupId = 2,
                             LastName = "Chegini",
-                            Password = "$2a$11$wE1bGZRWyBt6lr.SMIWeweZ6AhPTvAGRdl4kYFZdabEguKt2r6q4.",
+                            Password = "$2a$11$RSthzf4K4r8oiBHZ3cNd0uhpZUveAFZsYuf5dVkemQ4VFbBaArsuW",
                             Username = "manager"
                         },
                         new
@@ -543,7 +466,7 @@ namespace DESS.Migrations
                             FirstName = "No",
                             GroupId = 3,
                             LastName = "One",
-                            Password = "$2a$11$48aJEhT9gEpt3eV8TnmAyOKiAGflH4mSZAuH0MRa5q9lWUKKfQ/1C",
+                            Password = "$2a$11$ZxC2cbkYWbynsscazrvuY.fA0Oq2r3K4O3DQiIZPKR.IuTHsRPO0C",
                             Username = "admin"
                         },
                         new
@@ -552,7 +475,7 @@ namespace DESS.Migrations
                             FirstName = "Not",
                             GroupId = 4,
                             LastName = "Yet",
-                            Password = "$2a$11$Mgze.LiwtE/rMz4kHepJ8e8GRsHc.iolbZs369Ml9qt.PKw4BrBkm",
+                            Password = "$2a$11$BTaL3BobUL3sJbnp.7cuveMsLFAMULA/JCFzpjMVLi8Zbo4vb/5Y.",
                             Username = "operator"
                         });
                 });
@@ -658,11 +581,15 @@ namespace DESS.Migrations
 
             modelBuilder.Entity("Dess.Api.Entities.SiteFault", b =>
                 {
-                    b.HasOne("Dess.Api.Entities.Site", "Site")
+                    b.HasOne("Dess.Api.Entities.Site", null)
                         .WithMany("Log")
                         .HasForeignKey("SiteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Dess.Api.Entities.Site", "Site")
+                        .WithMany()
+                        .HasForeignKey("SiteId1");
                 });
 
             modelBuilder.Entity("Dess.Api.Entities.SiteGroupUser", b =>
