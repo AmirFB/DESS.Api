@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 
+using Microsoft.EntityFrameworkCore;
+
 using Dess.Api.DbContexts;
 using Dess.Api.Entities;
-
-using Microsoft.EntityFrameworkCore;
 
 namespace Dess.Api.Repositories
 {
@@ -52,6 +50,7 @@ namespace Dess.Api.Repositories
       .Include(e => e.Status)
       .Include(e => e.Inputs)
       .Include(e => e.Outputs)
+      .Include(e => e.Log)
       .ToListAsync();
 
     public async Task<IEnumerable<SiteFault>> GetAllLogAsync() =>
