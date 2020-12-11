@@ -15,6 +15,13 @@ namespace Dess.Api.Entities
 
 		public int ResetedBy { get; set; }
 
+		public short HvVoltage { get; set; }
+		public short Temperature { get; set; }
+		public BatteryStatus BatteryStatus { get; set; }
+		public byte BatteryLevel { get; set; }
+
+		public byte SignalStrength { get; set; }
+
 		[Required]
 		public int SiteId { get; set; }
 		public Site Site { get; set; }
