@@ -142,7 +142,7 @@ namespace Dess.Api.Controllers
       return Ok(dtos);
     }
 
-    [HttpGet("log")]
+    [HttpPost("log")]
     public async Task<ActionResult<IEnumerable<SiteFaultDto>>> GetLogAsync([FromBody] ReportFilterDto filter)
     {
       var logs = (await _logRepository.GetAsync(filter)).ToList();;
