@@ -22,10 +22,10 @@ namespace Dess.Api.Repositories
       var to = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
       if (filter.From.HasValue)
-        from.AddMilliseconds((double)filter.From);
+        from = from.AddMilliseconds((double)filter.From);
 
       if (filter.To.HasValue)
-        from.AddMilliseconds((double)filter.To);
+        to = to.AddMilliseconds((double)filter.To);
 
       var logs = await Entities
         .Include(l => l.Site)

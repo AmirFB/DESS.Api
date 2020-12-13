@@ -145,7 +145,7 @@ namespace Dess.Api.Controllers
     [HttpPost("log")]
     public async Task<ActionResult<IEnumerable<SiteFaultDto>>> GetLogAsync([FromBody] ReportFilterDto filter)
     {
-      var logs = (await _logRepository.GetAsync(filter)).ToList();;
+      var logs = (await _logRepository.GetAsync(filter)).ToList();
       var dtos = _mapper.Map<IList<SiteFaultDto>>(logs);
       var users = await _userRepository.GetAllAsync();
 
