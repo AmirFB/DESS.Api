@@ -51,22 +51,9 @@ namespace Dess.Api.DbContexts
         .WithOne(o => o.Module)
         .HasForeignKey(o => o.ModuleId);
 
-      modelBuilder.Entity<SiteGroupUser>()
-        .HasKey(sgu => new { sgu.GroupId, sgu.UserId });
-
-      modelBuilder.Entity<SiteGroupUser>()
-        .HasOne(sgu => sgu.Group)
-        .WithMany(g => g.Users)
-        .HasForeignKey(sgu => sgu.GroupId);
-
-      modelBuilder.Entity<SiteGroupUser>()
-        .HasOne(sgu => sgu.User)
-        .WithMany(u => u.SiteGroups)
-        .HasForeignKey(sgu => sgu.UserId);
-
       var converterTrigger = new ValueConverter<ICollection<TriggerType>, string>(
-          t => string.Join(";", t.ToList().ConvertAll(t => (int)t)),
-          t => t.Split(";", StringSplitOptions.RemoveEmptyEntries).Select(val => (TriggerType)int.Parse(val)).ToList());
+          t => string.Join(";", t.ToList().ConvertAll(t => (int) t)),
+          t => t.Split(";", StringSplitOptions.RemoveEmptyEntries).Select(val => (TriggerType) int.Parse(val)).ToList());
 
       modelBuilder.Entity<Output>()
         .Property(e => e.Triggers)
