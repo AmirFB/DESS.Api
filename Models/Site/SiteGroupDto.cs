@@ -10,7 +10,7 @@ namespace Dess.Api.Models.Site
         public string Name { get; set; }
         public string Province { get; set; }
 
-        public ICollection<UserDto> Users { get; set; }
-        public ICollection<SiteDto> Sites { get; set; }
+        public ICollection<int> UserIds { get; set; }
+        public ICollection<int> SiteIds { get; set; }
     }
 }

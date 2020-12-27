@@ -10,7 +10,6 @@ namespace Dess.Api.Models.User
     public string PhoneNumber { get; set; }
     public int GroupId { get; set; }
 
-    public byte[] ImageData { get; set; }
     public int[] PermissionIds { get; set; }
   }
 }
