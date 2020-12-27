@@ -20,19 +20,24 @@ namespace Dess.Api.Controllers
   [Route("api/web/sites")]
   public class SiteWebController : ControllerBase
   {
-    private readonly ISiteRepository _repository;
+    private readonly ISiteRepository _siteRepository;
+    private readonly ISiteGroupRepository _siteGroupRepository;
     private readonly IUserRepository _userRepository;
     private readonly ILogRepository _logRepository;
     private readonly IMapper _mapper;
 
     public SiteWebController(
       ISiteRepository siteRepository,
+      ISiteGroupRepository siteGroupRepository,
       IUserRepository userRepository,
       ILogRepository logRepository,
       IMapper mapper)
     {
-      _repository = siteRepository ??
+      _siteRepository = siteRepository ??
         throw new ArgumentNullException(nameof(siteRepository));
+
+      _siteGroupRepository = siteGroupRepository ??
+        throw new ArgumentNullException(nameof(siteGroupRepository));
 
       _userRepository = userRepository ??
         throw new ArgumentNullException(nameof(siteRepository));
@@ -47,39 +52,31 @@ namespace Dess.Api.Controllers
     [HttpGet("{id}", Name = "GetAsync")]
     public async Task<ActionResult<SiteDto>> GetAsync([FromRoute] int id)
     {
-      if (!await _repository.ExistsAsync(id))
+      if (!await _siteRepository.ExistsAsync(id))
         return NotFound();
 
-      var site = await _repository.GetAsync(id);
+      var site = await _siteRepository.GetAsync(id);
       return Ok(_mapper.Map<SiteDto>(site));
     }
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<SiteDto>>> GetAllAsync()
     {
-      var sites = await _repository.GetAllWithEverythingAsync();
+      var sites = await _siteRepository.GetAllWithEverythingAsync();
       var dtos = _mapper.Map<IEnumerable<SiteDto>>(sites);
 
       return Ok(dtos);
     }
 
-    [HttpGet("groups")]
-    public async Task<ActionResult<IEnumerable<SiteGroupDto>>> GetGroupsAsync()
-    {
-      var groups = await _repository.GetGroupsAsync();
-      var dtos = _mapper.Map<IEnumerable<SiteGroupDto>>(groups);
-
-      return Ok(dtos);
-    }
-
+    [Authorize(Policy = "CanAddRemoveSites")]
     [HttpPost]
     public async Task<IActionResult> AddAsync([FromBody] SiteDto site)
     {
       var siteRepo = _mapper.Map<Site>(site);
-      _repository.Add(siteRepo);
+      _siteRepository.Add(siteRepo);
       siteRepo.Hash = (siteRepo as IHashable).GetHash();
       siteRepo.Status = new SiteStatus();
-      await _repository.SaveAsync();
+      await _siteRepository.SaveAsync();
 
       var siteToReturn = _mapper.Map<SiteDto>(siteRepo);
 
@@ -92,27 +89,77 @@ namespace Dess.Api.Controllers
     [HttpPut]
     public async Task<IActionResult> UpdateAsync([FromBody] SiteDto site)
     {
-      var siteFromRepo = await _repository.GetWithIoAsync(site.Id);
+      var siteFromRepo = await _siteRepository.GetWithIoAsync(site.Id);
       _mapper.Map(site, siteFromRepo);
       siteFromRepo.Hash = (siteFromRepo as IHashable).GetHash();
-      await _repository.SaveAsync();
+      await _siteRepository.SaveAsync();
 
       return Ok();
     }
 
-    [Authorize(Policy = "CanEditSites")]
+    [Authorize(Policy = "CanAddRemoveSites")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAsync(int id)
     {
-      var siteForomRepo = await _repository.GetAsync(id);
+      var siteForomRepo = await _siteRepository.GetAsync(id);
 
       if (siteForomRepo == null)
       {
         return NotFound();
       }
 
-      _repository.Remove(siteForomRepo);
-      await _repository.SaveAsync();
+      _siteRepository.Remove(siteForomRepo);
+      await _siteRepository.SaveAsync();
+
+      return NoContent();
+    }
+
+    [HttpGet("groups")]
+    public async Task<ActionResult<IEnumerable<SiteGroupDto>>> GetGroupsAsync()
+    {
+      var groups = await _siteGroupRepository.GetAllAsync();
+      var dtos = _mapper.Map<IEnumerable<SiteGroupDto>>(groups);
+
+      return Ok(dtos);
+    }
+
+    [Authorize(Policy = "CanHandleSiteGroups")]
+    [HttpPost("groups")]
+    public async Task<IActionResult> AddGroupAsync([FromBody] SiteGroupDto group)
+    {
+      var groupRepo = _mapper.Map<SiteGroup>(group);
+      _siteGroupRepository.Add(groupRepo);
+      await _siteGroupRepository.SaveAsync();
+
+      var groupToReturn = _mapper.Map<SiteGroupDto>(groupRepo);
+
+      return CreatedAtRoute("GetAsync",
+        new { id = groupToReturn.Id },
+        groupToReturn);
+    }
+
+    [Authorize(Policy = "CanHandleSiteGroups")]
+    [HttpPut("groups")]
+    public async Task<IActionResult> UpdateGroupAsync([FromBody] SiteGroupDto group)
+    {
+      var groupFromRepo = await _siteGroupRepository.GetAsync(group.Id);
+      _mapper.Map(group, groupFromRepo);
+      await _siteGroupRepository.SaveAsync();
+
+      return Ok();
+    }
+
+    [Authorize(Policy = "CanHandleSiteGroups")]
+    [HttpDelete("groups/{id}")]
+    public async Task<IActionResult> DeleteGroupAsync(int id)
+    {
+      var groupForomRepo = await _siteGroupRepository.GetAsync(id);
+
+      if (groupForomRepo == null)
+        return NotFound();
+
+      _siteGroupRepository.Remove(groupForomRepo);
+      await _siteGroupRepository.SaveAsync();
 
       return NoContent();
     }
@@ -120,7 +167,7 @@ namespace Dess.Api.Controllers
     [HttpGet("log_old")]
     public async Task<ActionResult<IEnumerable<SiteFaultDto>>> GetAllLogAsync()
     {
-      var logs = (await _repository.GetAllLogAsync()).ToList();
+      var logs = (await _siteRepository.GetAllLogAsync()).ToList();
       var dtos = _mapper.Map<IList<SiteFaultDto>>(logs);
       var users = await _userRepository.GetAllAsync();
 
@@ -170,7 +217,7 @@ namespace Dess.Api.Controllers
     [HttpGet("{id}/log")]
     public async Task<ActionResult<IEnumerable<SiteStatusDto>>> GetModuleLogAsync([FromRoute] int id)
     {
-      var logs = await _repository.GetLogAsync(id);
+      var logs = await _siteRepository.GetLogAsync(id);
       var dtos = _mapper.Map<IEnumerable<SiteStatusDto>>(logs);
 
       return Ok(dtos);
@@ -181,7 +228,7 @@ namespace Dess.Api.Controllers
     [HttpPut("reset/{moduleId}/{faultId}")]
     public async Task<ActionResult<IEnumerable<SiteFault>>> ResetFaultAsync([FromRoute] int moduleId, [FromRoute] int? faultId)
     {
-      var site = await _repository.GetWithLogAsync(moduleId);
+      var site = await _siteRepository.GetWithLogAsync(moduleId);
 
       if (site == null)
         return NotFound();
@@ -196,7 +243,7 @@ namespace Dess.Api.Controllers
           return NotFound();
 
         fault.ResetedOn = DateTime.UtcNow;
-        fault.ResetedBy = int.Parse(HttpContext.User.Identities.ToList()[0].Claims.ToList()[0].Value);
+        fault.ResetedBy = int.Parse(HttpContext.User.Identities.ToList() [0].Claims.ToList() [0].Value);
       }
 
       else
@@ -204,11 +251,11 @@ namespace Dess.Api.Controllers
         foreach (var fault in faults)
         {
           fault.ResetedOn = DateTime.UtcNow;
-          fault.ResetedBy = int.Parse(HttpContext.User.Identities.ToList()[0].Claims.ToList()[0].Value);
+          fault.ResetedBy = int.Parse(HttpContext.User.Identities.ToList() [0].Claims.ToList() [0].Value);
         }
       }
 
-      await _repository.SaveAsync();
+      await _siteRepository.SaveAsync();
       return Ok(site.NotResetedFaults);
     }
   }
