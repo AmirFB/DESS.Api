@@ -41,6 +41,7 @@ namespace Dess.Api
 			services.AddSignalR();
 
 			services.AddScoped<ISiteRepository, SiteRepository>();
+			services.AddScoped<ISiteGroupRepository, SiteGroupRepository>();
 			services.AddScoped<ILogRepository, LogRepository>();
 			services.AddScoped<IUserRepository, UserRepository>();
 			services.AddScoped<IUserLogRepository, UserLogRepository>();
@@ -48,7 +49,7 @@ namespace Dess.Api
 
 			services.AddScoped<IUserService, UserService>();
 
-			var connectionString = _configuration.GetSection("ConnectionStrings")["DessConnectionString"];
+			var connectionString = _configuration.GetSection("ConnectionStrings") ["DessConnectionString"];
 			services.AddDbContext<DessDbContext>(o => o.UseMySql(connectionString));
 
 			var appSettingsSection = _configuration.GetSection("AppSettings");
@@ -69,7 +70,7 @@ namespace Dess.Api
 						OnTokenValidated = async(context) =>
 							{
 								var userRepository = context.HttpContext.RequestServices.GetRequiredService<IUserRepository>();
-								var id = int.Parse(context.Principal.Claims.ToList()[0].Value);
+								var id = int.Parse(context.Principal.Claims.ToList() [0].Value);
 								var user = await userRepository.GetAsync(id);
 
 								if (user == null)
@@ -86,8 +87,8 @@ namespace Dess.Api
 									var accessToken = context.Request.Query["access_token"];
 									var path = context.HttpContext.Request.Path;
 
-									if (!string.IsNullOrEmpty(accessToken) &&
-										(path.StartsWithSegments("/api/web/hub/ef")))
+									if (!string.IsNullOrEmpty(accessToken)
+										&& (path.StartsWithSegments("/api/web/hub/ef")))
 										context.Token = accessToken;
 								}
 
@@ -109,7 +110,7 @@ namespace Dess.Api
 				});
 
 			var serviceProvider = services.BuildServiceProvider();
-			var permissionRepository = (IPermissionRepository)serviceProvider.GetService<IPermissionRepository>();
+			var permissionRepository = (IPermissionRepository) serviceProvider.GetService<IPermissionRepository>();
 
 			try
 			{
