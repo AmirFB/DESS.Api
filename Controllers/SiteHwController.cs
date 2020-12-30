@@ -175,24 +175,25 @@ namespace Dess.Api.Controllers
       IEnumerable<SiteFault> obviated)
     {
       var text = FaultString.GetFaultMessage(site, raised, obviated);
-      var numbers = _repository.GetGroupPhoneNumbersAsync(site.GroupId);
+      var numbers = await _repository.GetGroupPhoneNumbersAsync(site.GroupId);
 
-      var httpClient = _httpClientFactory.CreateClient();
-
-      var request = new HttpRequestMessage(HttpMethod.Get,
-        "http://api.payamak-panel.com/post/Send.asmx");
-
-      var body = new
+      if (numbers.Count() > 0)
       {
-        Username = "",
-        Password = "",
-        From = "",
-        To = numbers,
-        Text = text,
-        Isflash = false
-      };
-      var json = JsonConvert.SerializeObject(body);
-      var content = new StringContent(json, Encoding.UTF8, "application/json");
+        var body = new
+        {
+          Username = "09370735105",
+          Password = "Ehp@4132112",
+          From = "30008666864256",
+          To = numbers,
+          Text = text,
+          Isflash = false
+        };
+        var json = JsonConvert.SerializeObject(body);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+        var httpClient = _httpClientFactory.CreateClient();
+        await httpClient.PostAsync("http://api.payamak-panel.com/post/Send.asmx", content);
+      }
     }
 
     [HttpPost("{siteId}/{configHash}")]
@@ -224,7 +225,6 @@ namespace Dess.Api.Controllers
         if (fault != null)
         {
           site.Log.Add(fault);
-
           raised.Add(fault);
         }
       }
