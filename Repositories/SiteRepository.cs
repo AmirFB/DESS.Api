@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -61,5 +62,18 @@ namespace Dess.Api.Repositories
 
     public void AddLog(SiteFault log) => Context.Logs.Add(log);
     public void UpdateLog(SiteFault log) => Context.Logs.Update(log);
+
+    public async Task<IEnumerable<string>> GetGroupPhoneNumbersAsync(int id)
+    {
+      var group = await Context.SiteGroups
+        .Include(sg => sg.Users)
+        .FirstOrDefaultAsync(g => g.Id == id);
+
+      var numbers = group.Users
+        .Where(u => !string.IsNullOrEmpty(u.PhoneNumber))
+        .Select(u => u.PhoneNumber);
+
+      return numbers;
+    }
   }
 }
